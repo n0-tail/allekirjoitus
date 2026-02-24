@@ -5,7 +5,7 @@ interface SuccessViewProps {
     onReset: () => void;
 }
 
-export const SuccessView: React.FC<SuccessViewProps> = ({ data, onReset }) => {
+export const SuccessView: React.FC<SuccessViewProps> = ({ onReset }) => {
     return (
         <div className="container animate-fade-in">
             <div className="card" style={{ textAlign: 'center', padding: '4rem 2rem' }}>

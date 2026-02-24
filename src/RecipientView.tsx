@@ -1,11 +1,18 @@
 import React from 'react';
 
 interface RecipientViewProps {
-    data: { file: File | null; sender: string; recipient: string };
+    data: {
+        file: File | null;
+        sender: string;
+        recipient: string;
+        fileName?: string;
+    };
     onSignClick: () => void;
 }
 
 export const RecipientView: React.FC<RecipientViewProps> = ({ data, onSignClick }) => {
+    const displayFileName = data.file?.name || data.fileName || 'Asiakirja.pdf';
+
     return (
         <div className="container animate-fade-in">
             <div className="card">
@@ -23,7 +30,7 @@ export const RecipientView: React.FC<RecipientViewProps> = ({ data, onSignClick 
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
                         <div>
-                            <div style={{ fontWeight: 500, color: 'var(--text-main)' }}>{data.file?.name}</div>
+                            <div style={{ fontWeight: 500, color: 'var(--text-main)' }}>{displayFileName}</div>
                             <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>PDF Asiakirja • 1 sivu</div>
                         </div>
                     </div>
@@ -32,13 +39,13 @@ export const RecipientView: React.FC<RecipientViewProps> = ({ data, onSignClick 
                 <div style={{ borderTop: '1px solid var(--border)', paddingTop: '2rem', marginTop: '1rem' }}>
                     <h3 style={{ marginBottom: '1rem', fontSize: '1.125rem' }}>Toimi näin:</h3>
                     <ol style={{ paddingLeft: '1.5rem', marginBottom: '2rem', color: 'var(--text-muted)' }}>
-                        <li style={{ marginBottom: '0.5rem' }}>Lue asiakirja läpi huolellisesti (PoC: Tässä voisi olla PDF-esikatselu).</li>
+                        <li style={{ marginBottom: '0.5rem' }}>Lue asiakirja läpi huolellisesti (PoC: Esikatselu ohitettu selaimen muistin tyhjennyttyä URL-reitityksessä).</li>
                         <li style={{ marginBottom: '0.5rem' }}>Tunnistaudu vahvasti verkkopankkitunnuksillasi.</li>
                         <li>Allekirjoitus liitetään asiakirjaan sähköisesti.</li>
                     </ol>
 
                     <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
-                        <button className="btn btn-secondary" onClick={() => alert('Demoympäristössä esikatselu on ohitettu.')}>
+                        <button className="btn btn-secondary" onClick={() => alert('Demoympäristössä alkuperäinen PDF-tiedosto ei siirtynyt linkin mukana (vaatisi Backendin).')}>
                             Lataa esikatselu
                         </button>
                         <button className="btn btn-primary" onClick={onSignClick}>

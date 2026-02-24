@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { UploadView } from './UploadView';
 import { RecipientView } from './RecipientView';
 import { MockBankAuth } from './MockBankAuth';
@@ -11,14 +11,39 @@ interface SignatureData {
   file: File | null;
   sender: string;
   recipient: string;
+  documentId?: string;
+  fileName?: string;
 }
 
 function App() {
   const [view, setView] = useState<AppState>('upload');
   const [data, setData] = useState<SignatureData>({ file: null, sender: '', recipient: '' });
 
+  // Check URL parameters on load for recipient viewing routing
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const documentId = params.get('document');
+    const sender = params.get('sender');
+    const recipient = params.get('recipient');
+    const fileName = params.get('file');
+
+    if (documentId && sender && recipient) {
+      // Simulate that the file is loaded from a server since we don't have the File object
+      setData({
+        file: null,
+        sender,
+        recipient,
+        documentId,
+        fileName: fileName || 'Sopimusasiakirja.pdf'
+      });
+      setView('recipient');
+    }
+  }, []);
+
   const handleSend = (submittedData: SignatureData) => {
-    setData(submittedData);
+    // Generate a mock document ID
+    const docId = Math.random().toString(36).substring(2, 10).toUpperCase();
+    setData({ ...submittedData, documentId: docId });
     setView('sent');
   };
 
@@ -29,6 +54,8 @@ function App() {
   const resetFlow = () => {
     setData({ file: null, sender: '', recipient: '' });
     setView('upload');
+    // Clear URL parameters
+    window.history.replaceState({}, '', window.location.pathname);
   };
 
   return (
@@ -41,7 +68,7 @@ function App() {
           Luottokirja
         </div>
         <div>
-          {view !== 'upload' && view !== 'sent' && (
+          {view !== 'upload' && view !== 'sent' && data.recipient && (
             <span className="badge badge-success" style={{ background: '#eff6ff', color: 'var(--primary)' }}>
               Vastaanottaja: {data.recipient}
             </span>
@@ -55,18 +82,39 @@ function App() {
         {view === 'sent' && (
           <div className="container animate-fade-in">
             <div className="card" style={{ textAlign: 'center' }}>
-              <h2 style={{ marginBottom: '1rem', color: 'var(--success)' }}>Asiakirja lähetetty!</h2>
+              <h2 style={{ marginBottom: '1rem', color: 'var(--success)' }}>Asiakirja on valmis lähetettäväksi!</h2>
               <p style={{ marginBottom: '2rem' }}>
-                Allekirjoituskutsu on lähetetty osoitteeseen <strong>{data.recipient}</strong>.
+                Allekirjoituskutsu sähköpostiin <strong>{data.recipient}</strong>.
               </p>
 
               <div style={{ padding: '1.5rem', background: '#eff6ff', borderRadius: 'var(--radius-md)', marginBottom: '2rem', border: '1px solid #bfdbfe' }}>
                 <p style={{ fontSize: '0.875rem', color: '#1e3a8a', marginBottom: '1rem' }}>
-                  <strong>Demo-ohje:</strong> Oikeassa palvelussa vastaanottaja saisi sähköpostin. Klikkaa alla olevaa painiketta siirtyäksesi suoraan vastaanottajan näkymään (simulai avattua sähköpostilinkkiä).
+                  <strong>Demo-ohje:</strong> Selaimesi avaa nyt sähköpostiohjelmasi ja luo viestin, joka sisältää uniikin linkin tähän sovellukseen parametrilla: <br /> `?document={data.documentId}`.
                 </p>
-                <button className="btn btn-primary" onClick={() => setView('recipient')}>
-                  Siirry vastaanottajan näkymään →
-                </button>
+
+                {data.documentId && (
+                  <a
+                    href={`mailto:${data.recipient}?subject=Allekirjoituspyyntö: ${data.file?.name || 'Asiakirja'}&body=Hei,%0A%0A${data.sender} on lähettänyt sinulle asiakirjan (${data.file?.name || 'Asiakirja'}) sähköisesti allekirjoitettavaksi.%0A%0APääset lukemaan ja allekirjoittamaan asiakirjan tästä turvallisesta linkistä:%0A${window.location.origin}${window.location.pathname}?document=${data.documentId}&sender=${encodeURIComponent(data.sender)}&recipient=${encodeURIComponent(data.recipient)}&file=${encodeURIComponent(data.file?.name || 'Asiakirja')}%0A%0AYstävällisin terveisin,%0ALuottokirja PoC`}
+                    className="btn btn-primary"
+                    style={{ textDecoration: 'none' }}
+                  >
+                    Käynnistä sähköpostin lähetys
+                  </a>
+                )}
+
+                <div style={{ marginTop: '1.5rem', borderTop: '1px dashed #bfdbfe', paddingTop: '1rem' }}>
+                  <p style={{ fontSize: '0.875rem', color: '#1e3a8a', marginBottom: '1rem' }}>
+                    Voit myös kopioida linkin suoraan tästä ja avata sen testataksesi vastaanottajan kokemusta:
+                  </p>
+                  <input
+                    type="text"
+                    readOnly
+                    className="form-input"
+                    style={{ fontSize: '0.8rem', textAlign: 'center', background: '#e0f2fe' }}
+                    value={`${window.location.origin}${window.location.pathname}?document=${data.documentId}&sender=${data.sender}&recipient=${data.recipient}&file=${data.file?.name || 'Asiakirja'}`}
+                    onClick={(e) => (e.target as HTMLInputElement).select()}
+                  />
+                </div>
               </div>
 
               <button className="btn btn-secondary" onClick={resetFlow}>
@@ -78,7 +126,7 @@ function App() {
 
         {view === 'recipient' && <RecipientView data={data} onSignClick={() => setView('auth')} />}
 
-        {view === 'success' && <SuccessView data={data} onReset={resetFlow} />}
+        {view === 'success' && <SuccessView onReset={resetFlow} />}
       </main>
 
       {view === 'auth' && (

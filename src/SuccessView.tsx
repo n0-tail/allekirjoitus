@@ -1,7 +1,6 @@
 import React from 'react';
 
 interface SuccessViewProps {
-    data: { file: File | null; sender: string; recipient: string };
     onReset: () => void;
 }
 

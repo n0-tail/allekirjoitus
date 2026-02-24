@@ -157,6 +157,20 @@ function App() {
                 </div>
               </div>
 
+              <div style={{ padding: '1.5rem', background: '#fffbeb', border: '1px dashed #fcd34d', borderRadius: 'var(--radius-lg)', marginBottom: '2rem' }}>
+                <h3 style={{ fontSize: '1rem', color: '#b45309', marginBottom: '0.5rem' }}>Nopea demo-tila</h3>
+                <p style={{ fontSize: '0.875rem', color: '#92400e', marginBottom: '1rem' }}>
+                  Haluatko vain demota palvelun putken alusta loppuun ilman sähköpostien säätöä? Ohita askeleet ja hyppää suoraan vastaanottajan saappaisiin.
+                </p>
+                <button
+                  className="btn btn-primary"
+                  style={{ background: '#d97706', width: '100%' }}
+                  onClick={() => setView('recipient')}
+                >
+                  Simuloi vastaanottajaa heti →
+                </button>
+              </div>
+
               <button className="btn btn-secondary" onClick={resetFlow} style={{ border: 'none', background: 'transparent', boxShadow: 'none' }}>
                 ← Palaa alkuun
               </button>

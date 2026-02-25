@@ -1,11 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { UploadView } from './UploadView';
 import { RecipientView } from './RecipientView';
 import { MockBankAuth } from './MockBankAuth';
+import { ProcessingView } from './ProcessingView';
 import { SuccessView } from './SuccessView';
 import './index.css';
 
-type AppState = 'upload' | 'sent' | 'recipient' | 'auth' | 'success';
+type AppState = 'upload' | 'sent' | 'recipient' | 'auth' | 'processing' | 'success';
 
 interface SignatureData {
   file: File | null;
@@ -16,40 +17,42 @@ interface SignatureData {
 }
 
 function App() {
-  const [view, setView] = useState<AppState>('upload');
-  const [data, setData] = useState<SignatureData>({ file: null, sender: '', recipient: '' });
+  const getInitialView = (): AppState => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('document') && params.get('sender') && params.get('recipient')) return 'recipient';
+    }
+    return 'upload';
+  };
+
+  const getInitialData = (): SignatureData => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const documentId = params.get('document');
+      const sender = params.get('sender');
+      const recipient = params.get('recipient');
+      const fileName = params.get('file');
+
+      if (documentId && sender && recipient) {
+        return { file: null, sender, recipient, documentId, fileName: fileName || 'Sopimusasiakirja.pdf' };
+      }
+    }
+    return { file: null, sender: '', recipient: '' };
+  };
+
+  const [view, setView] = useState<AppState>(getInitialView);
+  const [data, setData] = useState<SignatureData>(getInitialData);
   const [copied, setCopied] = useState(false);
 
-  // Check URL parameters on load for recipient viewing routing
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const documentId = params.get('document');
-    const sender = params.get('sender');
-    const recipient = params.get('recipient');
-    const fileName = params.get('file');
-
-    if (documentId && sender && recipient) {
-      // Simulate that the file is loaded from a server since we don't have the File object
-      setData({
-        file: null,
-        sender,
-        recipient,
-        documentId,
-        fileName: fileName || 'Sopimusasiakirja.pdf'
-      });
-      setView('recipient');
-    }
-  }, []);
-
   const handleSend = (submittedData: SignatureData) => {
-    // Generate a mock document ID
-    const docId = Math.random().toString(36).substring(2, 10).toUpperCase();
+    // Generate a mock document ID only if one wasn't provided by the backend upload
+    const docId = submittedData.documentId || Math.random().toString(36).substring(2, 10).toUpperCase();
     setData({ ...submittedData, documentId: docId });
     setView('sent');
   };
 
   const handleAuthSuccess = () => {
-    setView('success');
+    setView('processing');
   };
 
   const resetFlow = () => {
@@ -179,6 +182,17 @@ function App() {
         )}
 
         {view === 'recipient' && <RecipientView data={data} onSignClick={() => setView('auth')} />}
+
+        {view === 'processing' && (
+          <ProcessingView
+            data={data}
+            onSuccess={() => setView('success')}
+            onFail={(err) => {
+              alert(`Virhe asiakirjan käsittelyssä: ${err}`);
+              setView('recipient');
+            }}
+          />
+        )}
 
         {view === 'success' && <SuccessView onReset={resetFlow} />}
       </main>

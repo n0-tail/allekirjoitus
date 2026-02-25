@@ -1,73 +1,53 @@
-# React + TypeScript + Vite
+# Luottokirja (Signature Service) 🖋️
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Luottokirja is a modern, serverless Proof-of-Concept (PoC) for an electronic signature pipeline. It is designed around an **Ephemeral Pipeline** architecture, meaning it acts as a temporary processor for documents rather than a permanent storage vault. 
 
-Currently, two official plugins are available:
+This approach guarantees zero storage costs at scale and maximizes privacy, while delivering a seamless, "DocuSign-like" user experience.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## The Architecture
 
-## React Compiler
+1. **Frontend**: React + TypeScript + Vite. Deployed to GitHub Pages.
+2. **PDF Processing**: All heavy PDF manipulation (stamping signatures, timestamps, and IP addresses) is offloaded to the user's browser using `pdf-lib`.
+3. **Storage & Database**: Supabase (PostgreSQL + S3-compatible Storage).
+4. **Email Delivery**: Supabase Edge Functions + Resend API.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## How the Pipeline Works
 
-## Expanding the ESLint configuration
+1. **Upload**: A user selects a PDF and inputs sender/recipient emails. The PDF is temporarily uploaded to a secure Supabase bucket.
+2. **Notification**: A Supabase Edge Function emails the recipient a secure link to the application.
+3. **Authentication**: The recipient opens the link and authenticates (currently simulated with `MockBankAuth.tsx`).
+4. **Client-Side Stamping**: Upon successful login, the React app securely downloads the PDF, visually stamps it with the recipient's details using `pdf-lib`, and uploads the final version back to Supabase.
+5. **Distribution**: The Edge function generates a 24-hour signed download URL for the finalized PDF and emails it to both parties.
+6. **Auto-Purge**: (Future capability) A cron job/lifecycle hook deletes the PDF from the bucket after the 24-hour download window, freeing up the space. The text-based audit trail remains in the `documents` table.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Local Development
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+**Prerequisites:**
+You need a Supabase project and a Resend API key.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+1. Clone the repository and install dependencies:
+   ```bash
+   npm install
+   ```
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+2. Create a `.env.local` file in the root directory:
+   ```env
+   VITE_SUPABASE_URL=your_supabase_project_url
+   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+   RESEND_API_KEY=your_resend_api_key
+   ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+3. Run the development server:
+   ```bash
+   npm run dev
+   ```
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Deploying
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+The frontend is deployed to GitHub Pages using the `npm run deploy` script (via the `gh-pages` package).
+
+The email dispatch function is deployed to Supabase Edge Functions:
+```bash
+npx supabase functions deploy send-email --project-ref your_project_ref
+npx supabase secrets set RESEND_API_KEY=your_resend_api_key --project-ref your_project_ref
 ```

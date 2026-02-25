@@ -194,7 +194,7 @@ function App() {
           />
         )}
 
-        {view === 'success' && <SuccessView onReset={resetFlow} />}
+        {view === 'success' && <SuccessView data={data} onReset={resetFlow} />}
       </main>
 
       {view === 'auth' && (

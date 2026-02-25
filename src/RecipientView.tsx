@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { supabase } from './lib/supabase';
 
 interface RecipientViewProps {
     data: {
@@ -6,12 +7,47 @@ interface RecipientViewProps {
         sender: string;
         recipient: string;
         fileName?: string;
+        documentId?: string;
     };
     onSignClick: () => void;
 }
 
 export const RecipientView: React.FC<RecipientViewProps> = ({ data, onSignClick }) => {
     const displayFileName = data.file?.name || data.fileName || 'Asiakirja.pdf';
+    const [isDownloading, setIsDownloading] = useState(false);
+
+    const handleDownload = async () => {
+        if (!data.documentId || !displayFileName) {
+            alert('Virhe: Asiakirjan tunnistetta ei löytynyt. Lataus ei onnistu esikatselussa.');
+            return;
+        }
+
+        setIsDownloading(true);
+        try {
+            const filePath = `${data.documentId}/${displayFileName}`;
+            const { data: urlData, error } = await supabase.storage.from('pdfs').createSignedUrl(filePath, 60); // 60 sekuntia voimassa
+
+            if (error) {
+                throw new Error(`Latausvirhe: ${error.message}`);
+            }
+
+            if (urlData?.signedUrl) {
+                // Trigger download in browser
+                const a = document.createElement('a');
+                a.href = urlData.signedUrl;
+                a.download = displayFileName;
+                a.target = '_blank';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
+        } catch (err: unknown) {
+            console.error(err);
+            alert(err instanceof Error ? err.message : 'Tuntematon virhe tapahtui tiedostoa ladattaessa.');
+        } finally {
+            setIsDownloading(false);
+        }
+    };
 
     return (
         <div className="container animate-fade-in">
@@ -39,14 +75,14 @@ export const RecipientView: React.FC<RecipientViewProps> = ({ data, onSignClick 
                 <div style={{ borderTop: '1px solid var(--border)', paddingTop: '2rem', marginTop: '1rem' }}>
                     <h3 style={{ marginBottom: '1rem', fontSize: '1.125rem' }}>Toimi näin:</h3>
                     <ol style={{ paddingLeft: '1.5rem', marginBottom: '2rem', color: 'var(--text-muted)' }}>
-                        <li style={{ marginBottom: '0.5rem' }}>Lue asiakirja läpi huolellisesti (PoC: Esikatselu ohitettu selaimen muistin tyhjennyttyä URL-reitityksessä).</li>
+                        <li style={{ marginBottom: '0.5rem' }}>Lataa ja lue asiakirja läpi huolellisesti esikatselusta.</li>
                         <li style={{ marginBottom: '0.5rem' }}>Tunnistaudu vahvasti verkkopankkitunnuksillasi.</li>
                         <li>Allekirjoitus liitetään asiakirjaan sähköisesti.</li>
                     </ol>
 
                     <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
-                        <button className="btn btn-secondary" onClick={() => alert('Demoympäristössä alkuperäinen PDF-tiedosto ei siirtynyt linkin mukana (vaatisi Backendin).')}>
-                            Lataa esikatselu
+                        <button className="btn btn-secondary" onClick={handleDownload} disabled={isDownloading}>
+                            {isDownloading ? 'Ladataan...' : 'Lataa esikatselu'}
                         </button>
                         <button className="btn btn-primary" onClick={onSignClick}>
                             Tunnistaudu & Allekirjoita

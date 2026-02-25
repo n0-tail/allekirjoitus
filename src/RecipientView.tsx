@@ -10,9 +10,10 @@ interface RecipientViewProps {
         documentId?: string;
     };
     onSignClick: () => void;
+    onPrivacyClick?: () => void;
 }
 
-export const RecipientView: React.FC<RecipientViewProps> = ({ data, onSignClick }) => {
+export const RecipientView: React.FC<RecipientViewProps> = ({ data, onSignClick, onPrivacyClick }) => {
     const displayFileName = data.file?.name || data.fileName || 'Asiakirja.pdf';
     const [isDownloading, setIsDownloading] = useState(false);
 
@@ -80,13 +81,18 @@ export const RecipientView: React.FC<RecipientViewProps> = ({ data, onSignClick 
                         <li>Allekirjoitus liitetään asiakirjaan sähköisesti.</li>
                     </ol>
 
-                    <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
-                        <button className="btn btn-secondary" onClick={handleDownload} disabled={isDownloading}>
-                            {isDownloading ? 'Ladataan...' : 'Lataa esikatselu'}
-                        </button>
-                        <button className="btn btn-primary" onClick={onSignClick}>
-                            Tunnistaudu & Allekirjoita
-                        </button>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.5rem' }}>
+                        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', margin: 0 }}>
+                            Tunnistautumalla vahvasti hyväksyt palvelun <a href="#" onClick={(e) => { e.preventDefault(); onPrivacyClick && onPrivacyClick(); }} style={{ color: 'var(--primary)' }}>Tietosuojaselosteen</a>.
+                        </p>
+                        <div style={{ display: 'flex', gap: '1rem' }}>
+                            <button className="btn btn-secondary" onClick={handleDownload} disabled={isDownloading}>
+                                {isDownloading ? 'Ladataan...' : 'Lataa esikatselu'}
+                            </button>
+                            <button className="btn btn-primary" onClick={onSignClick}>
+                                Tunnistaudu & Allekirjoita
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

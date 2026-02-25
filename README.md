@@ -1,6 +1,6 @@
-# Luottokirja (Signature Service) 🖋️
+# Allekirjoitus (Signature Service) 🖋️
 
-Luottokirja is a modern, serverless Proof-of-Concept (PoC) for an electronic signature pipeline. It is designed around an **Ephemeral Pipeline** architecture, meaning it acts as a temporary processor for documents rather than a permanent storage vault. 
+Allekirjoitus is a modern, serverless Proof-of-Concept (PoC) for an electronic signature pipeline. It is designed around an **Ephemeral Pipeline** architecture, meaning it acts as a temporary processor for documents rather than a permanent storage vault. 
 
 This approach guarantees zero storage costs at scale and maximizes privacy, while delivering a seamless, "DocuSign-like" user experience.
 

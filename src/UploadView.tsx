@@ -76,7 +76,7 @@ export const UploadView: React.FC<UploadViewProps> = ({ onSend }) => {
                   </a>
                 </div>
                 <p style="color: #6b7280; font-size: 14px; margin-bottom: 0;">
-                  Ystävällisin terveisin,<br>Luottokirja
+                  Ystävällisin terveisin,<br>Allekirjoitus
                 </p>
               </div>`
             }

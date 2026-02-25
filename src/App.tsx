@@ -4,9 +4,10 @@ import { RecipientView } from './RecipientView';
 import { MockBankAuth } from './MockBankAuth';
 import { ProcessingView } from './ProcessingView';
 import { SuccessView } from './SuccessView';
+import { Tietosuojaseloste } from './Tietosuojaseloste';
 import './index.css';
 
-type AppState = 'upload' | 'sent' | 'recipient' | 'auth' | 'processing' | 'success';
+type AppState = 'upload' | 'sent' | 'recipient' | 'auth' | 'processing' | 'success' | 'privacy';
 
 interface SignatureData {
   file: File | null;
@@ -69,7 +70,7 @@ function App() {
           <svg style={{ width: '28px', height: '28px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
           </svg>
-          Luottokirja
+          Allekirjoitus
         </div>
         <div>
           {view !== 'upload' && view !== 'sent' && data.recipient && (
@@ -105,7 +106,7 @@ function App() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                   {data.documentId && (
                     <a
-                      href={`mailto:${data.recipient}?subject=Allekirjoituspyyntö: ${data.file?.name || 'Asiakirja'}&body=Hei,%0A%0A${data.sender} on lähettänyt sinulle asiakirjan (${data.file?.name || 'Asiakirja'}) sähköisesti allekirjoitettavaksi.%0A%0APääset lukemaan ja allekirjoittamaan asiakirjan tästä turvallisesta linkistä:%0A${window.location.origin}${window.location.pathname}?document=${data.documentId}&sender=${encodeURIComponent(data.sender)}&recipient=${encodeURIComponent(data.recipient)}&file=${encodeURIComponent(data.file?.name || 'Asiakirja')}%0A%0AYstävällisin terveisin,%0ALuottokirja`}
+                      href={`mailto:${data.recipient}?subject=Allekirjoituspyyntö: ${data.file?.name || 'Asiakirja'}&body=Hei,%0A%0A${data.sender} on lähettänyt sinulle asiakirjan (${data.file?.name || 'Asiakirja'}) sähköisesti allekirjoitettavaksi.%0A%0APääset lukemaan ja allekirjoittamaan asiakirjan tästä turvallisesta linkistä:%0A${window.location.origin}${window.location.pathname}?document=${data.documentId}&sender=${encodeURIComponent(data.sender)}&recipient=${encodeURIComponent(data.recipient)}&file=${encodeURIComponent(data.file?.name || 'Asiakirja')}%0A%0AYstävällisin terveisin,%0AAllekirjoitus`}
                       className="btn btn-primary"
                       style={{ textDecoration: 'none', width: '100%' }}
                     >
@@ -181,7 +182,7 @@ function App() {
           </div>
         )}
 
-        {view === 'recipient' && <RecipientView data={data} onSignClick={() => setView('auth')} />}
+        {view === 'recipient' && <RecipientView data={data} onSignClick={() => setView('auth')} onPrivacyClick={() => setView('privacy')} />}
 
         {view === 'processing' && (
           <ProcessingView
@@ -195,6 +196,8 @@ function App() {
         )}
 
         {view === 'success' && <SuccessView data={data} onReset={resetFlow} />}
+
+        {view === 'privacy' && <Tietosuojaseloste onBack={() => setView(data.documentId ? 'recipient' : 'upload')} />}
       </main>
 
       {view === 'auth' && (
@@ -203,6 +206,17 @@ function App() {
           onCancel={() => setView('recipient')}
         />
       )}
+      <footer style={{ marginTop: 'auto', padding: '2rem', textAlign: 'center', fontSize: '0.875rem', color: 'var(--text-muted)' }}>
+        <div>&copy; {new Date().getFullYear()} Polarcomp Oy (polarcomp.fi). Y-tunnus: 1234567-8</div>
+        <div style={{ marginTop: '0.5rem' }}>
+          <button
+            onClick={() => setView('privacy')}
+            style={{ background: 'none', border: 'none', color: 'var(--primary)', cursor: 'pointer', textDecoration: 'underline' }}
+          >
+            Tietosuojaseloste
+          </button>
+        </div>
+      </footer>
     </>
   );
 }

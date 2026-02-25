@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { UploadView } from './UploadView';
 import { RecipientView } from './RecipientView';
-import { MockBankAuth } from './MockBankAuth';
+import { OidcCallbackView } from './OidcCallbackView';
 import { ProcessingView } from './ProcessingView';
 import { SuccessView } from './SuccessView';
 import { Tietosuojaseloste } from './Tietosuojaseloste';
 import './index.css';
 
-type AppState = 'upload' | 'sent' | 'recipient' | 'auth' | 'processing' | 'success' | 'privacy';
+type AppState = 'upload' | 'sent' | 'recipient' | 'processing' | 'success' | 'privacy' | 'callback';
 
 interface SignatureData {
   file: File | null;
@@ -15,12 +15,14 @@ interface SignatureData {
   recipient: string;
   documentId?: string;
   fileName?: string;
+  verifiedName?: string;
 }
 
 function App() {
   const getInitialView = (): AppState => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
+      if (params.get('code') && params.get('state')) return 'callback';
       if (params.get('document') && params.get('sender') && params.get('recipient')) return 'recipient';
     }
     return 'upload';
@@ -29,6 +31,17 @@ function App() {
   const getInitialData = (): SignatureData => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
+
+      if (params.get('code') && params.get('state')) {
+        const stashed = sessionStorage.getItem('signatureData');
+        if (stashed) {
+          try {
+            return JSON.parse(stashed);
+          } catch { /* ignore */ }
+        }
+        return { file: null, sender: '', recipient: '', documentId: params.get('state') || '' };
+      }
+
       const documentId = params.get('document');
       const sender = params.get('sender');
       const recipient = params.get('recipient');
@@ -50,10 +63,6 @@ function App() {
     const docId = submittedData.documentId || Math.random().toString(36).substring(2, 10).toUpperCase();
     setData({ ...submittedData, documentId: docId });
     setView('sent');
-  };
-
-  const handleAuthSuccess = () => {
-    setView('processing');
   };
 
   const resetFlow = () => {
@@ -182,7 +191,8 @@ function App() {
           </div>
         )}
 
-        {view === 'recipient' && <RecipientView data={data} onSignClick={() => setView('auth')} onPrivacyClick={() => setView('privacy')} />}
+        {/* When clicking authenticate, RecipientView directly redirects the window to Idura now without 'auth' view */}
+        {view === 'recipient' && <RecipientView data={data} onSignClick={() => { }} onPrivacyClick={() => setView('privacy')} />}
 
         {view === 'processing' && (
           <ProcessingView
@@ -198,14 +208,21 @@ function App() {
         {view === 'success' && <SuccessView data={data} onReset={resetFlow} />}
 
         {view === 'privacy' && <Tietosuojaseloste onBack={() => setView(data.documentId ? 'recipient' : 'upload')} />}
-      </main>
 
-      {view === 'auth' && (
-        <MockBankAuth
-          onSuccess={handleAuthSuccess}
-          onCancel={() => setView('recipient')}
-        />
-      )}
+        {view === 'callback' && (
+          <OidcCallbackView
+            code={new URLSearchParams(window.location.search).get('code') || ''}
+            onSuccess={(name) => {
+              setData(prev => ({ ...prev, verifiedName: name }));
+              setView('processing');
+            }}
+            onFail={(err) => {
+              alert(`Tunnistautuminen epäonnistui: ${err}`);
+              setView('recipient');
+            }}
+          />
+        )}
+      </main>
       <footer style={{ marginTop: 'auto', padding: '2rem', textAlign: 'center', fontSize: '0.875rem', color: 'var(--text-muted)' }}>
         <div>&copy; {new Date().getFullYear()} Polarcomp Oy (polarcomp.fi). Y-tunnus: 1234567-8</div>
         <div style={{ marginTop: '0.5rem' }}>

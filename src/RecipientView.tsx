@@ -50,6 +50,36 @@ export const RecipientView: React.FC<RecipientViewProps> = ({ data, onSignClick,
         }
     };
 
+    const handleSignClick = () => {
+        if (!data.documentId) {
+            alert('Virhe: Asiakirjan tunnistetta ei löytynyt.');
+            return;
+        }
+
+        // Tallenna tilatiedot istuntoon, jotta voimme jatkaa OIDC-paluun jälkeen
+        sessionStorage.setItem('signatureData', JSON.stringify({
+            documentId: data.documentId,
+            sender: data.sender,
+            recipient: data.recipient,
+            fileName: displayFileName
+        }));
+
+        const clientId = import.meta.env.VITE_IDURA_CLIENT_ID;
+        const domain = import.meta.env.VITE_IDURA_DOMAIN;
+
+        if (!clientId || !domain) {
+            console.warn("Idura OIDC muuttujia ei löydy, käytetään fallbackia.");
+            onSignClick(); // Fallback paikalliseen testiin jos env puuttuu
+            return;
+        }
+
+        // OIDC Redirect (PKCE client flow initiated here, but code exchange happens on server)
+        const redirectUri = encodeURIComponent(window.location.origin + window.location.pathname);
+        const authUrl = `https://${domain}/oauth2/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}&scope=openid profile ssno&state=${data.documentId}&acr_values=urn:grn:authn:fi:bank-id`;
+
+        window.location.href = authUrl;
+    };
+
     return (
         <div className="container animate-fade-in">
             <div className="card">
@@ -89,7 +119,7 @@ export const RecipientView: React.FC<RecipientViewProps> = ({ data, onSignClick,
                             <button className="btn btn-secondary" onClick={handleDownload} disabled={isDownloading}>
                                 {isDownloading ? 'Ladataan...' : 'Lataa esikatselu'}
                             </button>
-                            <button className="btn btn-primary" onClick={onSignClick}>
+                            <button className="btn btn-primary" onClick={handleSignClick}>
                                 Tunnistaudu & Allekirjoita
                             </button>
                         </div>

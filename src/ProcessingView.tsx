@@ -8,6 +8,7 @@ interface ProcessingViewProps {
         recipient: string;
         documentId?: string;
         fileName?: string;
+        verifiedName?: string;
     };
     onSuccess: () => void;
     onFail: (error: string) => void;
@@ -44,7 +45,7 @@ export const ProcessingView: React.FC<ProcessingViewProps> = ({ data, onSuccess,
 
                 const timestamp = new Date().toLocaleString('fi-FI');
                 lastPage.drawText(`Allekirjoitettu sähköisesti`, { x: 50, y: 70, size: 12, color: rgb(0, 0.4, 0) });
-                lastPage.drawText(`Allekirjoittaja: ${data.recipient}`, { x: 50, y: 55, size: 10, color: rgb(0, 0, 0) });
+                lastPage.drawText(`Allekirjoittaja: ${data.verifiedName || data.recipient}`, { x: 50, y: 55, size: 10, color: rgb(0, 0, 0) });
                 lastPage.drawText(`Aikaleima: ${timestamp}`, { x: 50, y: 40, size: 10, color: rgb(0, 0, 0) });
 
                 const pdfBytes = await pdfDoc.save();

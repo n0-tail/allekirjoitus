@@ -47,6 +47,11 @@ create policy "Anyone can read a PDF if they have the path"
   to anon
   using ( bucket_id = 'pdfs' );
 
+create policy "Anyone can update a temporary PDF"
+  on storage.objects for update
+  to anon
+  using ( bucket_id = 'pdfs' );
+
 create policy "Anyone can delete a PDF (for our auto-purge)"
   on storage.objects for delete
   to anon

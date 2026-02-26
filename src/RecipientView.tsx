@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { supabase } from './lib/supabase';
+import toast from 'react-hot-toast';
 
 interface RecipientViewProps {
     data: {
@@ -19,7 +20,7 @@ export const RecipientView: React.FC<RecipientViewProps> = ({ data, onSignClick,
 
     const handleDownload = async () => {
         if (!data.documentId || !displayFileName) {
-            alert('Virhe: Asiakirjan tunnistetta ei löytynyt. Lataus ei onnistu esikatselussa.');
+            toast.error('Virhe: Asiakirjan tunnistetta ei löytynyt. Lataus ei onnistu esikatselussa.');
             return;
         }
 
@@ -44,7 +45,7 @@ export const RecipientView: React.FC<RecipientViewProps> = ({ data, onSignClick,
             }
         } catch (err: unknown) {
             console.error(err);
-            alert(err instanceof Error ? err.message : 'Tuntematon virhe tapahtui tiedostoa ladattaessa.');
+            toast.error(err instanceof Error ? err.message : 'Tuntematon virhe tapahtui tiedostoa ladattaessa.');
         } finally {
             setIsDownloading(false);
         }
@@ -52,7 +53,7 @@ export const RecipientView: React.FC<RecipientViewProps> = ({ data, onSignClick,
 
     const handleSignClick = () => {
         if (!data.documentId) {
-            alert('Virhe: Asiakirjan tunnistetta ei löytynyt.');
+            toast.error('Virhe: Asiakirjan tunnistetta ei löytynyt.');
             return;
         }
 

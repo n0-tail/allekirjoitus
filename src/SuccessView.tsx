@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { supabase } from './lib/supabase';
+import toast from 'react-hot-toast';
 
 interface SuccessViewProps {
     data: {
@@ -18,7 +19,7 @@ export const SuccessView: React.FC<SuccessViewProps> = ({ data, onReset }) => {
 
     const handleDownload = async () => {
         if (!data.documentId || !displayFileName) {
-            alert('Virhe: Asiakirjan tunnistetta ei löytynyt. Latausta ei voida suorittaa.');
+            toast.error('Virhe: Asiakirjan tunnistetta ei löytynyt. Latausta ei voida suorittaa.');
             return;
         }
 
@@ -42,7 +43,7 @@ export const SuccessView: React.FC<SuccessViewProps> = ({ data, onReset }) => {
             }
         } catch (err: unknown) {
             console.error(err);
-            alert(err instanceof Error ? err.message : 'Tuntematon virhe tapahtui tiedostoa ladattaessa.');
+            toast.error(err instanceof Error ? err.message : 'Tuntematon virhe tapahtui tiedostoa ladattaessa.');
         } finally {
             setIsDownloading(false);
         }

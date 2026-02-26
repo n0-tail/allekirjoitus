@@ -17,14 +17,19 @@ serve(async (req) => {
   }
 
   try {
+    const { documentId, role } = await req.json().catch(() => ({ documentId: 'unknown', role: 'unknown' }))
+
     // 300 cents = 3.00 EUR
     const paymentIntent = await stripe.paymentIntents.create({
       amount: 300,
       currency: 'eur',
-      // Automatic payment methods are enabled in the Stripe dashboard
       automatic_payment_methods: {
         enabled: true,
       },
+      metadata: {
+        documentId: documentId || 'unknown',
+        role: role || 'unknown'
+      }
     })
 
     return new Response(
@@ -34,7 +39,7 @@ serve(async (req) => {
         status: 200,
       },
     )
-  } catch (error) {
+  } catch (error: any) {
     return new Response(
       JSON.stringify({ error: error.message }),
       {

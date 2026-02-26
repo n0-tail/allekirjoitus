@@ -1,0 +1,1 @@
+const axios = require('axios'); const { execSync } = require('child_process'); execSync('node test_par.mjs > par2.txt'); const txt=fs.readFileSync('par2.txt','utf16le'); console.log(txt.substring(txt.indexOf('Response:')));

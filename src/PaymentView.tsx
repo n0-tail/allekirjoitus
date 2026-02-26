@@ -68,9 +68,11 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSuccess, reason }) => {
 interface PaymentViewProps {
     onPaymentSuccess: () => void;
     reason: string;
+    documentId: string;
+    role: 'sender' | 'recipient';
 }
 
-export const PaymentView: React.FC<PaymentViewProps> = ({ onPaymentSuccess, reason }) => {
+export const PaymentView: React.FC<PaymentViewProps> = ({ onPaymentSuccess, reason, documentId, role }) => {
     const [clientSecret, setClientSecret] = useState('');
     const [error, setError] = useState<string | null>(null);
 
@@ -91,7 +93,9 @@ export const PaymentView: React.FC<PaymentViewProps> = ({ onPaymentSuccess, reas
         // Fetch Intent from Supabase Edge Function
         const fetchIntent = async () => {
             try {
-                const { data, error: funcError } = await supabase.functions.invoke('create-payment-intent');
+                const { data, error: funcError } = await supabase.functions.invoke('create-payment-intent', {
+                    body: { documentId, role }
+                });
 
                 if (funcError) throw new Error(funcError.message);
                 if (data?.clientSecret) {

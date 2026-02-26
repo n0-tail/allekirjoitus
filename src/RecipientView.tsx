@@ -64,20 +64,8 @@ export const RecipientView: React.FC<RecipientViewProps> = ({ data, onSignClick,
             fileName: displayFileName
         }));
 
-        const clientId = import.meta.env.VITE_IDURA_CLIENT_ID;
-        const domain = import.meta.env.VITE_IDURA_DOMAIN;
-
-        if (!clientId || !domain) {
-            console.warn("Idura OIDC muuttujia ei löydy, käytetään fallbackia.");
-            onSignClick(); // Fallback paikalliseen testiin jos env puuttuu
-            return;
-        }
-
-        // OIDC Redirect (PKCE client flow initiated here, but code exchange happens on server)
-        const redirectUri = encodeURIComponent(window.location.origin + window.location.pathname);
-        const authUrl = `https://${domain}/oauth2/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}&scope=openid profile ssno&state=${data.documentId}&acr_values=urn:grn:authn:fi:bank-id`;
-
-        window.location.href = authUrl;
+        // Pyydetään pääkomponenttia siirtymään maksu/tunnistautumis-näkymään
+        onSignClick();
     };
 
     return (

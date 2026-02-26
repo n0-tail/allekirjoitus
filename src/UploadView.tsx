@@ -168,7 +168,7 @@ export const UploadView: React.FC<UploadViewProps> = ({ onSend }) => {
               className="btn btn-primary"
               disabled={!file || !sender || !recipient || isUploading}
             >
-              {isUploading ? 'Lähetetään...' : 'Lähetä allekirjoitettavaksi'}
+              {isUploading ? 'Lähetetään...' : 'Lähetä ja jatka tunnistautumaan'}
             </button>
           </div>
         </form>

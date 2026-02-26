@@ -5,9 +5,11 @@ import { OidcCallbackView } from './OidcCallbackView';
 import { ProcessingView } from './ProcessingView';
 import { SuccessView } from './SuccessView';
 import { Tietosuojaseloste } from './Tietosuojaseloste';
+import { PaymentView } from './PaymentView';
+import { supabase } from './lib/supabase';
 import './index.css';
 
-type AppState = 'upload' | 'sent' | 'recipient' | 'processing' | 'success' | 'privacy' | 'callback';
+type AppState = 'upload' | 'sent' | 'sender-payment' | 'recipient' | 'recipient-payment' | 'processing' | 'success' | 'privacy' | 'callback';
 
 interface SignatureData {
   file: File | null;
@@ -72,6 +74,59 @@ function App() {
     window.history.replaceState({}, '', window.location.pathname);
   };
 
+  const initiateAuth = (role: 'sender' | 'recipient') => {
+    if (!data.documentId) {
+      alert('Virhe: Asiakirjan tunnistetta ei löytynyt.');
+      return;
+    }
+
+    // Tallenna tilatiedot istuntoon, jotta voimme jatkaa OIDC-paluun jälkeen
+    sessionStorage.setItem('signatureData', JSON.stringify({
+      documentId: data.documentId,
+      sender: data.sender,
+      recipient: data.recipient,
+      fileName: data.file?.name || data.fileName || 'Asiakirja.pdf',
+      role: role // Save role so we know what to do after callback
+    }));
+
+    const clientId = import.meta.env.VITE_IDURA_CLIENT_ID;
+    const domain = import.meta.env.VITE_IDURA_DOMAIN;
+
+    if (!clientId || !domain) {
+      console.warn("Idura OIDC muuttujia ei löydy.");
+      alert("Tunnistautuminen ei ole käytössä (muuttujat puuttuvat).");
+      return;
+    }
+
+    const redirectUri = window.location.origin + window.location.pathname;
+
+    supabase.functions.invoke('init-auth', {
+      body: {
+        state: data.documentId,
+        redirectUri: redirectUri
+      }
+    })
+      .then(({ data: authData, error }) => {
+        if (error) {
+          console.error("Init-auth error:", error);
+          alert("Virhe tunnistautumisen alustuksessa (Backend): " + error.message);
+          return;
+        }
+
+        if (authData && authData.authUrl) {
+          window.location.href = authData.authUrl;
+        } else if (authData && authData.error) {
+          alert("Virhe tunnistautumisen alustuksessa (IdP): " + authData.error);
+        } else {
+          alert("Palvelin ei palauttanut kelvollista ohjausosoitetta eikä virhettä.");
+        }
+      })
+      .catch(err => {
+        console.error("Fetch error configuring auth:", err);
+        alert("Yhteysvirhe tunnistautumisen alustuksessa: " + err.message);
+      });
+  }
+
   return (
     <>
       <header className="app-header">
@@ -104,31 +159,18 @@ function App() {
                 </div>
               </div>
 
-              <h2 style={{ marginBottom: '1rem' }}>Asiakirja on valmiina!</h2>
+              <h2 style={{ marginBottom: '1rem' }}>Asiakirja on lähetetty!</h2>
               <p style={{ marginBottom: '2rem', color: 'var(--text-muted)' }}>
-                Sähköinen allekirjoituskutsu on luotu henkilölle <strong>{data.recipient}</strong>.
+                Sähköinen allekirjoituskutsu on luotu henkilölle <strong>{data.recipient}</strong>. Sinun täytyy enää maksaa käsittelymaksu ja tunnistautua, jotta allekirjoituspyyntö on virallinen.
               </p>
 
               <div style={{ padding: '2rem', background: '#f8fafc', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border)', marginBottom: '2rem' }}>
-                <h3 style={{ fontSize: '1rem', marginBottom: '1.5rem', color: 'var(--text-main)' }}>Lähetä kutsu eteenpäin</h3>
+                <h3 style={{ fontSize: '1rem', marginBottom: '1.5rem', color: 'var(--text-main)' }}>Kutsu on lähetetty sähköpostitse</h3>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                  {data.documentId && (
-                    <a
-                      href={`mailto:${data.recipient}?subject=Allekirjoituspyyntö: ${data.file?.name || 'Asiakirja'}&body=Hei,%0A%0A${data.sender} on lähettänyt sinulle asiakirjan (${data.file?.name || 'Asiakirja'}) sähköisesti allekirjoitettavaksi.%0A%0APääset lukemaan ja allekirjoittamaan asiakirjan tästä turvallisesta linkistä:%0A${window.location.origin}${window.location.pathname}?document=${data.documentId}&sender=${encodeURIComponent(data.sender)}&recipient=${encodeURIComponent(data.recipient)}&file=${encodeURIComponent(data.file?.name || 'Asiakirja')}%0A%0AYstävällisin terveisin,%0AAllekirjoitus`}
-                      className="btn btn-primary"
-                      style={{ textDecoration: 'none', width: '100%' }}
-                    >
-                      <svg style={{ width: '20px', height: '20px', marginRight: '0.5rem' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                      </svg>
-                      Avaa sähköpostisovellus
-                    </a>
-                  )}
-
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.5rem' }}>
                     <div style={{ flex: 1, height: '1px', background: 'var(--border)' }}></div>
-                    <span style={{ fontSize: '0.875rem', color: 'var(--text-muted)', fontWeight: 500 }}>TAI KOOPIOI LINKKI</span>
+                    <span style={{ fontSize: '0.875rem', color: 'var(--text-muted)', fontWeight: 500 }}>VOIT MYÖS KOPIOIDA LINKIN TÄSTÄ</span>
                     <div style={{ flex: 1, height: '1px', background: 'var(--border)' }}></div>
                   </div>
 
@@ -170,14 +212,22 @@ function App() {
                 </div>
               </div>
 
+              <button
+                className="btn btn-primary"
+                style={{ width: '100%', marginBottom: '1rem', padding: '1rem', fontSize: '1.125rem' }}
+                onClick={() => setView('sender-payment')}
+              >
+                Siirry maksamaan ja tunnistautumaan &rarr;
+              </button>
+
               <div style={{ padding: '1.5rem', background: '#fffbeb', border: '1px dashed #fcd34d', borderRadius: 'var(--radius-lg)', marginBottom: '2rem' }}>
                 <h3 style={{ fontSize: '1rem', color: '#b45309', marginBottom: '0.5rem' }}>Nopea demo-tila</h3>
                 <p style={{ fontSize: '0.875rem', color: '#92400e', marginBottom: '1rem' }}>
-                  Haluatko vain demota palvelun putken alusta loppuun ilman sähköpostien säätöä? Ohita askeleet ja hyppää suoraan vastaanottajan saappaisiin.
+                  Haluatko vain demota palvelun putken alusta loppuun sivuuttamalla lähettäjän tunnistautumisen? Ohita askeleet ja hyppää suoraan vastaanottajan saappaisiin.
                 </p>
                 <button
-                  className="btn btn-primary"
-                  style={{ background: '#d97706', width: '100%' }}
+                  className="btn btn-secondary"
+                  style={{ background: 'transparent', border: '1px solid #d97706', color: '#b45309', width: '100%' }}
                   onClick={() => setView('recipient')}
                 >
                   Simuloi vastaanottajaa heti →
@@ -191,8 +241,27 @@ function App() {
           </div>
         )}
 
-        {/* When clicking authenticate, RecipientView directly redirects the window to Idura now without 'auth' view */}
-        {view === 'recipient' && <RecipientView data={data} onSignClick={() => { }} onPrivacyClick={() => setView('privacy')} />}
+        {view === 'sender-payment' && (
+          <PaymentView
+            reason="Lähettäjän käsittely- ja tunnistautumismaksu"
+            onPaymentSuccess={() => initiateAuth('sender')}
+          />
+        )}
+
+        {view === 'recipient' && (
+          <RecipientView
+            data={data}
+            onSignClick={() => setView('recipient-payment')}
+            onPrivacyClick={() => setView('privacy')}
+          />
+        )}
+
+        {view === 'recipient-payment' && (
+          <PaymentView
+            reason="Allekirjoittajan käsittely- ja tunnistautumismaksu"
+            onPaymentSuccess={() => initiateAuth('recipient')}
+          />
+        )}
 
         {view === 'processing' && (
           <ProcessingView
@@ -214,6 +283,21 @@ function App() {
             code={new URLSearchParams(window.location.search).get('code') || ''}
             onSuccess={(name) => {
               setData(prev => ({ ...prev, verifiedName: name }));
+
+              // Hae istunnosta, olimmeko lähettäjä vai vastaanottaja
+              try {
+                const stashed = sessionStorage.getItem('signatureData');
+                if (stashed) {
+                  const stashedData = JSON.parse(stashed);
+                  if (stashedData.role === 'sender') {
+                    // Lähettäjän osuus on valmis, näytetään lähettäjän onnistumisruutu
+                    setView('success');
+                    return;
+                  }
+                }
+              } catch (_) { }
+
+              // Oletuksena vastaanottaja (allekirjoittaja), jolloin siirrytään prosessointiin (PDF-leimaus)
               setView('processing');
             }}
             onFail={(err) => {

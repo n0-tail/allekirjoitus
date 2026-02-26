@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { UploadView } from './UploadView';
 import { RecipientView } from './RecipientView';
 import { OidcCallbackView } from './OidcCallbackView';
@@ -25,6 +25,10 @@ function App() {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       if (params.get('code') && params.get('state')) return 'callback';
+      if (params.get('payment_intent_client_secret')) {
+        const stashed = sessionStorage.getItem('appState_view');
+        if (stashed) return stashed as AppState;
+      }
       if (params.get('document') && params.get('sender') && params.get('recipient')) return 'recipient';
     }
     return 'upload';
@@ -44,6 +48,15 @@ function App() {
         return { file: null, sender: '', recipient: '', documentId: params.get('state') || '' };
       }
 
+      if (params.get('payment_intent_client_secret')) {
+        const stashed = sessionStorage.getItem('appState_data');
+        if (stashed) {
+          try {
+            return JSON.parse(stashed);
+          } catch { /* ignore */ }
+        }
+      }
+
       const documentId = params.get('document');
       const sender = params.get('sender');
       const recipient = params.get('recipient');
@@ -59,6 +72,12 @@ function App() {
   const [view, setView] = useState<AppState>(getInitialView);
   const [data, setData] = useState<SignatureData>(getInitialData);
   const [copied, setCopied] = useState(false);
+
+  // Stash state for Payment returns
+  useEffect(() => {
+    sessionStorage.setItem('appState_view', view);
+    sessionStorage.setItem('appState_data', JSON.stringify(data));
+  }, [view, data]);
 
   const handleSend = (submittedData: SignatureData) => {
     // Generate a mock document ID only if one wasn't provided by the backend upload

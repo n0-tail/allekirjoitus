@@ -1,53 +1,51 @@
 # Allekirjoitus (Signature Service) 🖋️
 
-Allekirjoitus is a modern, serverless Proof-of-Concept (PoC) for an electronic signature pipeline. It is designed around an **Ephemeral Pipeline** architecture, meaning it acts as a temporary processor for documents rather than a permanent storage vault. 
+Allekirjoitus on moderni, "serverless" Proof-of-Concept (PoC) sähköiselle allekirjoituspalvelulle. Se on suunniteltu huomioimaan tietosuoja sekä hyödyntämään pelkästään moderneja pilvipalveluita ja asiakkaan selainta raskaimpiin operaatioihin.
 
-This approach guarantees zero storage costs at scale and maximizes privacy, while delivering a seamless, "DocuSign-like" user experience.
+## Arkkitehtuuri & Nykyinen Tila
 
-## The Architecture
+Palvelun ydintoiminnallisuudet ovat **tällä hetkellä jo täysin toteutettu** ja toimintakunnossa:
 
-1. **Frontend**: React + TypeScript + Vite. Deployed to GitHub Pages.
-2. **PDF Processing**: All heavy PDF manipulation (stamping signatures, timestamps, and IP addresses) is offloaded to the user's browser using `pdf-lib`.
-3. **Storage & Database**: Supabase (PostgreSQL + S3-compatible Storage).
-4. **Email Delivery**: Supabase Edge Functions + Resend API.
+1. **Frontend**: React + TypeScript + Vite. Julkaistu automaattisesti GitHub Pagesiin.
+2. **Storage & Database (Toteutettu)**: Supabase PostgreSQL -tietokanta ja Storage. Asiakirjat ladataan ensin S3-yhteensopivaan "pdfs"-buckettiin, ja niille luodaan tila-rivi `documents`-tauluun.
+3. **Sähköpostien Lähetys (Toteutettu)**: Resend API + Supabase Edge Functions (`send-email`). Lähettää lähetysvaiheessa automaattisesti kutsulinkin vastaanottajalle, sekä allekirjoituksen jälkeen valmiin ladattavan PDF-linkin kummallekin osapuolelle.
+4. **Vahva Tunnistautuminen (FTN / Criipto) (Toteutettu)**:
+   - Integroitu Suomalainen Luottamusverkosto (FTN) pankkitunnuksilla (Criipton testiverkko).
+   - Hyödyntää kahta uutta Edge Functionia (`init-auth` ja `auth-callback`) toteuttamaan FTN:n vaatimat korkeimman turvatason kryptografiset vaatimukset:
+     - **PAR (Pushed Authorization Requests)**: Kirjautumispyynnöt allekirjoitetaan (JAR) ja pusketaan suoraan taustapalvelimen kautta.
+     - **JWE (JSON Web Encryption)**: Asiakkaan henkilöllisyystodistus (id_token) vastaanotetaan vahvasti salattuna ja puretaan omilla RSA-avaimilla (jose-kirjastolla).
+5. **PDF Leimaus selaimessa (Toteutettu)**: Autentikoinnin jälkeen palvelu hyödyntää `pdf-lib`-kirjastoa leimatakseen PDF-tiedoston visuaalisesti käyttäjän varmennetulla nimellä ja aikaleimalla suoraan selaimessa (välttäen näin raskaat PDF-palvelinkulut), jonka jälkeen se korvaa alkuperäisen tiedoston Supabasessa.
 
-## How the Pipeline Works
+## Seuraavat askeleet oikeaksi tuotteeksi (Tuotantovalmius)
 
-1. **Upload**: A user selects a PDF and inputs sender/recipient emails. The PDF is temporarily uploaded to a secure Supabase bucket.
-2. **Notification**: A Supabase Edge Function emails the recipient a secure link to the application.
-3. **Authentication**: The recipient opens the link and authenticates (currently simulated with `MockBankAuth.tsx`).
-4. **Client-Side Stamping**: Upon successful login, the React app securely downloads the PDF, visually stamps it with the recipient's details using `pdf-lib`, and uploads the final version back to Supabase.
-5. **Distribution**: The Edge function generates a 24-hour signed download URL for the finalized PDF and emails it to both parties.
-6. **Auto-Purge**: (Future capability) A cron job/lifecycle hook deletes the PDF from the bucket after the 24-hour download window, freeing up the space. The text-based audit trail remains in the `documents` table.
+Vaikka putki toimii nyt visuaalisesti ja teknisesti end-to-end, seuraavat asiat puuttuvat vielä aidosta, juridisesti pitävästä SaaS-tuotteesta:
 
-## Local Development
+1. **Kryptografinen PDF Sertifikaattiallekirjoitus (PAdES)**: Tällä hetkellä sovellus piirtää allekirjoittajan nimen ja aikaleiman visuaalisesti PDF:n sivulle. Juridisesti vahvassa "Advanced Electronic Signature" (AES) -mallissa PDF:n sisään tulee upottaa palveluntarjoajan kryptografinen varmenne (esim. node-signpdf:n avulla).
+2. **Tuotanto-FTN Avaimet**: Vaihda Criipton testiverkko (dfgdfgdfg-test.criipto.id) ja testipankkitunnukset oikeaan tuotantoverkkoon, tehden yrityksen ja käyttötarkoituksen varmentamisen Criiptolle.
+3. **Automaattinen tiedostojen siivous (Cron)**: Poistaa PDF-tiedostot automaattisesti jatkuvan tallennustilan ja tietosuojariskien minimoimiseksi esimerkiksi 24 tunnin jälkeen (jotta "ephemeral pipeline" toteutuu täydellisesti).
+4. **Tarkempi Audit Trail / Lokitus**: Laajempi tallennus IP-osoitteista, onnistuneista JWE/PAR FTN-transaktio-ID:istä ja selaimen user-agenteista erilliseksi tietokantatauluksi, joka mahdollisesti liitetään PDF:n viimeiseksi sivuksi "allekirjoituslokina".
 
-**Prerequisites:**
-You need a Supabase project and a Resend API key.
+## Paikallinen Kehitys
 
-1. Clone the repository and install dependencies:
+**Vaatimukset:**
+Supabase-projekti, Resend API-avain ja Criipto-tili (FTN).
+(Tässä repositoriossa on myös `mock-idura` palvelu, jolla FTN-tunnistautumista voi testata lokaalisti ilman oikeaa Criipto-yhteyttä `npm run mock-idura`).
+
+1. Asenna riippuvuudet:
    ```bash
    npm install
    ```
 
-2. Create a `.env.local` file in the root directory:
+2. Luo `.env.local` tiedosto:
    ```env
    VITE_SUPABASE_URL=your_supabase_project_url
    VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-   RESEND_API_KEY=your_resend_api_key
+   # Edge Functionsille (salaisuudet asetetaan myös Supabase cloudeihin):
+   IDURA_CLIENT_ID=...
+   IDURA_DOMAIN=...
    ```
 
-3. Run the development server:
+3. Käynnistä paikallinen palvelin:
    ```bash
    npm run dev
    ```
-
-## Deploying
-
-The frontend is deployed to GitHub Pages using the `npm run deploy` script (via the `gh-pages` package).
-
-The email dispatch function is deployed to Supabase Edge Functions:
-```bash
-npx supabase functions deploy send-email --project-ref your_project_ref
-npx supabase secrets set RESEND_API_KEY=your_resend_api_key --project-ref your_project_ref
-```

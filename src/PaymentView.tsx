@@ -26,7 +26,10 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSuccess, reason }) => {
 
         const { error } = await stripe.confirmPayment({
             elements,
-            redirect: 'if_required', // Avoid full page redirect so we can continue our SPA flow
+            confirmParams: {
+                return_url: window.location.href,
+            },
+            redirect: 'if_required', // Avoid full page redirect so we can continue our SPA flow if possible
         });
 
         if (error) {
@@ -72,6 +75,19 @@ export const PaymentView: React.FC<PaymentViewProps> = ({ onPaymentSuccess, reas
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const secret = params.get('payment_intent_client_secret');
+        const redirectStatus = params.get('redirect_status');
+
+        if (secret && redirectStatus === 'succeeded') {
+            // Maksu onnistui uudelleenohjauksen kautta (esim. Bancontact)
+            onPaymentSuccess();
+            return;
+        } else if (secret && redirectStatus) {
+            setError(`Maksu ei mennyt läpi (Tila: ${redirectStatus}). Lataa sivu uudelleen yrittääksesi uudestaan.`);
+            return;
+        }
+
         // Fetch Intent from Supabase Edge Function
         const fetchIntent = async () => {
             try {
@@ -90,7 +106,7 @@ export const PaymentView: React.FC<PaymentViewProps> = ({ onPaymentSuccess, reas
         };
 
         fetchIntent();
-    }, []);
+    }, [onPaymentSuccess]);
 
     if (error) {
         return (

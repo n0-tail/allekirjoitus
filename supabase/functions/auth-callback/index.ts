@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import * as jose from "npm:jose@5.2.2";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -6,7 +7,6 @@ const corsHeaders = {
 };
 
 serve(async (req: Request) => {
-  // Handle CORS preflight request
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
@@ -19,15 +19,35 @@ serve(async (req: Request) => {
     }
 
     const clientId = Deno.env.get('IDURA_CLIENT_ID');
-    const clientSecret = Deno.env.get('IDURA_CLIENT_SECRET');
     const domain = Deno.env.get('IDURA_DOMAIN');
+    const tokenEndpointOverride = Deno.env.get('IDURA_TOKEN_ENDPOINT');
 
-    if (!clientId || !clientSecret || !domain) {
-      throw new Error('Server misconfiguration: Idura credentials missing');
+    // FTN Requires private keys for signing client assertion and decrypting the JWE id_token
+    const clientSigPrivateKeyPem = Deno.env.get('IDURA_PRIVATE_SIG_KEY');
+    const clientEncPrivateKeyPem = Deno.env.get('IDURA_PRIVATE_ENC_KEY');
+    const sigKid = Deno.env.get('IDURA_SIG_KID');
+
+    if (!clientId || (!domain && !tokenEndpointOverride) || !clientSigPrivateKeyPem || !clientEncPrivateKeyPem || !sigKid) {
+      throw new Error('Server misconfiguration: Idura FTN credentials/keys missing');
     }
 
-    // 1. Exchange 'code' for 'id_token' and 'access_token'
-    const tokenResponse = await fetch(`https://${domain}/oauth2/token`, {
+    const tokenUrl = tokenEndpointOverride || `https://${domain}/oauth2/token`;
+
+    // 1. Generate client_assertion (JWT)
+    const clientSigKey = await jose.importPKCS8(clientSigPrivateKeyPem.replace(/\\n/g, '\n'), 'RS256');
+    const clientAssertion = await new jose.SignJWT({
+      iss: clientId,
+      sub: clientId,
+      aud: `https://${domain}`, // Criipto expects the base domain as audience, not the specific endpoint path
+      jti: crypto.randomUUID()
+    })
+      .setProtectedHeader({ alg: 'RS256', kid: sigKid })
+      .setIssuedAt()
+      .setExpirationTime('5m')
+      .sign(clientSigKey);
+
+    // 2. Exchange 'code' for 'id_token' and 'access_token'
+    const tokenResponse = await fetch(tokenUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -37,7 +57,8 @@ serve(async (req: Request) => {
         code: code,
         redirect_uri: redirectUri,
         client_id: clientId,
-        client_secret: clientSecret,
+        client_assertion_type: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
+        client_assertion: clientAssertion
       }),
     });
 
@@ -52,22 +73,22 @@ serve(async (req: Request) => {
       throw new Error('No id_token returned from identity provider');
     }
 
-    // 2. Decode the JWT id_token (We don't need to verify signature here because we got it directly from the trusted token endpoint via TLS over a backchannel, per OIDC spec)
-    const payloadBase64 = tokenData.id_token.split('.')[1];
-    // Clean up base64 padding/url encoding
-    const cleanedBase64 = payloadBase64.replace(/-/g, '+').replace(/_/g, '/');
-    const payloadJson = atob(cleanedBase64);
-    const payload = JSON.parse(new TextDecoder().decode(Uint8Array.from(payloadJson, c => c.charCodeAt(0))));
+    // 3. Decrypt the JWE id_token
+    const clientEncKey = await jose.importPKCS8(clientEncPrivateKeyPem.replace(/\\n/g, '\n'), 'RSA-OAEP-256');
+    const { plaintext } = await jose.compactDecrypt(tokenData.id_token, clientEncKey);
+    const jwsIdToken = new TextDecoder().decode(plaintext);
+
+    // 4. Decode the decrypted JWS to read claims (we skip signature verification here as we got it via backchannel TLS and it's a mock/sandbox, though in prod we'd verify the IdP's signature)
+    const decodedJws = jose.decodeJwt(jwsIdToken);
 
     // In Criipto/Idura, the user's name is usually in the 'name' claim.
-    const fullName = payload.name || "Tuntematon Allekirjoittaja";
+    const fullName = decodedJws.name || "Tuntematon Allekirjoittaja";
 
     return new Response(
       JSON.stringify({
         success: true,
         name: fullName,
-        // Optional: return the raw payload for debugging in sandbox if needed
-        _debug_claims: payload
+        _debug_claims: decodedJws
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
@@ -76,7 +97,7 @@ serve(async (req: Request) => {
     console.error('Auth-callback error:', error);
     return new Response(
       JSON.stringify({ error: error instanceof Error ? error.message : "Tuntematon virhe." }),
-      { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
 });

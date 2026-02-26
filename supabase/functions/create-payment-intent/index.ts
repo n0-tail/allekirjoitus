@@ -3,6 +3,7 @@ import Stripe from 'npm:stripe@^13.0.0'
 
 const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') as string, {
   apiVersion: '2023-10-16',
+  httpClient: Stripe.createFetchHttpClient(),
 })
 
 const corsHeaders = {

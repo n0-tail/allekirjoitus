@@ -16,7 +16,7 @@ const TermsView: React.FC = () => {
 
                         <section>
                             <h2 className="text-xl font-bold text-gray-900 mt-8 mb-4">1. Palvelun kuvaus</h2>
-                            <p>Tämä palvelu ("Palvelu") tarjoaa alustan PDF-asiakirjojen sähköiseen allekirjoittamiseen yksityishenkilöiden välillä hyödyntäen vahvaa sähköistä tunnistautumista (FTN). Palvelun tarjoaa [Yrityksen Nimi] ("Palveluntarjoaja").</p>
+                            <p>Tämä palvelu ("Palvelu") tarjoaa alustan PDF-asiakirjojen sähköiseen allekirjoittamiseen yksityishenkilöiden välillä hyödyntäen vahvaa sähköistä tunnistautumista (FTN). Palvelun tarjoaa Polarcomp Oy ("Palveluntarjoaja").</p>
                         </section>
 
                         <section>

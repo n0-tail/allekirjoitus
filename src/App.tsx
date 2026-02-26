@@ -335,7 +335,7 @@ function App() {
       </main>
 
       <footer style={{ marginTop: 'auto', padding: '2rem', textAlign: 'center', fontSize: '0.875rem', color: 'var(--text-muted)' }}>
-        <div>&copy; {new Date().getFullYear()} Polarcomp Oy (polarcomp.fi). Y-tunnus: 1234567-8</div>
+        <div>&copy; {new Date().getFullYear()} Polarcomp Oy (polarcomp.fi). Y-tunnus: 0969733-4</div>
         <div style={{ marginTop: '0.5rem', display: 'flex', justifyContent: 'center', gap: '1rem' }}>
           <Link to="/ehdot" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>
             Käyttöehdot

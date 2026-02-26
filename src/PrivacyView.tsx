@@ -16,7 +16,7 @@ const PrivacyView: React.FC = () => {
 
                         <section>
                             <h2 className="text-xl font-bold text-gray-900 mt-8 mb-4">1. Rekisterinpitäjä</h2>
-                            <p>[Yrityksen Nimi] / [Y-tunnus]<br />[Osoite]<br />[Sähköposti]</p>
+                            <p>Polarcomp Oy / 0969733-4<br />Halmetie 7, 98120 Kemijärvi<br />tietosuoja@polarcomp.fi</p>
                         </section>
 
                         <section>

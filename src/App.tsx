@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Routes, Route, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { Routes, Route, useNavigate, useParams, useSearchParams, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { UploadView } from './UploadView';
 import { RecipientView } from './RecipientView';
 import { OidcCallbackView } from './OidcCallbackView';
 import { ProcessingView } from './ProcessingView';
 import { SuccessView } from './SuccessView';
-import { Tietosuojaseloste } from './Tietosuojaseloste';
+import PrivacyView from './PrivacyView';
+import TermsView from './TermsView';
 import { PaymentView } from './PaymentView';
 import { supabase } from './lib/supabase';
 import './index.css';
@@ -328,19 +329,20 @@ function App() {
           <Route path="/asiakirja/:id" element={<DocumentFlow role="recipient" />} />
           <Route path="/lahettaja/:id" element={<DocumentFlow role="sender" />} />
           <Route path="/auth/callback" element={<AuthCallbackRoute />} />
-          <Route path="/tietosuoja" element={<Tietosuojaseloste onBack={() => window.history.back()} />} />
+          <Route path="/ehdot" element={<TermsView />} />
+          <Route path="/tietosuoja" element={<PrivacyView />} />
         </Routes>
       </main>
 
       <footer style={{ marginTop: 'auto', padding: '2rem', textAlign: 'center', fontSize: '0.875rem', color: 'var(--text-muted)' }}>
         <div>&copy; {new Date().getFullYear()} Polarcomp Oy (polarcomp.fi). Y-tunnus: 1234567-8</div>
-        <div style={{ marginTop: '0.5rem' }}>
-          <button
-            onClick={() => navigate('/tietosuoja')}
-            style={{ background: 'none', border: 'none', color: 'var(--primary)', cursor: 'pointer', textDecoration: 'underline' }}
-          >
+        <div style={{ marginTop: '0.5rem', display: 'flex', justifyContent: 'center', gap: '1rem' }}>
+          <Link to="/ehdot" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>
+            Käyttöehdot
+          </Link>
+          <Link to="/tietosuoja" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>
             Tietosuojaseloste
-          </button>
+          </Link>
         </div>
       </footer>
     </>

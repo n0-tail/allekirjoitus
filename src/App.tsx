@@ -9,7 +9,7 @@ import { PaymentView } from './PaymentView';
 import { supabase } from './lib/supabase';
 import './index.css';
 
-type AppState = 'upload' | 'sent' | 'sender-payment' | 'recipient' | 'recipient-payment' | 'processing' | 'success' | 'privacy' | 'callback';
+type AppState = 'upload' | 'sent' | 'sender-payment' | 'recipient' | 'recipient-payment' | 'processing' | 'waiting' | 'success' | 'privacy' | 'callback';
 
 interface SignatureData {
   file: File | null;
@@ -18,6 +18,7 @@ interface SignatureData {
   documentId?: string;
   fileName?: string;
   verifiedName?: string;
+  role?: 'sender' | 'recipient';
 }
 
 function App() {
@@ -278,11 +279,26 @@ function App() {
           <ProcessingView
             data={data}
             onSuccess={() => setView('success')}
+            onWaiting={() => setView('waiting')}
             onFail={(err) => {
               alert(`Virhe asiakirjan käsittelyssä: ${err}`);
               setView('recipient');
             }}
           />
+        )}
+
+        {view === 'waiting' && (
+          <div className="container animate-fade-in">
+            <div className="card" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
+              <div style={{ color: '#f59e0b', marginBottom: '1rem' }}>
+                <svg style={{ width: '48px', height: '48px', margin: '0 auto' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h2>Tallennettu onnistuneesti!</h2>
+              <p>Allekirjoituksesi on kirjattu turvallisesti järjestelmään. Odotamme vielä toisen osapuolen tunnistautumista tai maksua, ennen kuin lopullinen allekirjoitettu asiakirja voidaan luoda ja lähettää teille sähköpostitse.</p>
+            </div>
+          </div>
         )}
 
         {view === 'success' && <SuccessView data={data} onReset={resetFlow} />}
@@ -293,22 +309,18 @@ function App() {
           <OidcCallbackView
             code={new URLSearchParams(window.location.search).get('code') || ''}
             onSuccess={(name) => {
-              setData(prev => ({ ...prev, verifiedName: name }));
+              let currentRole: 'sender' | 'recipient' = 'recipient';
 
               // Hae istunnosta, olimmeko lähettäjä vai vastaanottaja
               try {
                 const stashed = sessionStorage.getItem('signatureData');
                 if (stashed) {
                   const stashedData = JSON.parse(stashed);
-                  if (stashedData.role === 'sender') {
-                    // Lähettäjän osuus on valmis, näytetään lähettäjän onnistumisruutu
-                    setView('success');
-                    return;
-                  }
+                  if (stashedData.role) currentRole = stashedData.role;
                 }
               } catch (_) { }
 
-              // Oletuksena vastaanottaja (allekirjoittaja), jolloin siirrytään prosessointiin (PDF-leimaus)
+              setData(prev => ({ ...prev, verifiedName: name, role: currentRole }));
               setView('processing');
             }}
             onFail={(err) => {

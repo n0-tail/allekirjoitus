@@ -9,12 +9,14 @@ interface ProcessingViewProps {
         documentId?: string;
         fileName?: string;
         verifiedName?: string;
+        role?: 'sender' | 'recipient';
     };
     onSuccess: () => void;
+    onWaiting: () => void;
     onFail: (error: string) => void;
 }
 
-export const ProcessingView: React.FC<ProcessingViewProps> = ({ data, onSuccess, onFail }) => {
+export const ProcessingView: React.FC<ProcessingViewProps> = ({ data, onSuccess, onWaiting, onFail }) => {
     const [status, setStatus] = useState('Viimeistellään asiakirjaa...');
 
     useEffect(() => {
@@ -22,16 +24,17 @@ export const ProcessingView: React.FC<ProcessingViewProps> = ({ data, onSuccess,
 
         const processDocument = async () => {
             try {
-                if (!data.documentId || !data.fileName) {
-                    throw new Error('Asiakirjan tunniste tai nimi puuttuu demoympäristössä. Et voi jatkaa ilman backend-reititystä.');
+                if (!data.documentId || !data.fileName || !data.role) {
+                    throw new Error('Asiakirjan tunniste, nimi tai rooli puuttuu. Et voi jatkaa ilman backend-reititystä.');
                 }
 
-                setStatus('Pyydetään palvelinta viimeistelemään asiakirja turvallisesti...');
-                const { error: invokeError } = await supabase.functions.invoke('finalize-signature', {
+                setStatus('Tallennetaan allekirjoitusta palvelimelle...');
+                const { data: resData, error: invokeError } = await supabase.functions.invoke('record-action', {
                     body: {
                         documentId: data.documentId,
                         fileName: data.fileName,
-                        verifiedName: data.verifiedName || data.recipient,
+                        role: data.role,
+                        verifiedName: data.verifiedName,
                         sender: data.sender,
                         recipient: data.recipient
                     }
@@ -41,7 +44,13 @@ export const ProcessingView: React.FC<ProcessingViewProps> = ({ data, onSuccess,
                     throw new Error(`Palvelinvirhe viimeistelyssä: ${invokeError.message}`);
                 }
 
-                if (isMounted) onSuccess();
+                if (resData?.status === 'waiting') {
+                    if (isMounted) onWaiting();
+                } else if (resData?.status === 'done') {
+                    if (isMounted) onSuccess();
+                } else {
+                    throw new Error('Palvelin palautti tunnistamattoman tilan.');
+                }
             } catch (err: unknown) {
                 console.error(err);
                 if (isMounted) onFail(err instanceof Error ? err.message : 'Tuntematon virhe käsittelyssä.');

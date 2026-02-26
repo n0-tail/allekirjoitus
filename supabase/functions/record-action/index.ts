@@ -66,15 +66,33 @@ serve(async (req) => {
 
         const arrayBuffer = await fileBlob.arrayBuffer();
         const pdfDoc = await PDFDocument.load(arrayBuffer);
-        const pages = pdfDoc.getPages();
-        const lastPage = pages[pages.length - 1];
+        const auditPage = pdfDoc.addPage();
+        const { width, height } = auditPage.getSize();
 
         const timestamp = new Date().toLocaleString('fi-FI', { timeZone: 'Europe/Helsinki' });
 
-        lastPage.drawText(`Allekirjoitettu sähköisesti`, { x: 50, y: 70, size: 12, color: rgb(0, 0.4, 0) });
-        lastPage.drawText(`Lähettäjä: ${doc.sender_name}`, { x: 50, y: 55, size: 10, color: rgb(0, 0, 0) });
-        lastPage.drawText(`Vastaanottaja: ${doc.recipient_name}`, { x: 50, y: 40, size: 10, color: rgb(0, 0, 0) });
-        lastPage.drawText(`Aikaleima: ${timestamp}`, { x: 50, y: 25, size: 10, color: rgb(0, 0, 0) });
+        // Draw Audit Trail Header
+        auditPage.drawText('SÄHKÖINEN ALLEKIRJOITUSTODISTUS', { x: 50, y: height - 50, size: 18, color: rgb(0, 0.4, 0) });
+
+        // Draw Document Info
+        auditPage.drawText(`Asiakirjan tunnus (ID): ${documentId}`, { x: 50, y: height - 90, size: 12, color: rgb(0, 0, 0) });
+        auditPage.drawText(`Alkuperäinen tiedosto: ${fileName || 'asiakirja.pdf'}`, { x: 50, y: height - 110, size: 12, color: rgb(0, 0, 0) });
+        auditPage.drawText(`Allekirjoituksen aikaleima: ${timestamp}`, { x: 50, y: height - 130, size: 12, color: rgb(0, 0, 0) });
+
+        // Draw Sender Info
+        auditPage.drawText('OSAPUOLI 1 (LÄHETTÄJÄ)', { x: 50, y: height - 170, size: 14, color: rgb(0.2, 0.2, 0.2) });
+        auditPage.drawText(`Nimi / Tunnistettu identiteetti: ${doc.sender_name}`, { x: 50, y: height - 190, size: 12, color: rgb(0, 0, 0) });
+        auditPage.drawText(`Sähköpostiosoite: ${sender}`, { x: 50, y: height - 210, size: 12, color: rgb(0, 0, 0) });
+
+        // Draw Recipient Info
+        auditPage.drawText('OSAPUOLI 2 (VASTAANOTTAJA)', { x: 50, y: height - 250, size: 14, color: rgb(0.2, 0.2, 0.2) });
+        auditPage.drawText(`Nimi / Tunnistettu identiteetti: ${doc.recipient_name}`, { x: 50, y: height - 270, size: 12, color: rgb(0, 0, 0) });
+        auditPage.drawText(`Sähköpostiosoite: ${recipient}`, { x: 50, y: height - 290, size: 12, color: rgb(0, 0, 0) });
+
+        // Footer disclaimer
+        // Note: drawText does not auto-wrap. This is short enough.
+        auditPage.drawText('Tämä sivu on automaattinen palveluntarjoajan varmenne vahvasta', { x: 50, y: 70, size: 10, color: rgb(0.4, 0.4, 0.4) });
+        auditPage.drawText('sähköisestä tunnistautumisesta (FTN) ja maksujen suorittamisesta.', { x: 50, y: 55, size: 10, color: rgb(0.4, 0.4, 0.4) });
 
         const pdfBytes = await pdfDoc.save();
 

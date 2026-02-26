@@ -41,7 +41,7 @@ function initiateAuth(data: SignatureData, role: 'sender' | 'recipient') {
     return;
   }
 
-  const redirectUri = window.location.origin + '/auth/callback';
+  const redirectUri = `${window.location.origin}${import.meta.env.BASE_URL}auth/callback`;
 
   supabase.functions.invoke('init-auth', {
     body: {
@@ -181,7 +181,7 @@ function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
                     readOnly
                     className="form-input"
                     style={{ flex: 1, fontSize: '0.875rem', background: 'white' }}
-                    value={`${window.location.origin}/asiakirja/${data.documentId}`}
+                    value={`${window.location.origin}${import.meta.env.BASE_URL}asiakirja/${data.documentId}`}
                     onClick={(e) => (e.target as HTMLInputElement).select()}
                   />
                   <button
@@ -189,7 +189,7 @@ function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
                     title="Kopioi leikepöydälle"
                     style={{ minWidth: '120px' }}
                     onClick={() => {
-                      navigator.clipboard.writeText(`${window.location.origin}/asiakirja/${data.documentId}`);
+                      navigator.clipboard.writeText(`${window.location.origin}${import.meta.env.BASE_URL}asiakirja/${data.documentId}`);
                       setCopied(true);
                       toast.success("Linkki kopioitu!");
                       setTimeout(() => setCopied(false), 2000);

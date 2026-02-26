@@ -56,7 +56,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
         if (dbError) throw new Error(`Virhe tietokantaan tallennettaessa: ${dbError.message}`);
 
         // 4. Send email via Edge Function
-        const link = `${window.location.origin}/asiakirja/${docId}`;
+        const link = `${window.location.origin}${import.meta.env.BASE_URL}asiakirja/${docId}`;
 
         // We catch the email error but don't stop the flow, as the user can still copy the link manually in the UI
         try {

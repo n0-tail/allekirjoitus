@@ -278,14 +278,14 @@ export const UploadView: React.FC<UploadViewProps> = () => {
           <details style={{ background: '#f8fafc', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', padding: '1rem 1.5rem' }}>
             <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: '1rem', color: 'var(--text-main)' }}>Mitä tiedoilleni tapahtuu?</summary>
             <p style={{ marginTop: '0.75rem', color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
-              Asiakirjat ja henkilötiedot käsitellään EU:n tietosuoja-asetuksen (GDPR) mukaisesti. Asiakirjat säilytetään salatusti vain prosessin ajan, eikä tietoja luovuteta kolmansille osapuolille.
+              Asiakirjat ja henkilötiedot käsitellään EU:n tietosuoja-asetuksen (GDPR) mukaisesti. Allekirjoitetut asiakirjat poistetaan palvelimilta automaattisesti 24 tunnin kuluessa allekirjoituksen valmistumisesta. Palveluun ei jää talteen henkilötietoja eikä asiakirjoja.
             </p>
           </details>
 
           <details style={{ background: '#f8fafc', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', padding: '1rem 1.5rem' }}>
             <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: '1rem', color: 'var(--text-main)' }}>Paljonko palvelu maksaa?</summary>
             <p style={{ marginTop: '0.75rem', color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
-              Palvelun käyttö maksaa 3,00 € per osapuoli (yhteensä 6,00 € per asiakirja). Maksu sisältää tunnistautumisen, asiakirjan käsittelyn ja allekirjoitustodistuksen. Ei kuukausimaksuja tai piilokustannuksia.
+              Käsittelymaksu veloitetaan molemmilta osapuolilta erikseen. Maksu sisältää tunnistautumisen, asiakirjan käsittelyn ja allekirjoitustodistuksen. Ei kuukausimaksuja tai piilokustannuksia.
             </p>
           </details>
 
@@ -328,7 +328,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                 "name": "Mitä tiedoilleni tapahtuu?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Asiakirjat ja henkilötiedot käsitellään EU:n tietosuoja-asetuksen (GDPR) mukaisesti. Asiakirjat säilytetään salatusti vain prosessin ajan, eikä tietoja luovuteta kolmansille osapuolille."
+                  "text": "Asiakirjat ja henkilötiedot käsitellään EU:n tietosuoja-asetuksen (GDPR) mukaisesti. Allekirjoitetut asiakirjat poistetaan palvelimilta automaattisesti 24 tunnin kuluessa allekirjoituksen valmistumisesta. Palveluun ei jää talteen henkilötietoja eikä asiakirjoja."
                 }
               },
               {
@@ -336,7 +336,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                 "name": "Paljonko palvelu maksaa?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Palvelun käyttö maksaa 3,00 € per osapuoli (yhteensä 6,00 € per asiakirja). Maksu sisältää tunnistautumisen, asiakirjan käsittelyn ja allekirjoitustodistuksen. Ei kuukausimaksuja tai piilokustannuksia."
+                  "text": "Käsittelymaksu veloitetaan molemmilta osapuolilta erikseen. Maksu sisältää tunnistautumisen, asiakirjan käsittelyn ja allekirjoitustodistuksen. Ei kuukausimaksuja tai piilokustannuksia."
                 }
               },
               {

@@ -66,7 +66,7 @@ export const SuccessView: React.FC<SuccessViewProps> = ({ data, onReset }) => {
 
                 <h2 style={{ marginBottom: '1rem' }}>Sopimus on allekirjoitettu!</h2>
                 <p style={{ marginBottom: '2rem', maxWidth: '500px', margin: '0 auto 2rem auto' }}>
-                    Asiakirja on nyt sähköisesti allekirjoitettu ja kryptografisesti lukittu. Tästä PoC-versiosta voit ladata esimerkkikappaleen (PDF).
+                    Asiakirja on nyt sähköisesti allekirjoitettu molempien osapuolten toimesta ja varustettu kryptografisella allekirjoitustodistuksella. Voit ladata allekirjoitetun asiakirjan alla olevasta painikkeesta.
                 </p>
 
                 <div style={{ display: 'inline-flex', flexDirection: 'column', gap: '1rem', width: '100%', maxWidth: '300px' }}>

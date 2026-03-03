@@ -224,20 +224,133 @@ export const UploadView: React.FC<UploadViewProps> = () => {
         </div>
       </section>
 
-      {/* TRUST BADGES */}
-      <div style={{ textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.875rem', marginTop: '4rem', padding: '2rem 1rem', background: '#f8fafc', borderRadius: 'var(--radius-lg)' }}>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', flexWrap: 'wrap' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <span style={{ fontSize: '1.25rem' }}>✅</span> Vahva tunnistautuminen (FTN)
+      {/* TRUST & CREDENTIALS */}
+      <section style={{ marginTop: '4rem', padding: '2rem 1rem', background: '#f8fafc', borderRadius: 'var(--radius-lg)' }}>
+        <h2 style={{ textAlign: 'center', marginBottom: '2rem', fontSize: '1.5rem' }}>Miksi luottaa palveluumme?</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.5rem' }}>
+
+          <div style={{ textAlign: 'center', padding: '1rem' }}>
+            <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>⚖️</div>
+            <h3 style={{ fontSize: '1rem', marginBottom: '0.5rem' }}>eIDAS-yhteensopiva</h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Sähköinen allekirjoitus on juridisesti sitova EU:n eIDAS-asetuksen (910/2014, Art. 25) mukaisesti.</p>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <span style={{ fontSize: '1.25rem' }}>🔒</span> Täysin salattavat yhteydet
+
+          <div style={{ textAlign: 'center', padding: '1rem' }}>
+            <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🏦</div>
+            <h3 style={{ fontSize: '1rem', marginBottom: '0.5rem' }}>FTN-tunnistautuminen</h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Traficomin hyväksymä vahva tunnistautuminen omilla pankkitunnuksilla (Finnish Trust Network).</p>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <span style={{ fontSize: '1.25rem' }}>⚖️</span> Lakiin perustuva luotettavuus
+
+          <div style={{ textAlign: 'center', padding: '1rem' }}>
+            <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🔒</div>
+            <h3 style={{ fontSize: '1rem', marginBottom: '0.5rem' }}>Turvallinen maksu</h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Maksut käsitellään Stripen kautta — PCI DSS Level 1 -sertifioitu, maailman johtava maksualusta.</p>
           </div>
+
+          <div style={{ textAlign: 'center', padding: '1rem' }}>
+            <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🇫🇮</div>
+            <h3 style={{ fontSize: '1rem', marginBottom: '0.5rem' }}>Suomalainen palvelu</h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Polarcomp Oy (Y-tunnus: 0969733-4). Tiedot käsitellään EU:n tietosuoja-asetuksen (GDPR) mukaisesti.</p>
+          </div>
+
         </div>
-      </div>
+      </section>
+
+      {/* FAQ SECTION */}
+      <section style={{ marginTop: '4rem', marginBottom: '2rem' }}>
+        <h2 style={{ textAlign: 'center', marginBottom: '2rem', fontSize: '2rem' }}>Usein kysytyt kysymykset</h2>
+        <div style={{ maxWidth: '700px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+
+          <details style={{ background: '#f8fafc', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', padding: '1rem 1.5rem' }}>
+            <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: '1rem', color: 'var(--text-main)' }}>Onko sähköinen allekirjoitus laillinen Suomessa?</summary>
+            <p style={{ marginTop: '0.75rem', color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
+              Kyllä. EU:n eIDAS-asetus (910/2014) tunnustaa sähköiset allekirjoitukset juridisesti sitoviksi kaikissa EU-maissa. Suomen lainsäädäntö ei aseta sopimusten muodollisia muotovaatimuksia, joten sähköinen allekirjoitus on pätevä useimmissa sopimuksissa.
+            </p>
+          </details>
+
+          <details style={{ background: '#f8fafc', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', padding: '1rem 1.5rem' }}>
+            <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: '1rem', color: 'var(--text-main)' }}>Miten tunnistautuminen toimii?</summary>
+            <p style={{ marginTop: '0.75rem', color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
+              Käytämme Finnish Trust Network (FTN) -tunnistautumista, jonka valvoo Traficom. Tunnistaudut omilla pankkitunnuksillasi (OP, Nordea, Danske Bank jne.), jolloin henkilöllisyytesi vahvistetaan luotettavasti.
+            </p>
+          </details>
+
+          <details style={{ background: '#f8fafc', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', padding: '1rem 1.5rem' }}>
+            <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: '1rem', color: 'var(--text-main)' }}>Mitä tiedoilleni tapahtuu?</summary>
+            <p style={{ marginTop: '0.75rem', color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
+              Asiakirjat ja henkilötiedot käsitellään EU:n tietosuoja-asetuksen (GDPR) mukaisesti. Asiakirjat säilytetään salatusti vain prosessin ajan, eikä tietoja luovuteta kolmansille osapuolille.
+            </p>
+          </details>
+
+          <details style={{ background: '#f8fafc', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', padding: '1rem 1.5rem' }}>
+            <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: '1rem', color: 'var(--text-main)' }}>Paljonko palvelu maksaa?</summary>
+            <p style={{ marginTop: '0.75rem', color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
+              Palvelun käyttö maksaa 3,00 € per osapuoli (yhteensä 6,00 € per asiakirja). Maksu sisältää tunnistautumisen, asiakirjan käsittelyn ja allekirjoitustodistuksen. Ei kuukausimaksuja tai piilokustannuksia.
+            </p>
+          </details>
+
+          <details style={{ background: '#f8fafc', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', padding: '1rem 1.5rem' }}>
+            <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: '1rem', color: 'var(--text-main)' }}>Mitä tiedostoja voi allekirjoittaa?</summary>
+            <p style={{ marginTop: '0.75rem', color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
+              Palvelu tukee PDF-tiedostoja. Voit allekirjoittaa sähköisesti esimerkiksi vuokrasopimuksia, työsopimuksia, kauppasopimuksia, valtakirjoja ja muita sopimusasiakirjoja.
+            </p>
+          </details>
+
+        </div>
+      </section>
+
+      {/* FAQ JSON-LD Schema (invisible, for Google rich results) */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Onko sähköinen allekirjoitus laillinen Suomessa?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Kyllä. EU:n eIDAS-asetus (910/2014) tunnustaa sähköiset allekirjoitukset juridisesti sitoviksi kaikissa EU-maissa. Suomen lainsäädäntö ei aseta sopimusten muodollisia muotovaatimuksia, joten sähköinen allekirjoitus on pätevä useimmissa sopimuksissa."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Miten tunnistautuminen toimii?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Käytämme Finnish Trust Network (FTN) -tunnistautumista, jonka valvoo Traficom. Tunnistaudut omilla pankkitunnuksillasi (OP, Nordea, Danske Bank jne.), jolloin henkilöllisyytesi vahvistetaan luotettavasti."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Mitä tiedoilleni tapahtuu?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Asiakirjat ja henkilötiedot käsitellään EU:n tietosuoja-asetuksen (GDPR) mukaisesti. Asiakirjat säilytetään salatusti vain prosessin ajan, eikä tietoja luovuteta kolmansille osapuolille."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Paljonko palvelu maksaa?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Palvelun käyttö maksaa 3,00 € per osapuoli (yhteensä 6,00 € per asiakirja). Maksu sisältää tunnistautumisen, asiakirjan käsittelyn ja allekirjoitustodistuksen. Ei kuukausimaksuja tai piilokustannuksia."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Mitä tiedostoja voi allekirjoittaa?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Palvelu tukee PDF-tiedostoja. Voit allekirjoittaa sähköisesti esimerkiksi vuokrasopimuksia, työsopimuksia, kauppasopimuksia, valtakirjoja ja muita sopimusasiakirjoja."
+                }
+              }
+            ]
+          })
+        }}
+      />
     </div>
   );
 };

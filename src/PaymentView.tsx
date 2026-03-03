@@ -16,6 +16,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSuccess, reason }) => {
     const elements = useElements();
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
+    const [isElementReady, setIsElementReady] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -23,21 +24,34 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSuccess, reason }) => {
         if (!stripe || !elements) return;
 
         setIsProcessing(true);
+        setErrorMessage(null);
 
-        const { error } = await stripe.confirmPayment({
-            elements,
-            confirmParams: {
-                return_url: window.location.href,
-            },
-            redirect: 'if_required', // Avoid full page redirect so we can continue our SPA flow if possible
-        });
+        try {
+            // Add a timeout so we don't hang forever
+            const confirmPromise = stripe.confirmPayment({
+                elements,
+                confirmParams: {
+                    return_url: window.location.href,
+                },
+                redirect: 'if_required',
+            });
 
-        if (error) {
-            setErrorMessage(error.message || 'Maksussa tapahtui virhe.');
+            const timeoutPromise = new Promise<never>((_, reject) =>
+                setTimeout(() => reject(new Error('Maksu aikakatkaistiin. Yritä uudelleen.')), 30000)
+            );
+
+            const { error } = await Promise.race([confirmPromise, timeoutPromise]);
+
+            if (error) {
+                setErrorMessage(error.message || 'Maksussa tapahtui virhe.');
+                setIsProcessing(false);
+            } else {
+                // Payment successful
+                onSuccess();
+            }
+        } catch (err: any) {
+            setErrorMessage(err.message || 'Maksussa tapahtui virhe.');
             setIsProcessing(false);
-        } else {
-            // Payment successful
-            onSuccess();
         }
     };
 
@@ -45,21 +59,29 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSuccess, reason }) => {
         <form onSubmit={handleSubmit} style={{ width: '100%' }}>
             <div style={{ padding: '1.5rem', background: '#f8fafc', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', marginBottom: '1.5rem' }}>
                 <h3 style={{ fontSize: '1.125rem', marginBottom: '1rem', color: 'var(--text-main)' }}>
-                    Käsittelymaksu (3,00 €)
+                    Käsittelymaksu (0,30 €)
                 </h3>
                 <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
                     {reason}
                 </p>
-                <PaymentElement />
+                {!isElementReady && (
+                    <div style={{ textAlign: 'center', padding: '1rem', color: 'var(--text-muted)', fontSize: '0.875rem' }}>
+                        Ladataan maksutapoja...
+                    </div>
+                )}
+                <PaymentElement
+                    onReady={() => setIsElementReady(true)}
+                    onLoadError={(e) => setErrorMessage(`Maksutapojen lataus epäonnistui: ${e.error.message}`)}
+                />
                 {errorMessage && <div style={{ color: 'red', marginTop: '1rem', fontSize: '0.875rem' }}>{errorMessage}</div>}
             </div>
             <button
                 type="submit"
-                disabled={!stripe || isProcessing}
+                disabled={!stripe || isProcessing || !isElementReady}
                 className="btn btn-primary"
                 style={{ width: '100%' }}
             >
-                {isProcessing ? 'Käsitellään...' : 'Maksa 3,00 €'}
+                {isProcessing ? 'Käsitellään...' : 'Maksa 0,30 €'}
             </button>
         </form>
     );
@@ -70,9 +92,10 @@ interface PaymentViewProps {
     reason: string;
     documentId: string;
     role: 'sender' | 'recipient';
+    email: string;
 }
 
-export const PaymentView: React.FC<PaymentViewProps> = ({ onPaymentSuccess, reason, documentId, role }) => {
+export const PaymentView: React.FC<PaymentViewProps> = ({ onPaymentSuccess, reason, documentId, role, email }) => {
     const [clientSecret, setClientSecret] = useState('');
     const [error, setError] = useState<string | null>(null);
 
@@ -94,7 +117,7 @@ export const PaymentView: React.FC<PaymentViewProps> = ({ onPaymentSuccess, reas
         const fetchIntent = async () => {
             try {
                 const { data, error: funcError } = await supabase.functions.invoke('create-payment-intent', {
-                    body: { documentId, role }
+                    body: { documentId, role, email }
                 });
 
                 if (funcError) throw new Error(funcError.message);

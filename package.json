@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://n0-tail.github.io/allekirjoitus/",
+  "homepage": "https://helppoallekirjoitus.fi/",
   "scripts": {
     "dev": "vite",
     "build": "npm-run-all build:tsc build:vite",

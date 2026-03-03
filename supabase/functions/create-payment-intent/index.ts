@@ -17,12 +17,13 @@ serve(async (req) => {
   }
 
   try {
-    const { documentId, role } = await req.json().catch(() => ({ documentId: 'unknown', role: 'unknown' }))
+    const { documentId, role, email } = await req.json().catch(() => ({ documentId: 'unknown', role: 'unknown', email: '' }))
 
-    // 300 cents = 3.00 EUR
+    // 30 cents = 0.30 EUR (väliaikainen testihinta)
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: 300,
+      amount: 30,
       currency: 'eur',
+      receipt_email: email || undefined,
       automatic_payment_methods: {
         enabled: true,
       },

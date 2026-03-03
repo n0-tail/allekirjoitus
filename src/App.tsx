@@ -22,10 +22,10 @@ export interface SignatureData {
   role?: 'sender' | 'recipient';
 }
 
-function initiateAuth(data: SignatureData, role: 'sender' | 'recipient') {
+function initiateAuth(data: SignatureData, role: 'sender' | 'recipient'): Promise<boolean> {
   if (!data.documentId) {
     toast.error('Virhe: Asiakirjan tunnistetta ei löytynyt.');
-    return;
+    return Promise.resolve(false);
   }
 
   sessionStorage.setItem('signatureData', JSON.stringify({
@@ -39,12 +39,12 @@ function initiateAuth(data: SignatureData, role: 'sender' | 'recipient') {
   if (!clientId || !domain) {
     console.warn("Idura OIDC muuttujia ei löydy.");
     toast.error("Tunnistautuminen ei ole käytössä (muuttujat puuttuvat).");
-    return;
+    return Promise.resolve(false);
   }
 
   const redirectUri = `${window.location.origin}${import.meta.env.BASE_URL}auth/callback`;
 
-  supabase.functions.invoke('init-auth', {
+  return supabase.functions.invoke('init-auth', {
     body: {
       state: data.documentId,
       redirectUri: redirectUri
@@ -53,19 +53,23 @@ function initiateAuth(data: SignatureData, role: 'sender' | 'recipient') {
     .then(({ data: authData, error }) => {
       if (error) {
         toast.error("Virhe tunnistautumisen alustuksessa: " + error.message);
-        return;
+        return false;
       }
 
       if (authData && authData.authUrl) {
         window.location.href = authData.authUrl;
+        return true; // We won't really return since it redirects, but for logic
       } else if (authData && authData.error) {
         toast.error("Virhe tunnistautumisen alustuksessa: " + authData.error);
+        return false;
       } else {
         toast.error("Palvelin ei palauttanut kelvollista ohjausosoitetta.");
+        return false;
       }
     })
     .catch(err => {
       toast.error("Yhteysvirhe tunnistautumisen alustuksessa: " + err.message);
+      return false;
     });
 }
 
@@ -74,7 +78,7 @@ function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [data, setData] = useState<SignatureData | null>(null);
-  const [view, setView] = useState<'loading' | 'start' | 'payment' | 'processing' | 'waiting' | 'success' | 'error'>('loading');
+  const [view, setView] = useState<'loading' | 'start' | 'payment' | 'authenticating' | 'processing' | 'waiting' | 'success' | 'error'>('loading');
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -90,7 +94,7 @@ function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
           // Jos maksu onnistui, ohjataan heti tunnistautumaan
           if (searchParams.get('redirect_status') === 'succeeded') {
             toast.success("Maksu vahvistettu! Siirrytään tunnistautumiseen...");
-            initiateAuth(JSON.parse(stashedData), role);
+            setView('authenticating');
             return;
           } else {
             setView('start'); // Jos peruutettu
@@ -224,10 +228,34 @@ function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
       {view === 'payment' && (
         <PaymentView
           reason={role === 'sender' ? "Lähettäjän käsittely- ja tunnistautumismaksu" : "Allekirjoittajan käsittely- ja tunnistautumismaksu"}
-          onPaymentSuccess={() => initiateAuth(data, role)}
+          onPaymentSuccess={() => {
+            toast.success("Maksu vahvistettu!");
+            setView('authenticating');
+          }}
           documentId={data.documentId!}
           role={role}
+          email={role === 'sender' ? data.sender : data.recipient}
         />
+      )}
+
+      {view === 'authenticating' && (
+        <div className="container animate-fade-in">
+          <div className="card" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
+            <h2 style={{ marginBottom: '1rem' }}>Siirrytään tunnistautumiseen...</h2>
+            <p style={{ marginBottom: '2rem', color: 'var(--text-muted)' }}>Maksu on vahvistettu. Seuraavaksi sinun tulee tunnistautua.</p>
+            <button
+              className="btn btn-primary"
+              onClick={async () => {
+                const success = await initiateAuth(data, role);
+                if (!success) {
+                  // Stay on this view so user can try again
+                }
+              }}
+            >
+              Jatka tunnistautumiseen
+            </button>
+          </div>
+        </div>
       )}
 
       {view === 'processing' && (

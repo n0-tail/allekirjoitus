@@ -149,46 +149,44 @@ export const UploadView: React.FC<UploadViewProps> = () => {
             </div>
           </div>
 
-          {file && (
-            <div className="animate-fade-in">
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                <div className="form-group">
-                  <label className="form-label">2. Lähettäjän sähköposti (Sinun)</label>
-                  <input
-                    type="email"
-                    className="form-input"
-                    placeholder="esim. matti.meikalainen@email.com"
-                    value={sender}
-                    onChange={(e) => setSender(e.target.value)}
-                    required
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label className="form-label">3. Vastaanottajan sähköposti</label>
-                  <input
-                    type="email"
-                    className="form-input"
-                    placeholder="esim. maija.meikalainen@email.com"
-                    value={recipient}
-                    onChange={(e) => setRecipient(e.target.value)}
-                    required
-                  />
-                </div>
+          <div className="animate-fade-in">
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+              <div className="form-group">
+                <label className="form-label">2. Lähettäjän sähköposti (Sinun)</label>
+                <input
+                  type="email"
+                  className="form-input"
+                  placeholder="esim. matti.meikalainen@email.com"
+                  value={sender}
+                  onChange={(e) => setSender(e.target.value)}
+                  required
+                />
               </div>
 
-              <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'center' }}>
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                  style={{ width: '100%', maxWidth: '400px', fontSize: '1.125rem', padding: '1rem' }}
-                  disabled={!file || !sender || !recipient || isUploading}
-                >
-                  {isUploading ? 'Lähetetään turvallisesti...' : 'Jatka ja tunnistaudu →'}
-                </button>
+              <div className="form-group">
+                <label className="form-label">3. Vastaanottajan sähköposti</label>
+                <input
+                  type="email"
+                  className="form-input"
+                  placeholder="esim. maija.meikalainen@email.com"
+                  value={recipient}
+                  onChange={(e) => setRecipient(e.target.value)}
+                  required
+                />
               </div>
             </div>
-          )}
+
+            <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'center' }}>
+              <button
+                type="submit"
+                className="btn btn-primary"
+                style={{ width: '100%', maxWidth: '400px', fontSize: '1.125rem', padding: '1rem' }}
+                disabled={!file || !sender || !recipient || isUploading}
+              >
+                {isUploading ? 'Lähetetään turvallisesti...' : 'Jatka ja tunnistaudu →'}
+              </button>
+            </div>
+          </div>
         </form>
       </div>
 
@@ -238,7 +236,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
           <div style={{ textAlign: 'center', padding: '1rem' }} className="step-card">
             <div style={{ width: '48px', height: '48px', margin: '0 auto 1rem auto', color: 'var(--primary)' }}>
               <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75M12 20.25c1.472 0 2.882.265 4.185.75M18.75 4.97A48.416 48.416 0 0012 4.5c-2.291 0-4.545.16-6.75.47m13.5 0c1.01.143 2.01.317 3 .52m-3-.52l2.62 10.726c.122.5.549.852 1.06.852a1.125 1.125 0 001.122-1.243l-1.09-10.02a1.693 1.693 0 00-1.874-1.503zM6.75 4.97c-1.01.143-2.01.317-3 .52m3-.52L4.131 15.696c-.122.5-.549.852-1.06.852A1.125 1.125 0 011.95 15.305l1.09-10.02A1.693 1.693 0 014.914 3.78z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
               </svg>
             </div>
             <h3 style={{ fontSize: '1rem', marginBottom: '0.5rem' }}>eIDAS-yhteensopiva</h3>

@@ -208,7 +208,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
               </svg>
             </div>
             <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>2. Maksa & Tunnistaudu</h3>
-            <p style={{ color: 'var(--text-muted)' }}>Molemmat osapuolet maksavat 3 € käsittelykulun ja tunnistautuvat vahvasti omilla pankkitunnuksillaan.</p>
+            <p style={{ color: 'var(--text-muted)' }}>Molemmat osapuolet maksavat 2,99 € käsittelykulun ja tunnistautuvat vahvasti omilla pankkitunnuksillaan.</p>
           </div>
 
           <div style={{ textAlign: 'center', padding: '1rem' }} className="step-card">
@@ -285,7 +285,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
           <details style={{ background: '#f8fafc', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', padding: '1rem 1.5rem' }}>
             <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: '1rem', color: 'var(--text-main)' }}>Paljonko palvelu maksaa?</summary>
             <p style={{ marginTop: '0.75rem', color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
-              Käsittelymaksu veloitetaan molemmilta osapuolilta erikseen. Maksu sisältää tunnistautumisen, asiakirjan käsittelyn ja allekirjoitustodistuksen. Ei kuukausimaksuja tai piilokustannuksia.
+              Palvelun käyttö maksaa 2,99 € per osapuoli. Maksu sisältää tunnistautumisen, asiakirjan käsittelyn ja allekirjoitustodistuksen. Ei kuukausimaksuja tai piilokustannuksia.
             </p>
           </details>
 
@@ -336,7 +336,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                 "name": "Paljonko palvelu maksaa?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Käsittelymaksu veloitetaan molemmilta osapuolilta erikseen. Maksu sisältää tunnistautumisen, asiakirjan käsittelyn ja allekirjoitustodistuksen. Ei kuukausimaksuja tai piilokustannuksia."
+                  "text": "Palvelun käyttö maksaa 2,99 € per osapuoli. Maksu sisältää tunnistautumisen, asiakirjan käsittelyn ja allekirjoitustodistuksen. Ei kuukausimaksuja tai piilokustannuksia."
                 }
               },
               {

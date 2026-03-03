@@ -98,7 +98,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
   return (
     <div style={{ maxWidth: '900px', margin: '0 auto' }}>
       {/* HERO SECTION */}
-      <section style={{ textAlign: 'center', marginBottom: '3rem', padding: '1rem 0' }} className="animate-fade-in">
+      <section className="hero-section animate-fade-in" style={{ textAlign: 'center', marginBottom: '3rem' }}>
         <h1 style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '1rem', lineHeight: 1.2 }}>
           Sido sopimukset <span style={{ color: 'var(--primary)' }}>turvallisesti</span> verkossa.
         </h1>
@@ -191,7 +191,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
         <h2 style={{ textAlign: 'center', marginBottom: '3rem', fontSize: '2rem' }}>Miten palvelu toimii?</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem' }}>
 
-          <div style={{ textAlign: 'center', padding: '1rem' }}>
+          <div style={{ textAlign: 'center', padding: '1rem' }} className="step-card">
             <div style={{ width: '56px', height: '56px', background: '#eff6ff', color: 'var(--primary)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem auto' }}>
               <svg style={{ width: '28px', height: '28px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
@@ -201,7 +201,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
             <p style={{ color: 'var(--text-muted)' }}>Pudota PDF-tiedosto ja syötä osapuolten sähköpostiosoitteet. Tiedosto siirtyy salattuna palvelimelle.</p>
           </div>
 
-          <div style={{ textAlign: 'center', padding: '1rem' }}>
+          <div style={{ textAlign: 'center', padding: '1rem' }} className="step-card">
             <div style={{ width: '56px', height: '56px', background: '#eff6ff', color: 'var(--primary)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem auto' }}>
               <svg style={{ width: '28px', height: '28px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -211,7 +211,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
             <p style={{ color: 'var(--text-muted)' }}>Molemmat osapuolet maksavat 3 € käsittelykulun ja tunnistautuvat vahvasti omilla pankkitunnuksillaan.</p>
           </div>
 
-          <div style={{ textAlign: 'center', padding: '1rem' }}>
+          <div style={{ textAlign: 'center', padding: '1rem' }} className="step-card">
             <div style={{ width: '56px', height: '56px', background: '#eff6ff', color: 'var(--primary)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem auto' }}>
               <svg style={{ width: '28px', height: '28px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />

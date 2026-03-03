@@ -33,6 +33,62 @@ body {
   flex-direction: column;
 }
 
+/* Hero gradient background */
+.hero-section {
+  background: linear-gradient(135deg, #eff6ff 0%, #f8fafc 50%, #eef2ff 100%);
+  padding: 3rem 1rem 2rem;
+  margin: -2rem -1rem 2rem;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+/* Step cards */
+.step-card {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  border-radius: var(--radius-md);
+  transition: var(--transition);
+  background: transparent;
+}
+
+.step-card:hover {
+  background: white;
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* FAQ styling */
+details {
+  transition: var(--transition);
+}
+
+details:hover {
+  border-color: var(--primary) !important;
+}
+
+details[open] {
+  background: white !important;
+  box-shadow: var(--shadow-sm);
+}
+
+details summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+details summary::after {
+  content: '+';
+  font-size: 1.25rem;
+  font-weight: 300;
+  color: var(--text-muted);
+  transition: var(--transition);
+}
+
+details[open] summary::after {
+  content: '−';
+}
+
 #root {
   flex: 1;
   display: flex;
@@ -40,16 +96,28 @@ body {
 }
 
 /* Typography */
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   font-weight: 600;
   letter-spacing: -0.02em;
 }
 
-h1 { font-size: 2.25rem; }
-h2 { font-size: 1.5rem; }
-h3 { font-size: 1.25rem; }
+h1 {
+  font-size: 2.25rem;
+}
 
-p { color: var(--text-muted); }
+h2 {
+  font-size: 1.5rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+}
+
+p {
+  color: var(--text-muted);
+}
 
 /* Layout Containers */
 .container {
@@ -168,7 +236,8 @@ p { color: var(--text-muted); }
   gap: 1rem;
 }
 
-.dropzone:hover, .dropzone.active {
+.dropzone:hover,
+.dropzone.active {
   border-color: var(--primary);
   background: #eff6ff;
 }
@@ -202,12 +271,13 @@ p { color: var(--text-muted); }
 
 /* Header */
 .app-header {
-  padding: 1.5rem 2rem;
+  padding: 1.25rem 2rem;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .app-logo {
@@ -217,12 +287,20 @@ p { color: var(--text-muted); }
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  letter-spacing: -0.01em;
 }
 
 /* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate-fade-in {
@@ -295,5 +373,7 @@ p { color: var(--text-muted); }
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }

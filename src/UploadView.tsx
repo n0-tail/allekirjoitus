@@ -229,25 +229,25 @@ export const UploadView: React.FC<UploadViewProps> = () => {
         <h2 style={{ textAlign: 'center', marginBottom: '2rem', fontSize: '1.5rem' }}>Miksi luottaa palveluumme?</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
 
-          <div style={{ textAlign: 'center', padding: '1rem' }}>
+          <div style={{ textAlign: 'center', padding: '1rem' }} className="step-card">
             <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>⚖️</div>
             <h3 style={{ fontSize: '1rem', marginBottom: '0.5rem' }}>eIDAS-yhteensopiva</h3>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Sähköinen allekirjoitus on juridisesti sitova EU:n eIDAS-asetuksen (910/2014, Art. 25) mukaisesti.</p>
           </div>
 
-          <div style={{ textAlign: 'center', padding: '1rem' }}>
+          <div style={{ textAlign: 'center', padding: '1rem' }} className="step-card">
             <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🏦</div>
             <h3 style={{ fontSize: '1rem', marginBottom: '0.5rem' }}>FTN-tunnistautuminen</h3>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Traficomin hyväksymä vahva tunnistautuminen omilla pankkitunnuksilla (Finnish Trust Network).</p>
           </div>
 
-          <div style={{ textAlign: 'center', padding: '1rem' }}>
+          <div style={{ textAlign: 'center', padding: '1rem' }} className="step-card">
             <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🔒</div>
             <h3 style={{ fontSize: '1rem', marginBottom: '0.5rem' }}>Turvallinen maksu</h3>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Maksut käsitellään Stripen kautta — PCI DSS Level 1 -sertifioitu, maailman johtava maksualusta.</p>
           </div>
 
-          <div style={{ textAlign: 'center', padding: '1rem' }}>
+          <div style={{ textAlign: 'center', padding: '1rem' }} className="step-card">
             <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🇫🇮</div>
             <h3 style={{ fontSize: '1rem', marginBottom: '0.5rem' }}>Suomalainen palvelu</h3>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Polarcomp Oy (Y-tunnus: 0969733-4). Tiedot käsitellään EU:n tietosuoja-asetuksen (GDPR) mukaisesti.</p>

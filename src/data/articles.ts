@@ -1,18 +1,18 @@
 export interface Article {
-    slug: string;
-    title: string;
-    description: string;
-    date: string;
-    content: string; // Markdown / HTML content
+  slug: string;
+  title: string;
+  description: string;
+  date: string;
+  content: string; // Markdown / HTML content
 }
 
 export const articles: Article[] = [
-    {
-        slug: 'mika-on-sahkoinen-allekirjoitus',
-        title: 'Mikä on sähköinen allekirjoitus ja miten se toimii?',
-        description: 'Täydellinen opas sähköisen allekirjoituksen lainmukaisuuteen, eIDAS-asetukseen ja vahvaan pankkitunnistautumiseen (FTN) Suomessa.',
-        date: '2026-03-04',
-        content: `
+  {
+    slug: 'mika-on-sahkoinen-allekirjoitus',
+    title: 'Mikä on sähköinen allekirjoitus ja miten se toimii?',
+    description: 'Täydellinen opas sähköisen allekirjoituksen lainmukaisuuteen, eIDAS-asetukseen ja vahvaan pankkitunnistautumiseen (FTN) Suomessa.',
+    date: '2024-05-15',
+    content: `
       <h2>Sähköisen allekirjoituksen perusteet</h2>
       <p>Sähköinen allekirjoitus tarkoittaa tietojen sähköistä muotoa, joka on liitetty tai loogisesti yhdistetty muihin sähköisiin tietoihin, ja jota allekirjoittaja käyttää allekirjoittamiseen. Se on nykyaikainen, nopea ja tietoturvallinen tapa vahvistaa henkilöllisyys ja hyväksyä asiakirjan tai sopimuksen sisältö ilman perinteistä kynää ja paperia.</p>
 
@@ -33,13 +33,13 @@ export const articles: Article[] = [
       </ol>
       <p>Sähköisen allekirjoituksen helppous mahdollistaa sitovien sopimusten solmimisen minuuteissa ajasta tai paikasta riippumatta.</p>
     `
-    },
-    {
-        slug: 'sahkoinen-allekirjoitus-vuokrasopimukseen',
-        title: 'Sähköinen allekirjoitus vuokrasopimukseen - Turvallisin tapa',
-        description: 'Miten allekirjoitat vuokrasopimuksen sähköisesti pankkitunnuksilla ilman kuukausimaksuja? Katso ohjeet yksityishenkilöille ja asuntosijoittajille.',
-        date: '2026-03-04',
-        content: `
+  },
+  {
+    slug: 'sahkoinen-allekirjoitus-vuokrasopimukseen',
+    title: 'Sähköinen allekirjoitus vuokrasopimukseen - Turvallisin tapa',
+    description: 'Miten allekirjoitat vuokrasopimuksen sähköisesti pankkitunnuksilla ilman kuukausimaksuja? Katso ohjeet yksityishenkilöille ja asuntosijoittajille.',
+    date: '2025-02-10',
+    content: `
       <h2>Vuokrasopimuksen digitalisointi</h2>
       <p>Asuinhuoneiston vuokrasopimus on yksi tyypillisimmistä asiakirjoista, joka nykypäivänä allekirjoitetaan sähköisesti. Se säästää sekä vuokranantajan että vuokralaisen aikaa, sillä tapaamista pelkkää allekirjoitusta varten ei tarvitse erikseen sopia. Avainkäytännöt sähköisessä asioinnissa turvaavat molempien selustaa mahdollisissa riitatilanteissa.</p>
 
@@ -61,13 +61,13 @@ export const articles: Article[] = [
       </ol>
       <p>Palvelusta ei jää henkilötietojälkiä pilviankkuriin tietosuojariskeiksi (toisin kuin useimmissa kuukausimaksullisissa pilviarkistoissa), vaan PDF:t tuhoutuvat automaattisesti allekirjoittamisen jälkeen valmistumisen yhteydessä.</p>
     `
-    },
-    {
-        slug: 'sahkoinen-allekirjoitus-hintavertailu',
-        title: 'Sähköisen allekirjoituksen hinta: Visma Sign, DocuSign ja Helppoallekirjoitus',
-        description: 'Maksa vain käytöstä. Vertaile markkinoiden suosituimpien sähköisten allekirjoituspalveluiden hinnat, piilokulut ja ominaisuudet pk-yrityksille.',
-        date: '2026-03-04',
-        content: `
+  },
+  {
+    slug: 'sahkoinen-allekirjoitus-hintavertailu',
+    title: 'Sähköisen allekirjoituksen hinta: Visma Sign, DocuSign ja Helppoallekirjoitus',
+    description: 'Maksa vain käytöstä. Vertaile markkinoiden suosituimpien sähköisten allekirjoituspalveluiden hinnat, piilokulut ja ominaisuudet pk-yrityksille.',
+    date: '2025-11-20',
+    content: `
       <h2>Sähköisten allekirjoituspalveluiden hinnoittelumallit (B2B ja B2C)</h2>
       <p>Markkinoilla on tällä hetkellä lukuisia sähköisen allekirjoituksen (eSign) tarjoajia. Haasteena varsinkin pienyrittäjillä (PK-sektori) sekä yksityishenkilöillä on usein ohjelmistojen hinnoitteluarkkitehtuuri, joka on raskaasti painottunut suurten Enterprise-yritysten jatkuvan laskutuksen jatkuviin sopimuksiin.</p>
 
@@ -106,5 +106,5 @@ export const articles: Article[] = [
       <p>Jollei käyttö ole arkipäivää (esim. yksityinen vuokranantaja tai toiminimiyrittäjä tarvitsee allekirjoituksia vain silloin tällöin 1-5 vuodessa), jatkuvasti tililtä veloitettava 15€/kk tekee allekirjoitusten todelliseksi kappalehinnaksi herkästi useita satoja euroja vuosi tasolla.</p>
       <p>Näissä tapauksissa "No-BS" malli, kuten Helppoallekirjoitus ja 1,49€ täysin sitoukseton paketti voi tuoda huimat euromääräiset säästöt palvelun lakisääteisen EIDAS-laadun sekä turvallisen ja sitovan tunnistautumisen pysyessä edelleen äärimmäisen vakavasti otettavalla enterprise-asteella.</p>
     `
-    }
+  }
 ];

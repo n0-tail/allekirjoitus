@@ -150,7 +150,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
           </div>
 
           <div className="animate-fade-in">
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
               <div className="form-group">
                 <label className="form-label">2. Lähettäjän sähköposti (Sinun)</label>
                 <input
@@ -231,7 +231,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
       {/* TRUST & CREDENTIALS */}
       <section style={{ marginTop: '4rem', padding: '2rem 1rem', background: '#f8fafc', borderRadius: 'var(--radius-lg)' }}>
         <h2 style={{ textAlign: 'center', marginBottom: '2rem', fontSize: '1.5rem' }}>Miksi luottaa palveluumme?</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.5rem' }}>
 
           <div style={{ textAlign: 'center', padding: '1rem' }} className="step-card">
             <div style={{ width: '48px', height: '48px', margin: '0 auto 1rem auto', color: 'var(--primary)' }}>

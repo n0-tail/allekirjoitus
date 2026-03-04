@@ -179,7 +179,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
 
           <div className="animate-fade-in">
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
-              <div className="form-group">
+              <div className="form-group" style={{ marginBottom: 0 }}>
                 <label className="form-label">2. Lähettäjän sähköposti (Sinun)</label>
                 <input
                   type="email"
@@ -191,49 +191,51 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                 />
               </div>
 
-              <div className="form-group">
-                <label className="form-label">3. Vastaanottajien sähköpostit</label>
+              {recipients.map((rec, index) => (
+                <div key={rec.id} className="form-group animate-fade-in" style={{ marginBottom: 0 }}>
+                  <label className="form-label">
+                    {index === 0 ? '3. Vastaanottajan sähköposti' : `Vastaanottaja ${index + 1}`}
+                  </label>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <input
+                      type="email"
+                      className="form-input"
+                      placeholder={index === 0 ? "esim. maija.meikalainen@email.com" : "Seuraava vastaanottaja"}
+                      value={rec.email}
+                      onChange={(e) => updateRecipient(rec.id, e.target.value)}
+                      required
+                    />
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                  {recipients.map((rec, index) => (
-                    <div key={rec.id} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }} className="animate-fade-in">
-                      <input
-                        type="email"
-                        className="form-input"
-                        placeholder={index === 0 ? "esim. maija.meikalainen@email.com" : "Seuraava vastaanottaja"}
-                        value={rec.email}
-                        onChange={(e) => updateRecipient(rec.id, e.target.value)}
-                        required
-                      />
-
-                      {index > 0 && (
-                        <button
-                          type="button"
-                          onClick={() => removeRecipient(rec.id)}
-                          style={{
-                            background: 'rgba(239, 68, 68, 0.1)',
-                            border: 'none',
-                            color: '#ef4444',
-                            cursor: 'pointer',
-                            padding: '0.6rem',
-                            borderRadius: 'var(--radius-md)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            transition: 'background 0.2s',
-                            flexShrink: 0 // Estää nappia kutistumasta
-                          }}
-                          title="Poista vastaanottaja"
-                        >
-                          <svg style={{ width: '20px', height: '20px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-                          </svg>
-                        </button>
-                      )}
-                    </div>
-                  ))}
+                    {index > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => removeRecipient(rec.id)}
+                        style={{
+                          background: 'rgba(239, 68, 68, 0.1)',
+                          border: 'none',
+                          color: '#ef4444',
+                          cursor: 'pointer',
+                          padding: '0.6rem',
+                          borderRadius: 'var(--radius-md)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          transition: 'background 0.2s',
+                          flexShrink: 0
+                        }}
+                        title="Poista vastaanottaja"
+                      >
+                        <svg style={{ width: '20px', height: '20px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                        </svg>
+                      </button>
+                    )}
+                  </div>
                 </div>
+              ))}
 
+              <div className="form-group" style={{ marginBottom: 0 }}>
+                <label className="form-label" style={{ visibility: 'hidden' }}>Lisää</label>
                 <button
                   type="button"
                   onClick={addRecipient}
@@ -248,7 +250,6 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                     cursor: 'pointer',
                     fontWeight: 500,
                     padding: '0.75rem',
-                    marginTop: '0.25rem',
                     borderRadius: 'var(--radius-md)',
                     width: '100%',
                     transition: 'all 0.2s ease-in-out'
@@ -259,7 +260,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                   <svg style={{ width: '18px', height: '18px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                   </svg>
-                  <span>Lisää toinen vastaanottaja</span>
+                  <span>Lisää vastaanottaja</span>
                 </button>
               </div>
             </div>

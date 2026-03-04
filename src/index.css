@@ -424,6 +424,13 @@ p {
   }
 }
 
+/* Specific component layouts (Desktop default) */
+.trust-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
 /* Mobile Responsiveness */
 @media (max-width: 640px) {
   h1 {
@@ -457,6 +464,11 @@ p {
 
   .bank-grid {
     grid-template-columns: 1fr;
+  }
+
+  .trust-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
   }
 
   .dropzone {

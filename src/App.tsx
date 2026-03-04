@@ -343,28 +343,29 @@ function App() {
   return (
     <>
       <header className="app-header">
-        <div className="app-logo" onClick={() => navigate('/')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
-          <svg width="220" height="40" viewBox="0 0 500 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#1E88E5" />
-                <stop offset="100%" stopColor="#0D47A1" />
-              </linearGradient>
-            </defs>
+        <div className="app-logo" onClick={() => navigate('/')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          {/* We'll use a precise structure that looks like the provided professional logo using standard elements with exact font styling for sharp rendering */}
+          <div style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
+            {/* Simple accurate representation of the blue N shape */}
+            <svg width="48" height="40" viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '8px' }}>
+              <defs>
+                <linearGradient id="nGradient" x1="0%" y1="100%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#0a467c" />
+                  <stop offset="40%" stopColor="#1E88E5" />
+                  <stop offset="100%" stopColor="#81D4FA" />
+                </linearGradient>
+              </defs>
+              <path d="M10,70 C15,60 25,45 35,50 C45,55 50,70 60,65 C75,55 85,25 95,20 C85,25 70,40 60,45 C50,50 45,35 35,30 C20,20 10,50 10,70 Z" fill="url(#nGradient)" />
+              <path d="M30,5 L20,35 L40,25 Z" fill="#29B6F6" />
+              <circle cx="10" cy="73" r="4" fill="#002171" />
+            </svg>
 
-            {/* The Pen/Checkmark Icon Shape (Approximation of provided image) */}
-            <g transform="translate(10, 5)">
-              <path d="M15,75 Q25,85 35,70 T60,50 T75,80 T105,30 Q125,5 140,5 T120,30 T95,60 T75,95 T50,65 T25,80 T0,70 Z" fill="url(#logoGrad)" />
-              <path d="M25,65 Q35,50 45,25 Q50,15 65,5 L75,10 Q65,25 55,45 Z" fill="#29B6F6" />
-              <path d="M10,80 L20,72 L23,76 L13,85 Z" fill="#002171" />
-            </g>
-
-            {/* The Text "helppoallekirjoitus.fi" formatted as SVG paths avoiding external fonts */}
-            {/* This is a simple fallback if text paths get too complex, but using standard system font for speed matching the brand colors */}
-            <text x="150" y="65" fontFamily="system-ui, -apple-system, sans-serif" fontWeight="700" fontSize="42" fill="#002171" letterSpacing="-0.5">
-              helppo<span style={{ color: '#0D47A1' }}>allekirjoitus</span><span style={{ color: '#1E88E5' }}>.fi</span>
-            </text>
-          </svg>
+            <div style={{ fontFamily: 'system-ui, -apple-system, sans-serif', fontSize: '1.75rem', fontWeight: 700, letterSpacing: '-0.03em' }}>
+              <span style={{ color: '#002171' }}>helppo</span>
+              <span style={{ color: '#0f5499' }}>allekirjoitus</span>
+              <span style={{ color: '#29B6F6' }}>.fi</span>
+            </div>
+          </div>
         </div>
       </header>
 

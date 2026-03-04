@@ -230,13 +230,13 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                 {recipients.map((rec, index) => (
                   <div key={rec.id} className="form-group animate-fade-in" style={{ marginBottom: 0 }}>
                     <label className="form-label">
-                      {index === 0 ? '3. Vastaanottajan sähköposti' : `Vastaanottaja ${index + 1}`}
+                      {index === 0 ? '3. Vastaanottaja 1' : `Vastaanottaja ${index + 1}`}
                     </label>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                       <input
                         type="email"
                         className="form-input"
-                        placeholder={index === 0 ? "esim. maija.meikalainen@email.com" : "Seuraava vastaanottaja"}
+                        placeholder={index === 0 ? "esim. maija.meikalainen@email.com" : "esim. matti.virtanen@email.com"}
                         value={rec.email}
                         onChange={(e) => updateRecipient(rec.id, e.target.value)}
                         required
@@ -298,7 +298,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
               </svg>
             </div>
-            <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>1. Lataa asiakirja</h3>
+            <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>Lataa asiakirja</h3>
             <p style={{ color: 'var(--text-muted)' }}>Pudota PDF-tiedosto ja syötä osapuolten sähköpostiosoitteet. Tiedosto siirtyy salattuna palvelimelle.</p>
           </div>
 
@@ -308,7 +308,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
             </div>
-            <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>2. Maksa & Tunnistaudu</h3>
+            <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>Maksa & Tunnistaudu</h3>
             <p style={{ color: 'var(--text-muted)' }}>Molemmat osapuolet maksavat 1,49 € käsittelykulun ja tunnistautuvat vahvasti omilla pankkitunnuksillaan.</p>
           </div>
 
@@ -318,7 +318,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
-            <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>3. Valmis Asiakirja</h3>
+            <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>Valmis Asiakirja</h3>
             <p style={{ color: 'var(--text-muted)' }}>Kun molemmat ovat valmiita, järjestelmä liittää asiakirjaan virallisen allekirjoitustodistuksen aikaleimoineen.</p>
           </div>
 

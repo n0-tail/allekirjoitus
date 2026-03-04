@@ -19,9 +19,9 @@ serve(async (req) => {
   try {
     const { documentId, role, email } = await req.json().catch(() => ({ documentId: 'unknown', role: 'unknown', email: '' }))
 
-    // 30 cents = 0.30 EUR (väliaikainen testihinta)
+    // 0.50 EUR = 50 cents (Stripe minimum amount)
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: 30,
+      amount: 50,
       currency: 'eur',
       receipt_email: email || undefined,
       automatic_payment_methods: {

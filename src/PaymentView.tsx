@@ -59,7 +59,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSuccess, reason }) => {
         <form onSubmit={handleSubmit} style={{ width: '100%' }}>
             <div style={{ padding: '1.5rem', background: '#f8fafc', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', marginBottom: '1.5rem' }}>
                 <h3 style={{ fontSize: '1.125rem', marginBottom: '1rem', color: 'var(--text-main)' }}>
-                    Käsittelymaksu (2,99 €)
+                    Käsittelymaksu (1,49 €)
                 </h3>
                 <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
                     {reason}
@@ -81,7 +81,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSuccess, reason }) => {
                 className="btn btn-primary"
                 style={{ width: '100%' }}
             >
-                {isProcessing ? 'Käsitellään...' : 'Maksa 2,99 €'}
+                {isProcessing ? 'Käsitellään...' : 'Maksa 1,49 €'}
             </button>
         </form>
     );

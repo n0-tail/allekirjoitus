@@ -343,11 +343,28 @@ function App() {
   return (
     <>
       <header className="app-header">
-        <div className="app-logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
-          <svg style={{ width: '28px', height: '28px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+        <div className="app-logo" onClick={() => navigate('/')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+          <svg width="220" height="40" viewBox="0 0 500 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#1E88E5" />
+                <stop offset="100%" stopColor="#0D47A1" />
+              </linearGradient>
+            </defs>
+
+            {/* The Pen/Checkmark Icon Shape (Approximation of provided image) */}
+            <g transform="translate(10, 5)">
+              <path d="M15,75 Q25,85 35,70 T60,50 T75,80 T105,30 Q125,5 140,5 T120,30 T95,60 T75,95 T50,65 T25,80 T0,70 Z" fill="url(#logoGrad)" />
+              <path d="M25,65 Q35,50 45,25 Q50,15 65,5 L75,10 Q65,25 55,45 Z" fill="#29B6F6" />
+              <path d="M10,80 L20,72 L23,76 L13,85 Z" fill="#002171" />
+            </g>
+
+            {/* The Text "helppoallekirjoitus.fi" formatted as SVG paths avoiding external fonts */}
+            {/* This is a simple fallback if text paths get too complex, but using standard system font for speed matching the brand colors */}
+            <text x="150" y="65" fontFamily="system-ui, -apple-system, sans-serif" fontWeight="700" fontSize="42" fill="#002171" letterSpacing="-0.5">
+              helppo<span style={{ color: '#0D47A1' }}>allekirjoitus</span><span style={{ color: '#1E88E5' }}>.fi</span>
+            </text>
           </svg>
-          Helppo Allekirjoitus
         </div>
       </header>
 

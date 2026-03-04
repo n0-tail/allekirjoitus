@@ -9,8 +9,29 @@ export const UploadView: React.FC<UploadViewProps> = () => {
   const navigate = useNavigate();
   const [file, setFile] = useState<File | null>(null);
   const [sender, setSender] = useState('');
-  const [recipient, setRecipient] = useState('');
+  interface Recipient {
+    id: string;
+    email: string;
+  }
+
+  const [recipients, setRecipients] = useState<Recipient[]>([
+    { id: crypto.randomUUID(), email: '' }
+  ]);
   const [isUploading, setIsUploading] = useState(false);
+
+  const addRecipient = () => {
+    setRecipients([...recipients, { id: crypto.randomUUID(), email: '' }]);
+  };
+
+  const removeRecipient = (idToRemove: string) => {
+    setRecipients(recipients.filter(r => r.id !== idToRemove));
+  };
+
+  const updateRecipient = (idToUpdate: string, newEmail: string) => {
+    setRecipients(
+      recipients.map(r => (r.id === idToUpdate ? { ...r, email: newEmail } : r))
+    );
+  };
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
@@ -27,7 +48,8 @@ export const UploadView: React.FC<UploadViewProps> = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (file && sender && recipient) {
+    const allEmailsFilled = recipients.every(r => r.email.trim() !== '');
+    if (file && sender && allEmailsFilled) {
       setIsUploading(true);
 
       try {
@@ -48,7 +70,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
           .insert({
             id: docId,
             sender_email: sender,
-            recipient_email: recipient,
+            recipient_email: recipients[0].email, // Temporarily still using the first one until backend is updated
             file_name: file.name,
             status: 'pending'
           });
@@ -60,9 +82,10 @@ export const UploadView: React.FC<UploadViewProps> = () => {
 
         // We catch the email error but don't stop the flow, as the user can still copy the link manually in the UI
         try {
+          // Temporarily still sending to the first recipient until backend handles multiple
           await supabase.functions.invoke('send-email', {
             body: {
-              to: recipient,
+              to: recipients[0].email,
               subject: `Allekirjoituspyyntö: ${file.name}`,
               html: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
                 <h2 style="color: #111827; margin-top: 0;">Hei!</h2>
@@ -164,15 +187,71 @@ export const UploadView: React.FC<UploadViewProps> = () => {
               </div>
 
               <div className="form-group">
-                <label className="form-label">3. Vastaanottajan sähköposti</label>
-                <input
-                  type="email"
-                  className="form-input"
-                  placeholder="esim. maija.meikalainen@email.com"
-                  value={recipient}
-                  onChange={(e) => setRecipient(e.target.value)}
-                  required
-                />
+                <label className="form-label">3. Vastaanottajien sähköpostit</label>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  {recipients.map((rec, index) => (
+                    <div key={rec.id} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }} className="animate-fade-in">
+                      <input
+                        type="email"
+                        className="form-input"
+                        placeholder={index === 0 ? "esim. maija.meikalainen@email.com" : "Seuraava vastaanottaja"}
+                        value={rec.email}
+                        onChange={(e) => updateRecipient(rec.id, e.target.value)}
+                        required
+                      />
+
+                      {index > 0 && (
+                        <button
+                          type="button"
+                          onClick={() => removeRecipient(rec.id)}
+                          style={{
+                            background: 'rgba(239, 68, 68, 0.1)',
+                            border: 'none',
+                            color: '#ef4444',
+                            cursor: 'pointer',
+                            padding: '0.6rem',
+                            borderRadius: 'var(--radius-md)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            transition: 'background 0.2s',
+                            flexShrink: 0 // Estää nappia kutistumasta
+                          }}
+                          title="Poista vastaanottaja"
+                        >
+                          <svg style={{ width: '20px', height: '20px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={addRecipient}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                    background: 'transparent',
+                    border: 'none',
+                    color: 'var(--primary)',
+                    cursor: 'pointer',
+                    fontWeight: 500,
+                    padding: '0.75rem 0',
+                    marginTop: '0.25rem'
+                  }}
+                >
+                  <div style={{ background: 'var(--primary)', color: 'white', borderRadius: '50%', padding: '0.2rem' }}>
+                    <svg style={{ width: '16px', height: '16px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                  </div>
+                  <span>Lisää vastaanottaja</span>
+                </button>
               </div>
             </div>
 
@@ -181,7 +260,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                 type="submit"
                 className="btn btn-primary"
                 style={{ width: '100%', maxWidth: '400px', fontSize: '1.125rem', padding: '1rem' }}
-                disabled={!file || !sender || !recipient || isUploading}
+                disabled={!file || !sender || recipients.some(r => r.email.trim() === '') || isUploading}
               >
                 {isUploading ? 'Lähetetään turvallisesti...' : 'Jatka ja tunnistaudu →'}
               </button>

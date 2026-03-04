@@ -423,3 +423,47 @@ p {
     transform: rotate(360deg);
   }
 }
+
+/* Mobile Responsiveness */
+@media (max-width: 640px) {
+  h1 {
+    font-size: 1.75rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+
+  h3 {
+    font-size: 1.125rem;
+  }
+
+  .container {
+    padding: 1rem;
+  }
+
+  .card {
+    padding: 1.5rem;
+  }
+
+  .glass-card {
+    padding: 1.5rem;
+  }
+
+  .hero-section {
+    padding: 3rem 1rem 2rem;
+    margin: -1rem -1rem 1.5rem;
+  }
+
+  .bank-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dropzone {
+    padding: 2rem 1rem;
+  }
+
+  .app-header {
+    padding: 1rem;
+  }
+}

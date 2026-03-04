@@ -363,12 +363,18 @@ function App() {
       </main>
 
       <footer style={{ marginTop: 'auto', padding: '2rem', textAlign: 'center', fontSize: '0.875rem', color: 'var(--text-muted)' }}>
-        <div>&copy; {new Date().getFullYear()} Polarcomp Oy (polarcomp.fi). Y-tunnus: 0969733-4</div>
-        <div style={{ marginTop: '0.5rem', display: 'flex', justifyContent: 'center', gap: '1rem' }}>
-          <Link to="/ehdot" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>
+        <div style={{ marginBottom: '1rem', lineHeight: '1.6' }}>
+          <strong>Polarcomp Oy</strong><br />
+          Halmetie 7, 98120 Kemijärvi<br />
+          Y-tunnus: 0969733-4<br />
+          <a href="mailto:sales@polarcomp.fi" style={{ color: 'inherit', textDecoration: 'none' }}>sales@polarcomp.fi</a> | +358 40 041 8289
+        </div>
+        <div>&copy; {new Date().getFullYear()} Polarcomp Oy (<a href="https://polarcomp.fi" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>polarcomp.fi</a>)</div>
+        <div style={{ marginTop: '0.75rem', display: 'flex', justifyContent: 'center', gap: '1.5rem' }}>
+          <Link to="/ehdot" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 500 }}>
             Käyttöehdot
           </Link>
-          <Link to="/tietosuoja" style={{ color: 'var(--primary)', textDecoration: 'underline' }}>
+          <Link to="/tietosuoja" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 500 }}>
             Tietosuojaseloste
           </Link>
         </div>

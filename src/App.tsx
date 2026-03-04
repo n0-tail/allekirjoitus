@@ -9,6 +9,8 @@ import { SuccessView } from './SuccessView';
 import PrivacyView from './PrivacyView';
 import TermsView from './TermsView';
 import { PaymentView } from './PaymentView';
+import { ArticleIndexView } from './views/ArticleIndexView';
+import { ArticlePostView } from './views/ArticlePostView';
 import { supabase } from './lib/supabase';
 import './index.css';
 
@@ -371,6 +373,8 @@ function App() {
           <Route path="/auth/callback" element={<AuthCallbackRoute />} />
           <Route path="/ehdot" element={<TermsView />} />
           <Route path="/tietosuoja" element={<PrivacyView />} />
+          <Route path="/asiantuntija-artikkelit" element={<ArticleIndexView />} />
+          <Route path="/asiantuntija-artikkelit/:slug" element={<ArticlePostView />} />
         </Routes>
       </main>
 
@@ -388,6 +392,9 @@ function App() {
           </Link>
           <Link to="/tietosuoja" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 500 }}>
             Tietosuojaseloste
+          </Link>
+          <Link to="/asiantuntija-artikkelit" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 500 }}>
+            Asiantuntija-artikkelit
           </Link>
         </div>
       </footer>

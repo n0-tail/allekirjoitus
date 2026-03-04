@@ -14,13 +14,17 @@ RETURNS TABLE (
     id uuid,
     file_name text,
     sender_email text,
-    recipient_email text
+    recipient_email text,
+    sender_name text,
+    recipient_name text,
+    status text
 )
 SECURITY DEFINER
 AS $$
 BEGIN
   RETURN QUERY
-  SELECT d.id, d.file_name, d.sender_email, d.recipient_email
+  SELECT d.id, d.file_name, d.sender_email, d.recipient_email,
+         d.sender_name, d.recipient_name, d.status
   FROM public.documents d
   WHERE d.id = doc_id;
 END;

@@ -108,7 +108,7 @@ function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
 
     supabase.rpc('get_document', { doc_id: id }).single()
       .then(({ data, error }) => {
-        const doc = data as { id: string, file_name: string, sender_email: string, recipient_email: string } | null;
+        const doc = data as { id: string, file_name: string, sender_email: string, recipient_email: string, sender_name: string | null, recipient_name: string | null, status: string | null } | null;
         if (error || !doc) {
           toast.error("Asiakirjaa ei löytynyt järjestelmästä.");
           setView('error');
@@ -123,15 +123,30 @@ function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
             return;
           }
 
-          setData({
+          const docData: SignatureData = {
             file: null,
             documentId: doc.id,
             sender: doc.sender_email,
             recipient: doc.recipient_email,
             fileName: doc.file_name,
             role: role
-          });
-          setView('start');
+          };
+          setData(docData);
+
+          // Determine initial view based on database status
+          if (doc.status === 'signed') {
+            setView('success');
+          } else if (role === 'sender' && doc.sender_name) {
+            setView('waiting');
+          } else if (role === 'recipient' && doc.recipient_name) {
+            setView('waiting');
+          } else if (role === 'sender' && doc.status === 'sender_paid') {
+            setView('authenticating');
+          } else if (role === 'recipient' && doc.status === 'recipient_paid') {
+            setView('authenticating');
+          } else {
+            setView('start');
+          }
         }
       });
   }, [id, role, searchParams]);

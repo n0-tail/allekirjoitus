@@ -126,7 +126,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
   return (
     <div style={{ maxWidth: '900px', margin: '0 auto' }}>
       {/* HERO SECTION */}
-      <section className="hero-section animate-fade-in" style={{ textAlign: 'center', marginBottom: '3rem' }}>
+      <section className="hero-section animate-fade-in" style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
         <h1 style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '1rem', lineHeight: 1.2 }}>
           Sido sopimukset <span style={{ color: 'var(--primary)' }}>turvallisesti</span> verkossa.
         </h1>
@@ -238,29 +238,33 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                   type="button"
                   onClick={addRecipient}
                   style={{
-                    display: 'inline-flex',
+                    display: 'flex',
                     alignItems: 'center',
+                    justifyContent: 'center',
                     gap: '0.4rem',
-                    background: 'transparent',
-                    border: 'none',
+                    background: 'rgba(37, 99, 235, 0.03)',
+                    border: '1px dashed rgba(37, 99, 235, 0.3)',
                     color: 'var(--primary)',
                     cursor: 'pointer',
                     fontWeight: 500,
-                    padding: '0.75rem 0',
-                    marginTop: '0.25rem'
+                    padding: '0.75rem',
+                    marginTop: '0.25rem',
+                    borderRadius: 'var(--radius-md)',
+                    width: '100%',
+                    transition: 'all 0.2s ease-in-out'
                   }}
+                  onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(37, 99, 235, 0.08)'; e.currentTarget.style.borderColor = 'rgba(37, 99, 235, 0.5)'; }}
+                  onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(37, 99, 235, 0.03)'; e.currentTarget.style.borderColor = 'rgba(37, 99, 235, 0.3)'; }}
                 >
-                  <div style={{ background: 'var(--primary)', color: 'white', borderRadius: '50%', padding: '0.2rem' }}>
-                    <svg style={{ width: '16px', height: '16px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                    </svg>
-                  </div>
-                  <span>Lisää vastaanottaja</span>
+                  <svg style={{ width: '18px', height: '18px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                  <span>Lisää toinen vastaanottaja</span>
                 </button>
               </div>
             </div>
 
-            <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'center' }}>
+            <div style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'center' }}>
               <button
                 type="submit"
                 className="btn btn-primary"
@@ -275,7 +279,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
       </div>
 
       {/* HOW IT WORKS */}
-      <section style={{ marginTop: '5rem', marginBottom: '2rem' }}>
+      <section style={{ marginTop: '3rem', marginBottom: '2rem' }}>
         <h2 style={{ textAlign: 'center', marginBottom: '3rem', fontSize: '2rem' }}>Miten palvelu toimii?</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem' }}>
 

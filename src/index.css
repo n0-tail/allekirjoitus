@@ -37,8 +37,8 @@ body {
 .hero-section {
   position: relative;
   background: linear-gradient(135deg, #eff6ff 0%, #f8fafc 50%, #eef2ff 100%);
-  padding: 4rem 1rem 3rem;
-  margin: -2rem -1rem 2rem;
+  padding: 2.5rem 1rem 2rem;
+  margin: -2rem -1rem 1.5rem;
   border-radius: 0 0 var(--radius-lg) var(--radius-lg);
   overflow: hidden;
   z-index: 1;
@@ -185,7 +185,7 @@ p {
   border-radius: var(--radius-lg);
   border: 1px solid rgba(255, 255, 255, 0.6);
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08), inset 0 0 0 1px rgba(255, 255, 255, 0.9);
-  padding: 2.5rem;
+  padding: 2rem;
   transition: var(--transition);
 }
 
@@ -271,7 +271,7 @@ p {
 .dropzone {
   border: 2px dashed var(--border);
   border-radius: var(--radius-lg);
-  padding: 3rem 2rem;
+  padding: 2rem 1.5rem;
   text-align: center;
   cursor: pointer;
   transition: var(--transition);

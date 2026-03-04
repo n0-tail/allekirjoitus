@@ -106,9 +106,9 @@ function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
     // Jos jatkamme IDURA-paluun jälkeen (sessionStorange 'processing' tai vastaava ei enää käytössä tässä, 
     // se hoidetaan AuthCallbackRoute:ssa joka ohjaa takaisin tänne)
 
-    supabase.rpc('get_document', { doc_id: id }).single()
+    supabase.from('documents').select('*').eq('id', id).single()
       .then(({ data, error }) => {
-        const doc = data as { id: string, file_name: string, sender_email: string, recipient_email: string, sender_name: string | null, recipient_name: string | null, status: string | null } | null;
+        const doc = data;
         if (error || !doc) {
           toast.error("Asiakirjaa ei löytynyt järjestelmästä.");
           setView('error');
@@ -140,9 +140,9 @@ function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
             setView('waiting');
           } else if (role === 'recipient' && doc.recipient_name) {
             setView('waiting');
-          } else if (role === 'sender' && doc.status === 'sender_paid') {
+          } else if (role === 'sender' && doc.sender_paid) {
             setView('authenticating');
-          } else if (role === 'recipient' && doc.status === 'recipient_paid') {
+          } else if (role === 'recipient' && doc.recipient_paid) {
             setView('authenticating');
           } else {
             setView('start');

@@ -29,14 +29,11 @@ serve(async (req) => {
                 const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
                 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-                const statusField = role === 'sender' ? 'sender_paid' : 'recipient_paid';
+                const updateField = role === 'sender' ? { sender_paid: true } : { recipient_paid: true };
 
-                // Assuming you might add these columns to your table. 
-                // For now, we just update the generic 'status' if it's the sender, 
-                // or just log it to ensure the webhook works without breaking existing schema too much.
                 const { error } = await supabase
                     .from('documents')
-                    .update({ status: statusField })
+                    .update(updateField)
                     .eq('id', documentId);
 
                 if (error) {

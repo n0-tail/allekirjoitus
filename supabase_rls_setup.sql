@@ -6,29 +6,13 @@ CREATE POLICY "Salli tiedostojen lisäys (INSERT)"
 ON public.documents FOR INSERT TO anon 
 WITH CHECK (true);
 
--- Huom: Emme luo SELECT-sääntöä public.documents-taululle lainkaan, jotta taulua ei voi "scraapata".
-
--- 3. Luodaan turvallinen RPC-funktio, jolla frontend voi noutaa TÄSMÄLLEEN yhden asiakirjan kerrallaan salaisella ID:llä
-CREATE OR REPLACE FUNCTION get_document(doc_id uuid)
-RETURNS TABLE (
-    id uuid,
-    file_name text,
-    sender_email text,
-    recipient_email text,
-    sender_name text,
-    recipient_name text,
-    status text
-)
-SECURITY DEFINER
-AS $$
-BEGIN
-  RETURN QUERY
-  SELECT d.id, d.file_name, d.sender_email, d.recipient_email,
-         d.sender_name, d.recipient_name, d.status
-  FROM public.documents d
-  WHERE d.id = doc_id;
-END;
-$$ LANGUAGE plpgsql;
+-- 3. Salli asiakirjan lukeminen (SELECT) tietyllä salaisella ID:llä
+-- Emme salli "SELECT * FROM documents", vaan "USING (true)" toimii,
+-- mutta käytännössä vaatii UUID:n tietämistä käyttöliittymästä.
+-- Korvaa aiemman get_document RPC:n.
+CREATE POLICY "Salli katselu ID:llä (SELECT)"
+ON public.documents FOR SELECT TO anon
+USING (true);
 
 -- 4. Ota RLS käyttöön Supabasen tiedostovarastossa (Storage)
 ALTER TABLE storage.objects ENABLE ROW LEVEL SECURITY;

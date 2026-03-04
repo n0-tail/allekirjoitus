@@ -4,6 +4,8 @@ create table public.documents (
   sender_email text not null,
   recipient_email text not null,
   status text not null default 'pending', -- 'pending', 'signed', 'rejected'
+  sender_paid boolean not null default false,
+  recipient_paid boolean not null default false,
   file_name text not null,
   document_hash text, -- To optionally verify the file
   audit_trail jsonb default '[]'::jsonb, -- Array of events: [{action, timestamp, ip, userAgent}]

@@ -93,9 +93,10 @@ interface PaymentViewProps {
     documentId: string;
     role: 'sender' | 'recipient';
     email: string;
+    signerId?: string;
 }
 
-export const PaymentView: React.FC<PaymentViewProps> = ({ onPaymentSuccess, reason, documentId, role, email }) => {
+export const PaymentView: React.FC<PaymentViewProps> = ({ onPaymentSuccess, reason, documentId, role, email, signerId }) => {
     const [clientSecret, setClientSecret] = useState('');
     const [error, setError] = useState<string | null>(null);
 
@@ -117,7 +118,7 @@ export const PaymentView: React.FC<PaymentViewProps> = ({ onPaymentSuccess, reas
         const fetchIntent = async () => {
             try {
                 const { data, error: funcError } = await supabase.functions.invoke('create-payment-intent', {
-                    body: { documentId, role, email }
+                    body: { documentId, role, email, signerId }
                 });
 
                 if (funcError) throw new Error(funcError.message);

@@ -12,6 +12,9 @@ export const UploadView: React.FC<UploadViewProps> = () => {
   interface Recipient {
     id: string;
     email: string;
+    paid?: boolean;
+    name?: string | null;
+    signed?: boolean;
   }
 
   const [recipients, setRecipients] = useState<Recipient[]>([
@@ -70,39 +73,41 @@ export const UploadView: React.FC<UploadViewProps> = () => {
           .insert({
             id: docId,
             sender_email: sender,
-            recipient_email: recipients[0].email, // Temporarily still using the first one until backend is updated
+            signers: recipients,
             file_name: file.name,
             status: 'pending'
           });
 
         if (dbError) throw new Error(`Virhe tietokantaan tallennettaessa: ${dbError.message}`);
 
-        // 4. Send email via Edge Function
-        const link = `${window.location.origin}${import.meta.env.BASE_URL}asiakirja/${docId}`;
-
         // We catch the email error but don't stop the flow, as the user can still copy the link manually in the UI
         try {
-          // Temporarily still sending to the first recipient until backend handles multiple
-          await supabase.functions.invoke('send-email', {
-            body: {
-              to: recipients[0].email,
-              subject: `Allekirjoituspyyntö: ${file.name}`,
-              html: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
-                <h2 style="color: #111827; margin-top: 0;">Hei!</h2>
-                <p style="color: #374151; font-size: 16px; line-height: 1.5;">
-                  <strong>${sender}</strong> on lähettänyt sinulle asiakirjan <em>(${file.name})</em> sähköisesti allekirjoitettavaksi.
-                </p>
-                <div style="margin: 30px 0;">
-                  <a href="${link}" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500; display: inline-block;">
-                    Avaa ja allekirjoita asiakirja
-                  </a>
-                </div>
-                <p style="color: #6b7280; font-size: 14px; margin-bottom: 0;">
-                  Ystävällisin terveisin,<br>Allekirjoitus
-                </p>
-              </div>`
-            }
+          // Send personal invitation to each signer
+          const emailPromises = recipients.map(rec => {
+            const link = `${window.location.origin}${import.meta.env.BASE_URL}asiakirja/${docId}?signer=${rec.id}`;
+            return supabase.functions.invoke('send-email', {
+              body: {
+                to: rec.email,
+                subject: `Allekirjoituspyyntö: ${file.name}`,
+                html: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
+                  <h2 style="color: #111827; margin-top: 0;">Hei!</h2>
+                  <p style="color: #374151; font-size: 16px; line-height: 1.5;">
+                    <strong>${sender}</strong> on lähettänyt sinulle asiakirjan <em>(${file.name})</em> sähköisesti allekirjoitettavaksi.
+                  </p>
+                  <div style="margin: 30px 0;">
+                    <a href="${link}" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500; display: inline-block;">
+                      Avaa ja allekirjoita asiakirja
+                    </a>
+                  </div>
+                  <p style="color: #6b7280; font-size: 14px; margin-bottom: 0;">
+                    Ystävällisin terveisin,<br>Allekirjoitus
+                  </p>
+                </div>`
+              }
+            });
           });
+
+          await Promise.all(emailPromises);
         } catch {
           console.warn("Sähköpostin lähetys epäonnistui (reunafunktiota ei ehkä ole vielä julkaistu), jatketaan silti.");
         }

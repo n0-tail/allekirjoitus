@@ -17,7 +17,7 @@ serve(async (req) => {
   }
 
   try {
-    const { documentId, role, email } = await req.json().catch(() => ({ documentId: 'unknown', role: 'unknown', email: '' }))
+    const { documentId, role, email, signerId } = await req.json().catch(() => ({ documentId: 'unknown', role: 'unknown', email: '', signerId: undefined }))
 
     // 0.50 EUR = 50 cents (Stripe minimum amount)
     const paymentIntent = await stripe.paymentIntents.create({
@@ -29,7 +29,8 @@ serve(async (req) => {
       },
       metadata: {
         documentId: documentId || 'unknown',
-        role: role || 'unknown'
+        role: role || 'unknown',
+        ...(signerId ? { signerId } : {})
       }
     })
 

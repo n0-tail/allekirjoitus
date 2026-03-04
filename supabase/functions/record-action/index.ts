@@ -13,9 +13,9 @@ serve(async (req) => {
     }
 
     try {
-        const { documentId, fileName, role, verifiedName, sender, recipient } = await req.json();
+        const { documentId, fileName, role, verifiedName, sender, recipient, signerId } = await req.json();
 
-        if (!documentId || !role || !verifiedName || !sender || !recipient) {
+        if (!documentId || !role || !verifiedName || !sender) {
             throw new Error('Missing required fields for action recording.');
         }
 
@@ -24,24 +24,10 @@ serve(async (req) => {
         const supabase = createClient(supabaseUrl, supabaseServiceKey);
         const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
 
-        // 1. Update the correct name column based on role
-        const updateField = role === 'sender' ? { sender_name: verifiedName } : { recipient_name: verifiedName };
-
-        const { error: updateError } = await supabase
-            .from('documents')
-            .update(updateField)
-            .eq('id', documentId);
-
-        if (updateError) {
-            console.error('Failed to update name column:', updateError.message);
-            // It might fail if the user didn't create the columns yet. 
-            throw new Error(`Tietokantaongelma. Varmista että sender_name ja recipient_name tilit on lisätty tietokantaan! Virhe: ${updateError.message}`);
-        }
-
-        // 2. Fetch the document to see if BOTH names are now present
+        // 1. Fetch current document state to append data
         const { data: doc, error: fetchError } = await supabase
             .from('documents')
-            .select('sender_name, recipient_name')
+            .select('*')
             .eq('id', documentId)
             .single();
 
@@ -49,10 +35,36 @@ serve(async (req) => {
             throw new Error(`Failed to fetch document state: ${fetchError?.message}`);
         }
 
-        const hasBothNames = doc.sender_name && doc.recipient_name;
+        // 2. Update the correct name/signed status based on role
+        let updatedSigners = doc.signers || [];
 
-        // If one is missing, early return with "waiting" status
-        if (!hasBothNames) {
+        if (role === 'sender') {
+            const { error: updateError } = await supabase
+                .from('documents')
+                .update({ sender_name: verifiedName })
+                .eq('id', documentId);
+            if (updateError) throw new Error(`Virhe lähettäjän päivityksessä: ${updateError.message}`);
+            doc.sender_name = verifiedName; // Update local ref
+
+        } else if (role === 'recipient' && signerId) {
+            updatedSigners = updatedSigners.map((s: any) =>
+                s.id === signerId ? { ...s, name: verifiedName, signed: true } : s
+            );
+
+            const { error: updateError } = await supabase
+                .from('documents')
+                .update({ signers: updatedSigners })
+                .eq('id', documentId);
+            if (updateError) throw new Error(`Virhe vastaanottajan päivityksessä: ${updateError.message}`);
+            doc.signers = updatedSigners; // Update local ref
+        }
+
+        // 3. Check if EVERYONE is now signed
+        const hasSenderName = !!doc.sender_name;
+        const allRecipientsSigned = updatedSigners.length > 0 && updatedSigners.every((s: any) => s.signed === true);
+
+        // If anyone is missing, early return with "waiting" status
+        if (!hasSenderName || !allRecipientsSigned) {
             return new Response(JSON.stringify({ status: 'waiting' }), {
                 headers: { ...corsHeaders, 'Content-Type': 'application/json' },
                 status: 200,
@@ -80,14 +92,18 @@ serve(async (req) => {
         auditPage.drawText(`Allekirjoituksen aikaleima: ${timestamp}`, { x: 50, y: height - 130, size: 12, color: rgb(0, 0, 0) });
 
         // Draw Sender Info
-        auditPage.drawText('OSAPUOLI 1 (LÄHETTÄJÄ)', { x: 50, y: height - 170, size: 14, color: rgb(0.2, 0.2, 0.2) });
+        auditPage.drawText('OSAPUOLI 1: LÄHETTÄJÄ', { x: 50, y: height - 170, size: 14, color: rgb(0.2, 0.2, 0.2) });
         auditPage.drawText(`Nimi / Tunnistettu identiteetti: ${doc.sender_name}`, { x: 50, y: height - 190, size: 12, color: rgb(0, 0, 0) });
-        auditPage.drawText(`Sähköpostiosoite: ${sender}`, { x: 50, y: height - 210, size: 12, color: rgb(0, 0, 0) });
+        auditPage.drawText(`Sähköpostiosoite: ${doc.sender_email || sender}`, { x: 50, y: height - 210, size: 12, color: rgb(0, 0, 0) });
 
-        // Draw Recipient Info
-        auditPage.drawText('OSAPUOLI 2 (VASTAANOTTAJA)', { x: 50, y: height - 250, size: 14, color: rgb(0.2, 0.2, 0.2) });
-        auditPage.drawText(`Nimi / Tunnistettu identiteetti: ${doc.recipient_name}`, { x: 50, y: height - 270, size: 12, color: rgb(0, 0, 0) });
-        auditPage.drawText(`Sähköpostiosoite: ${recipient}`, { x: 50, y: height - 290, size: 12, color: rgb(0, 0, 0) });
+        // Draw Recipient Info (Dynamic Loop)
+        let currentY = height - 250;
+        updatedSigners.forEach((s: any, index: number) => {
+            auditPage.drawText(`OSAPUOLI ${index + 2}: VASTAANOTTAJA`, { x: 50, y: currentY, size: 14, color: rgb(0.2, 0.2, 0.2) });
+            auditPage.drawText(`Nimi / Tunnistettu identiteetti: ${s.name}`, { x: 50, y: currentY - 20, size: 12, color: rgb(0, 0, 0) });
+            auditPage.drawText(`Sähköpostiosoite: ${s.email}`, { x: 50, y: currentY - 40, size: 12, color: rgb(0, 0, 0) });
+            currentY -= 80; // Move down for the next signer
+        });
 
         // Footer disclaimer
         // Note: drawText does not auto-wrap. This is short enough.
@@ -110,11 +126,13 @@ serve(async (req) => {
 
         // 4. Send Confirmation Emails
         if (RESEND_API_KEY && signedUrl) {
+            const allNames = [doc.sender_name, ...updatedSigners.map((s: any) => s.name)].join(', ');
+
             const emailHtml = `
             <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #10b981; border-radius: 8px;">
-              <h2 style="color: #065f46; margin-top: 0;">Asiakirja on nyt valmis (Molempien suostumus)</h2>
+              <h2 style="color: #065f46; margin-top: 0;">Asiakirja on nyt valmis (Kaikkien suostumus)</h2>
               <p style="color: #374151; font-size: 16px; line-height: 1.5;">
-                Molemmat osapuolet (<strong>${doc.sender_name}</strong> ja <strong>${doc.recipient_name}</strong>) ovat nyt sähköisesti allekirjoittaneet asiakirjan.
+                Kaikki osapuolet (<strong>${allNames}</strong>) ovat nyt sähköisesti allekirjoittaneet asiakirjan.
               </p>
               <div style="margin: 30px 0;">
                 <a href="${signedUrl}" download style="background-color: #10b981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500; display: inline-block;">
@@ -124,28 +142,22 @@ serve(async (req) => {
               </div>
             </div>`;
 
-            await Promise.all([
-                fetch('https://api.resend.com/emails', {
+            const allEmails = [doc.sender_email, ...updatedSigners.map((s: any) => s.email)];
+
+            const emailPromises = allEmails.map(emailTarget => {
+                return fetch('https://api.resend.com/emails', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${RESEND_API_KEY}` },
                     body: JSON.stringify({
                         from: 'Allekirjoitus <onboarding@resend.dev>',
-                        to: [sender],
-                        subject: `Asiakirja valmis: Molemmat osapuolet ovat allekirjoittaneet`,
+                        to: [emailTarget],
+                        subject: `Asiakirja valmis: Kaikki osapuolet ovat allekirjoittaneet`,
                         html: emailHtml,
                     }),
-                }),
-                fetch('https://api.resend.com/emails', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${RESEND_API_KEY}` },
-                    body: JSON.stringify({
-                        from: 'Allekirjoitus <onboarding@resend.dev>',
-                        to: [recipient],
-                        subject: `Asiakirja valmis: Molemmat osapuolet ovat allekirjoittaneet`,
-                        html: emailHtml,
-                    }),
-                })
-            ]);
+                });
+            });
+
+            await Promise.all(emailPromises);
         }
 
         return new Response(JSON.stringify({ status: 'done', signedUrl }), {

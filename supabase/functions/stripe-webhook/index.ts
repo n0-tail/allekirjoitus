@@ -21,7 +21,7 @@ serve(async (req) => {
 
         if (event.type === 'payment_intent.succeeded') {
             const paymentIntent = event.data.object;
-            const { documentId, role } = paymentIntent.metadata;
+            const { documentId, role, signerId } = paymentIntent.metadata;
 
             if (documentId && role) {
                 // Initialize Supabase admin client
@@ -29,17 +29,45 @@ serve(async (req) => {
                 const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
                 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-                const updateField = role === 'sender' ? { sender_paid: true } : { recipient_paid: true };
+                if (role === 'sender') {
+                    const { error } = await supabase
+                        .from('documents')
+                        .update({ sender_paid: true })
+                        .eq('id', documentId);
 
-                const { error } = await supabase
-                    .from('documents')
-                    .update(updateField)
-                    .eq('id', documentId);
+                    if (error) {
+                        console.error(`Failed to update DB for ${documentId}:`, error.message);
+                    } else {
+                        console.log(`Payment confirmed for ${documentId} (Role: sender)`);
+                    }
+                } else if (role === 'recipient' && signerId) {
+                    // Fetch existing signers
+                    const { data: doc, error: fetchError } = await supabase
+                        .from('documents')
+                        .select('signers')
+                        .eq('id', documentId)
+                        .single();
 
-                if (error) {
-                    console.error(`Failed to update DB for ${documentId}:`, error.message);
-                } else {
-                    console.log(`Payment confirmed for ${documentId} (Role: ${role})`);
+                    if (fetchError || !doc) {
+                        console.error(`Failed to fetch doc for signer update ${documentId}:`, fetchError?.message);
+                        return new Response('Error fetching document', { status: 500 });
+                    }
+
+                    // Mutate array
+                    const updatedSigners = doc.signers.map((s: any) =>
+                        s.id === signerId ? { ...s, paid: true } : s
+                    );
+
+                    const { error } = await supabase
+                        .from('documents')
+                        .update({ signers: updatedSigners })
+                        .eq('id', documentId);
+
+                    if (error) {
+                        console.error(`Failed to update DB for signer ${signerId}:`, error.message);
+                    } else {
+                        console.log(`Payment confirmed for signer ${signerId}`);
+                    }
                 }
             }
         }

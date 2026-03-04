@@ -10,6 +10,7 @@ interface ProcessingViewProps {
         fileName?: string;
         verifiedName?: string;
         role?: 'sender' | 'recipient';
+        signerId?: string;
     };
     onSuccess: () => void;
     onWaiting: () => void;
@@ -36,7 +37,8 @@ export const ProcessingView: React.FC<ProcessingViewProps> = ({ data, onSuccess,
                         role: data.role,
                         verifiedName: data.verifiedName,
                         sender: data.sender,
-                        recipient: data.recipient
+                        recipient: data.recipient,
+                        signerId: data.signerId
                     }
                 });
 

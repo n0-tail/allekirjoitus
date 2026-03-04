@@ -22,6 +22,8 @@ export interface SignatureData {
   fileName?: string;
   verifiedName?: string;
   role?: 'sender' | 'recipient';
+  signerId?: string;
+  allSigners?: any[];
 }
 
 function initiateAuth(data: SignatureData, role: 'sender' | 'recipient'): Promise<boolean> {
@@ -129,25 +131,51 @@ function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
             file: null,
             documentId: doc.id,
             sender: doc.sender_email,
-            recipient: doc.recipient_email,
+            recipient: '', // Will set below if recipient
             fileName: doc.file_name,
-            role: role
+            role: role,
+            allSigners: doc.signers || []
           };
-          setData(docData);
 
-          // Determine initial view based on database status
-          if (doc.status === 'signed') {
-            setView('success');
-          } else if (role === 'sender' && doc.sender_name) {
-            setView('waiting');
-          } else if (role === 'recipient' && doc.recipient_name) {
-            setView('waiting');
-          } else if (role === 'sender' && doc.sender_paid) {
-            setView('authenticating');
-          } else if (role === 'recipient' && doc.recipient_paid) {
-            setView('authenticating');
+          if (role === 'recipient') {
+            const signerId = searchParams.get('signer');
+            if (!signerId) {
+              toast.error("Virhe: Sähköpostilinkistä puuttuu tunniste (signer).");
+              setView('error');
+              return;
+            }
+            const signersList = doc.signers || [];
+            const targetSigner = signersList.find((s: any) => s.id === signerId);
+
+            if (!targetSigner) {
+              toast.error("Virhe: Sinua ei löytynyt tämän asiakirjan allekirjoittajista.");
+              setView('error');
+              return;
+            }
+
+            docData.recipient = targetSigner.email;
+            docData.signerId = signerId;
+            setData(docData);
+
+            if (targetSigner.signed) {
+              setView('waiting'); // Waiting for others, but this ONE is done
+            } else if (targetSigner.paid) {
+              setView('authenticating');
+            } else {
+              setView('start');
+            }
           } else {
-            setView('start');
+            // SENDER
+            docData.recipient = doc.signers && doc.signers.length > 0 ? doc.signers.map((s: any) => s.email).join(', ') : 'Vastaanottajat';
+            setData(docData);
+
+            if (doc.sender_name) {
+              setView('waiting');
+            } else if (doc.sender_paid) {
+              setView('authenticating');
+            } else {
+              setView('start');
+            }
           }
         }
       });
@@ -252,6 +280,7 @@ function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
           documentId={data.documentId!}
           role={role}
           email={role === 'sender' ? data.sender : data.recipient}
+          signerId={data.signerId}
         />
       )}
 
@@ -290,13 +319,20 @@ function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
       {view === 'waiting' && (
         <div className="container animate-fade-in">
           <div className="card" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
-            <div style={{ color: '#f59e0b', marginBottom: '1rem' }}>
-              <svg style={{ width: '48px', height: '48px', margin: '0 auto' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div style={{ color: '#f59e0b', margin: '0 auto 1.5rem auto' }}>
+              <svg style={{ width: '64px', height: '64px', margin: '0 auto' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h2>Tallennettu onnistuneesti!</h2>
-            <p>Allekirjoituksesi on kirjattu turvallisesti järjestelmään. Odotamme vielä toisen osapuolen tunnistautumista tai maksua, ennen kuin lopullinen allekirjoitettu asiakirja voidaan luoda ja lähettää teille sähköpostitse.</p>
+            <h2 style={{ marginBottom: '1rem', fontSize: '1.75rem' }}>Odotetaan muita osapuolia</h2>
+            {data.allSigners && data.allSigners.length > 0 ? (
+              <p style={{ fontSize: '1.125rem', color: 'var(--text-muted)' }}>
+                Allekirjoituksesi on kirjattu järjestelmään. Odotamme vielä muiden osapuolten tunnistautumisia, ennen kuin lopullinen asiakirja voidaan luoda.<br /><br />
+                <strong style={{ color: 'var(--text-main)' }}>Valmiina: {data.allSigners.filter(s => s.signed).length} / {data.allSigners.length}</strong>
+              </p>
+            ) : (
+              <p>Allekirjoituksesi on kirjattu järjestelmään. Odotamme vielä toisen osapuolen tunnistautumista...</p>
+            )}
           </div>
         </div>
       )}

@@ -41,6 +41,9 @@ serve(async (req) => {
                         let updatedSigners = doc?.signers || [];
                         if (!fetchError && doc && doc.signers) {
                             updatedSigners = doc.signers.map((s: any) => ({ ...s, paid: true }));
+                            console.log(`Setting paid: true for all ${updatedSigners.length} signers.`);
+                        } else {
+                            console.error(`Fetch error or no signers:`, fetchError);
                         }
 
                         const { error } = await supabase
@@ -63,7 +66,7 @@ serve(async (req) => {
                         if (error) {
                             console.error(`Failed to update DB for ${documentId}:`, error.message);
                         } else {
-                            console.log(`Payment confirmed for ${documentId} (Role: sender)`);
+                            console.log(`Payment confirmed for ${documentId} (Role: sender). payForAll was: ${paymentIntent.metadata.payForAll}`);
                         }
                     }
                 } else if (role === 'recipient' && signerId) {

@@ -45,7 +45,7 @@ serve(async (req) => {
         documentId: documentId || 'unknown',
         role: role || 'unknown',
         ...(signerId ? { signerId } : {}),
-        ...(payForAll ? { payForAll: 'true' } : {})
+        payForAll: payForAll ? 'true' : 'false'
       }
     })
 

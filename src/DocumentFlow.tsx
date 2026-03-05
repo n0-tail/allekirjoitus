@@ -127,18 +127,6 @@ export function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
                                         </div>
                                     </>
                                 )}
-
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '1.5rem' }}>
-                                    <div style={{ flex: 1, height: '1px', background: 'var(--border)' }}></div>
-                                    <span style={{ fontSize: '0.875rem', color: 'var(--text-muted)', fontWeight: 500 }}>OMA PALUULINKKISI</span>
-                                    <div style={{ flex: 1, height: '1px', background: 'var(--border)' }}></div>
-                                </div>
-                                <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', textAlign: 'center', margin: 0 }}>
-                                    Laitoimme sinulle myös sähköpostia. Pääset takaisin maksamaan ja tunnistautumaan tästä linkistä:
-                                </p>
-                                <div style={{ background: 'white', padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px dashed var(--border)', fontSize: '0.875rem', wordBreak: 'break-all', textAlign: 'center' }}>
-                                    {window.location.origin}{import.meta.env.BASE_URL}lahettaja/{data.documentId}
-                                </div>
                             </div>
                         </div>
 

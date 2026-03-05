@@ -30,15 +30,41 @@ serve(async (req) => {
                 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
                 if (role === 'sender') {
-                    const { error } = await supabase
-                        .from('documents')
-                        .update({ sender_paid: true })
-                        .eq('id', documentId);
+                    if (paymentIntent.metadata.payForAll === 'true') {
+                        // Fetch doc to get the current signers array
+                        const { data: doc, error: fetchError } = await supabase
+                            .from('documents')
+                            .select('signers')
+                            .eq('id', documentId)
+                            .single();
 
-                    if (error) {
-                        console.error(`Failed to update DB for ${documentId}:`, error.message);
+                        let updatedSigners = doc?.signers || [];
+                        if (!fetchError && doc && doc.signers) {
+                            updatedSigners = doc.signers.map((s: any) => ({ ...s, paid: true }));
+                        }
+
+                        const { error } = await supabase
+                            .from('documents')
+                            .update({ sender_paid: true, signers: updatedSigners })
+                            .eq('id', documentId);
+
+                        if (error) {
+                            console.error(`Failed to update DB for ${documentId} with payForAll:`, error.message);
+                        } else {
+                            console.log(`Payment confirmed for ${documentId} (Role: sender, payForAll: true)`);
+                        }
                     } else {
-                        console.log(`Payment confirmed for ${documentId} (Role: sender)`);
+                        // Standard single payment
+                        const { error } = await supabase
+                            .from('documents')
+                            .update({ sender_paid: true })
+                            .eq('id', documentId);
+
+                        if (error) {
+                            console.error(`Failed to update DB for ${documentId}:`, error.message);
+                        } else {
+                            console.log(`Payment confirmed for ${documentId} (Role: sender)`);
+                        }
                     }
                 } else if (role === 'recipient' && signerId) {
                     // Fetch existing signers

@@ -120,10 +120,19 @@ function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
           // Haetaan sessionstoragesta jos siellä on jo jotain (esim OIDC paluu)
           const stashedSession = sessionStorage.getItem('appState_view');
           const stashedData = sessionStorage.getItem('appState_data');
+
           if (stashedSession === 'processing' && stashedData) {
             setData(JSON.parse(stashedData));
             setView('processing');
             sessionStorage.removeItem('appState_view');
+            return;
+          }
+
+          // NEW: Allow authentication retries if the local session remembers we paid, 
+          // even if the database webhook hasn't caught up yet.
+          if (stashedSession === 'authenticating' && stashedData) {
+            setData(JSON.parse(stashedData));
+            setView('authenticating');
             return;
           }
 
@@ -380,6 +389,9 @@ function AuthCallbackRoute() {
           const stashed = sessionStorage.getItem('signatureData');
           if (stashed) {
             const data = JSON.parse(stashed);
+            // NEW: Ensure we don't force a new payment if they just failed auth.
+            sessionStorage.setItem('appState_view', 'authenticating');
+
             navigate(data.role === 'sender' ? `/lahettaja/${data.documentId}` : `/asiakirja/${data.documentId}`, { replace: true });
             return;
           }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import toast from 'react-hot-toast';
 import { supabase } from './lib/supabase';
 
 // Initialize Stripe. Uses Vite env var.
@@ -152,6 +153,13 @@ export const PaymentView: React.FC<PaymentViewProps> = ({ onPaymentSuccess, reas
                 });
 
                 if (funcError) throw new Error(funcError.message);
+
+                if (data?.alreadyPaid) {
+                    toast.success("Maksusi on jo hoidettu! Ohitetaan maksuvaihe...");
+                    onPaymentSuccess();
+                    return;
+                }
+
                 if (data?.clientSecret) {
                     setClientSecret(data.clientSecret);
                 } else {

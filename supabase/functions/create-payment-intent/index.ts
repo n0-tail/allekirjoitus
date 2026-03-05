@@ -22,15 +22,29 @@ serve(async (req) => {
 
     let finalAmount = 50; // default 50 cents testing minimum
 
-    if (payForAll && role === 'sender' && documentId !== 'unknown') {
+    if (documentId !== 'unknown') {
       const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
       const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
       const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-      const { data: doc, error } = await supabase.from('documents').select('signers').eq('id', documentId).single();
-      if (!error && doc && doc.signers) {
-        // Sender + all signers
-        finalAmount = (1 + doc.signers.length) * 50;
+      const { data: doc, error } = await supabase.from('documents').select('sender_paid, signers').eq('id', documentId).single();
+
+      if (!error && doc) {
+        // Double-check if already paid to prevent race conditions or double billing
+        if (role === 'sender' && doc.sender_paid) {
+          return new Response(JSON.stringify({ alreadyPaid: true }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 });
+        }
+        if (role === 'recipient' && signerId) {
+          const sTarget = doc.signers?.find((s: any) => s.id === signerId);
+          if (sTarget?.paid) {
+            return new Response(JSON.stringify({ alreadyPaid: true }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 });
+          }
+        }
+
+        if (payForAll && role === 'sender' && doc.signers) {
+          // Sender + all signers
+          finalAmount = (1 + doc.signers.length) * 50; // default test amount, will use real amount logic if you have it
+        }
       }
     }
 

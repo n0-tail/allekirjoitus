@@ -22,6 +22,7 @@ serve(async (req) => {
         if (event.type === 'payment_intent.succeeded') {
             const paymentIntent = event.data.object;
             const { documentId, role, signerId } = paymentIntent.metadata;
+            console.log('[WEBHOOK] payment_intent.succeeded received. Full metadata:', JSON.stringify(paymentIntent.metadata));
 
             if (documentId && role) {
                 // Initialize Supabase admin client
@@ -30,7 +31,9 @@ serve(async (req) => {
                 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
                 if (role === 'sender') {
+                    console.log(`[WEBHOOK] Role=sender. payForAll raw value: '${paymentIntent.metadata.payForAll}', type: ${typeof paymentIntent.metadata.payForAll}`);
                     if (paymentIntent.metadata.payForAll === 'true') {
+                        console.log('[WEBHOOK] payForAll detected as true. Fetching signers...');
                         // Fetch doc to get the current signers array
                         const { data: doc, error: fetchError } = await supabase
                             .from('documents')
@@ -38,23 +41,23 @@ serve(async (req) => {
                             .eq('id', documentId)
                             .single();
 
-                        let updatedSigners = doc?.signers || [];
-                        if (!fetchError && doc && doc.signers) {
-                            updatedSigners = doc.signers.map((s: any) => ({ ...s, paid: true }));
-                            console.log(`Setting paid: true for all ${updatedSigners.length} signers.`);
+                        if (fetchError || !doc) {
+                            console.error(`[WEBHOOK] CRITICAL: Failed to fetch doc ${documentId}:`, fetchError?.message);
                         } else {
-                            console.error(`Fetch error or no signers:`, fetchError);
-                        }
+                            console.log(`[WEBHOOK] Fetched ${doc.signers?.length || 0} signers. Current state:`, JSON.stringify(doc.signers));
+                            const updatedSigners = (doc.signers || []).map((s: any) => ({ ...s, paid: true }));
+                            console.log('[WEBHOOK] Updated signers (all paid=true):', JSON.stringify(updatedSigners));
 
-                        const { error } = await supabase
-                            .from('documents')
-                            .update({ sender_paid: true, signers: updatedSigners })
-                            .eq('id', documentId);
+                            const { error } = await supabase
+                                .from('documents')
+                                .update({ sender_paid: true, signers: updatedSigners })
+                                .eq('id', documentId);
 
-                        if (error) {
-                            console.error(`Failed to update DB for ${documentId} with payForAll:`, error.message);
-                        } else {
-                            console.log(`Payment confirmed for ${documentId} (Role: sender, payForAll: true)`);
+                            if (error) {
+                                console.error(`[WEBHOOK] CRITICAL: DB update failed for ${documentId}:`, error.message);
+                            } else {
+                                console.log(`[WEBHOOK] SUCCESS: All signers marked paid for doc ${documentId}`);
+                            }
                         }
                     } else {
                         // Standard single payment

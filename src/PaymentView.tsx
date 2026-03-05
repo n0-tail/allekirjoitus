@@ -15,9 +15,12 @@ interface CheckoutFormProps {
     setPayForAll?: (val: boolean) => void;
     numSigners: number;
     showPayForAllToggle: boolean;
+    documentId: string;
+    role: 'sender' | 'recipient';
+    signerId?: string;
 }
 
-const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSuccess, reason, totalAmount, payForAll, setPayForAll, numSigners, showPayForAllToggle }) => {
+const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSuccess, reason, totalAmount, payForAll, setPayForAll, numSigners, showPayForAllToggle, documentId, role, signerId }) => {
     const stripe = useStripe();
     const elements = useElements();
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -52,7 +55,14 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSuccess, reason, totalAmo
                 setErrorMessage(error.message || 'Maksussa tapahtui virhe.');
                 setIsProcessing(false);
             } else {
-                // Payment successful
+                // Payment successful - confirm in our DB directly (don't rely on webhook)
+                try {
+                    await supabase.functions.invoke('confirm-payment', {
+                        body: { documentId, role, signerId, payForAll }
+                    });
+                } catch (confirmErr) {
+                    console.warn('confirm-payment call failed, webhook should handle it:', confirmErr);
+                }
                 onSuccess();
             }
         } catch (err: any) {
@@ -136,6 +146,10 @@ export const PaymentView: React.FC<PaymentViewProps> = ({ onPaymentSuccess, reas
 
         if (secret && redirectStatus === 'succeeded') {
             // Maksu onnistui uudelleenohjauksen kautta (esim. Bancontact)
+            // Confirm in our DB directly
+            supabase.functions.invoke('confirm-payment', {
+                body: { documentId, role, signerId, payForAll }
+            }).catch(err => console.warn('confirm-payment after redirect failed:', err));
             onPaymentSuccess();
             return;
         } else if (secret && redirectStatus) {
@@ -212,6 +226,9 @@ export const PaymentView: React.FC<PaymentViewProps> = ({ onPaymentSuccess, reas
                         setPayForAll={role === 'sender' ? setPayForAll : undefined}
                         numSigners={numSigners}
                         showPayForAllToggle={role === 'sender'}
+                        documentId={documentId}
+                        role={role}
+                        signerId={signerId}
                     />
                 </Elements>
             </div>

@@ -89,7 +89,7 @@ serve(async (req) => {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${RESEND_API_KEY}` },
                         body: JSON.stringify({
-                            from: 'Allekirjoitus <onboarding@resend.dev>',
+                            from: 'Helppo Allekirjoitus <noreply@helppoallekirjoitus.fi>',
                             to: [doc.sender_email || sender],
                             subject: `Oma osiosi on valmis: ${doc.file_name || fileName || 'Asiakirja'}`,
                             html: emailHtml,
@@ -184,7 +184,7 @@ serve(async (req) => {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${RESEND_API_KEY}` },
                     body: JSON.stringify({
-                        from: 'Allekirjoitus <onboarding@resend.dev>',
+                        from: 'Helppo Allekirjoitus <noreply@helppoallekirjoitus.fi>',
                         to: [emailTarget],
                         subject: `Asiakirja valmis: Kaikki osapuolet ovat allekirjoittaneet`,
                         html: emailHtml,

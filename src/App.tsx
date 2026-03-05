@@ -168,9 +168,10 @@ function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
 
             if (targetSigner.signed) {
               setView('waiting'); // Waiting for others, but this ONE is done
-            } else if (targetSigner.paid) {
-              setView('authenticating');
+            } else if (stashedSession === 'authenticating' || stashedSession === 'processing') {
+              // Retain current session state if they're mid-flow
             } else {
+              // NEW: Even if targetSigner.paid is true (because sender prepaid), we MUST show 'start' first!
               setView('start');
             }
           } else {
@@ -274,7 +275,12 @@ function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
       {view === 'start' && role === 'recipient' && (
         <RecipientView
           data={data}
+          isPaid={data.allSigners?.find(s => s.id === data.signerId)?.paid || false}
           onSignClick={() => setView('payment')}
+          onAuthDirectClick={() => {
+            toast.success("Maksusi on jo hoidettu (Lähettäjä). Siirrytään tunnistautumiseen!");
+            setView('authenticating');
+          }}
           onPrivacyClick={() => navigate('/tietosuoja')}
         />
       )}
@@ -290,6 +296,7 @@ function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
           role={role}
           email={role === 'sender' ? data.sender : data.recipient}
           signerId={data.signerId}
+          numSigners={data.allSigners?.length || 0}
         />
       )}
 

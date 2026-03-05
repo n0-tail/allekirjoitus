@@ -10,11 +10,13 @@ interface RecipientViewProps {
         fileName?: string;
         documentId?: string;
     };
+    isPaid?: boolean;
     onSignClick: () => void;
+    onAuthDirectClick?: () => void;
     onPrivacyClick?: () => void;
 }
 
-export const RecipientView: React.FC<RecipientViewProps> = ({ data, onSignClick, onPrivacyClick }) => {
+export const RecipientView: React.FC<RecipientViewProps> = ({ data, isPaid, onSignClick, onAuthDirectClick, onPrivacyClick }) => {
     const displayFileName = data.file?.name || data.fileName || 'Asiakirja.pdf';
     const [isDownloading, setIsDownloading] = useState(false);
 
@@ -108,9 +110,15 @@ export const RecipientView: React.FC<RecipientViewProps> = ({ data, onSignClick,
                             <button className="btn btn-secondary" onClick={handleDownload} disabled={isDownloading}>
                                 {isDownloading ? 'Ladataan...' : 'Lataa esikatselu'}
                             </button>
-                            <button className="btn btn-primary" onClick={handleSignClick}>
-                                Tunnistaudu & Allekirjoita
-                            </button>
+                            {isPaid ? (
+                                <button className="btn btn-primary" onClick={onAuthDirectClick}>
+                                    Tunnistaudu (Käsittelymaksu maksettu)
+                                </button>
+                            ) : (
+                                <button className="btn btn-primary" onClick={handleSignClick}>
+                                    Tunnistaudu & Allekirjoita
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>

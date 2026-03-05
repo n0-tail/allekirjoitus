@@ -65,6 +65,41 @@ serve(async (req) => {
 
         // If anyone is missing, early return with "waiting" status
         if (!hasSenderName || !allRecipientsSigned) {
+            // Send tracking email to sender if it's their turn that just finished
+            if (role === 'sender' && RESEND_API_KEY) {
+                try {
+                    const trackingLink = `https://helppoallekirjoitus.fi/lahettaja/${documentId}`;
+                    const emailHtml = `
+                    <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #10b981; border-radius: 8px;">
+                      <h2 style="color: #065f46; margin-top: 0;">Oma osiosi on nyt valmis!</h2>
+                      <p style="color: #374151; font-size: 16px; line-height: 1.5;">
+                        Kiitos <strong>${verifiedName}</strong>! Tunnistautumisesi ja maksusi on nyt kirjattu järjestelmäämme turvallisesti.
+                      </p>
+                      <p style="color: #374151; font-size: 16px; line-height: 1.5;">
+                        Odotamme vielä muiden osapuolten tunnistautumista. Voit sulkea selaimen turvallisesti. Lähetämme uuden viestin heti, kun asiakirja on kaikkien osalta valmis.
+                      </p>
+                      <div style="margin: 30px 0;">
+                        <a href="${trackingLink}" style="background-color: #10b981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500; display: inline-block;">
+                          Seuraa asiakirjan tilaa tästä
+                        </a>
+                      </div>
+                    </div>`;
+
+                    await fetch('https://api.resend.com/emails', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${RESEND_API_KEY}` },
+                        body: JSON.stringify({
+                            from: 'Allekirjoitus <onboarding@resend.dev>',
+                            to: [doc.sender_email || sender],
+                            subject: `Oma osiosi on valmis: ${doc.file_name || fileName || 'Asiakirja'}`,
+                            html: emailHtml,
+                        }),
+                    });
+                } catch (emailErr) {
+                    console.error("Vahvistussähköpostin lähetys lähettäjälle epäonnistui:", emailErr);
+                }
+            }
+
             return new Response(JSON.stringify({ status: 'waiting' }), {
                 headers: { ...corsHeaders, 'Content-Type': 'application/json' },
                 status: 200,

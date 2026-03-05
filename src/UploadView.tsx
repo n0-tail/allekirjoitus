@@ -107,7 +107,33 @@ export const UploadView: React.FC<UploadViewProps> = () => {
             });
           });
 
-          await Promise.all(emailPromises);
+          // Lähetetään sähköposti myös lähettäjälle itselleen paluulinkillä
+          const senderLink = `${window.location.origin}${import.meta.env.BASE_URL}lahettaja/${docId}`;
+          const senderEmailPromise = supabase.functions.invoke('send-email', {
+            body: {
+              to: sender,
+              subject: `Allekirjoituspyyntösi: ${file.name}`,
+              html: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
+                <h2 style="color: #111827; margin-top: 0;">Allekirjoituspyyntösi on luotu!</h2>
+                <p style="color: #374151; font-size: 16px; line-height: 1.5;">
+                  Olet luonut sähköisen allekirjoituspyynnön asiakirjalle <em>(${file.name})</em>.
+                </p>
+                <p style="color: #374151; font-size: 16px; line-height: 1.5;">
+                  Sinun tulee maksaa käsittelymaksu ja tunnistautua asettaaksesi oman allekirjoituksesi asiakirjaan. Voit palata maksamaan ja tunnistautumaan myöhemmin tästä linkistä:
+                </p>
+                <div style="margin: 30px 0;">
+                  <a href="${senderLink}" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500; display: inline-block;">
+                    Jatka maksulinkkiin
+                  </a>
+                </div>
+                <p style="color: #6b7280; font-size: 14px; margin-bottom: 0;">
+                  Ystävällisin terveisin,<br>Allekirjoitus
+                </p>
+              </div>`
+            }
+          });
+
+          await Promise.all([...emailPromises, senderEmailPromise]);
         } catch {
           console.warn("Sähköpostin lähetys epäonnistui (reunafunktiota ei ehkä ole vielä julkaistu), jatketaan silti.");
         }
@@ -142,7 +168,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label className="form-label">1. Valitse asiakirja (PDF)</label>
+            <label className="form-label">Valitse asiakirja (PDF)</label>
             <div
               className={`dropzone ${file ? 'active' : ''}`}
               onDragOver={(e) => e.preventDefault()}
@@ -180,10 +206,10 @@ export const UploadView: React.FC<UploadViewProps> = () => {
           <div className="animate-fade-in">
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
 
-              {/* LEFT COLUMN: Sender + Add Button */}
+              {/* LEFT COLUMN: Sender */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 <div className="form-group" style={{ marginBottom: 0 }}>
-                  <label className="form-label">2. Lähettäjän sähköposti (Sinun)</label>
+                  <label className="form-label">Lähettäjän sähköposti (Sinun)</label>
                   <input
                     type="email"
                     className="form-input"
@@ -193,44 +219,14 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                     required
                   />
                 </div>
-
-                <div className="form-group" style={{ marginBottom: 0 }}>
-                  <label className="form-label" style={{ visibility: 'hidden' }}>Lisää</label>
-                  <button
-                    type="button"
-                    onClick={addRecipient}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '0.4rem',
-                      background: 'rgba(37, 99, 235, 0.03)',
-                      border: '1px dashed rgba(37, 99, 235, 0.3)',
-                      color: 'var(--primary)',
-                      cursor: 'pointer',
-                      fontWeight: 500,
-                      padding: '0.75rem',
-                      borderRadius: 'var(--radius-md)',
-                      width: '100%',
-                      transition: 'all 0.2s ease-in-out'
-                    }}
-                    onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(37, 99, 235, 0.08)'; e.currentTarget.style.borderColor = 'rgba(37, 99, 235, 0.5)'; }}
-                    onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(37, 99, 235, 0.03)'; e.currentTarget.style.borderColor = 'rgba(37, 99, 235, 0.3)'; }}
-                  >
-                    <svg style={{ width: '18px', height: '18px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                    </svg>
-                    <span>Lisää vastaanottaja</span>
-                  </button>
-                </div>
               </div>
 
-              {/* RIGHT COLUMN: All Recipients */}
+              {/* RIGHT COLUMN: All Recipients + Add Button */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 {recipients.map((rec, index) => (
                   <div key={rec.id} className="form-group animate-fade-in" style={{ marginBottom: 0 }}>
                     <label className="form-label">
-                      {index === 0 ? '3. Vastaanottaja 1' : `Vastaanottaja ${index + 1}`}
+                      {index === 0 ? 'Vastaanottaja 1' : `Vastaanottaja ${index + 1}`}
                     </label>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                       <input
@@ -269,6 +265,35 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                     </div>
                   </div>
                 ))}
+
+                <div className="form-group" style={{ marginBottom: 0 }}>
+                  <button
+                    type="button"
+                    onClick={addRecipient}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '0.4rem',
+                      background: 'rgba(37, 99, 235, 0.03)',
+                      border: '1px dashed rgba(37, 99, 235, 0.3)',
+                      color: 'var(--primary)',
+                      cursor: 'pointer',
+                      fontWeight: 500,
+                      padding: '0.75rem',
+                      borderRadius: 'var(--radius-md)',
+                      width: '100%',
+                      transition: 'all 0.2s ease-in-out'
+                    }}
+                    onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(37, 99, 235, 0.08)'; e.currentTarget.style.borderColor = 'rgba(37, 99, 235, 0.5)'; }}
+                    onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(37, 99, 235, 0.03)'; e.currentTarget.style.borderColor = 'rgba(37, 99, 235, 0.3)'; }}
+                  >
+                    <svg style={{ width: '18px', height: '18px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                    <span>Lisää vastaanottaja</span>
+                  </button>
+                </div>
               </div>
 
             </div>

@@ -94,34 +94,50 @@ export function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
                             <h3 style={{ fontSize: '1rem', marginBottom: '1.5rem', color: 'var(--text-main)' }}>Kutsu on lähetetty sähköpostitse</h3>
 
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.5rem' }}>
+                                {data.allSigners && data.allSigners.length === 1 && (
+                                    <>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.5rem' }}>
+                                            <div style={{ flex: 1, height: '1px', background: 'var(--border)' }}></div>
+                                            <span style={{ fontSize: '0.875rem', color: 'var(--text-muted)', fontWeight: 500 }}>VOIT MYÖS KOPIOIDA LINKIN VASTAANOTTAJALLE TÄSTÄ</span>
+                                            <div style={{ flex: 1, height: '1px', background: 'var(--border)' }}></div>
+                                        </div>
+
+                                        <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                            <input
+                                                type="text"
+                                                readOnly
+                                                className="form-input"
+                                                style={{ flex: 1, fontSize: '0.875rem', background: 'white' }}
+                                                value={`${window.location.origin}${import.meta.env.BASE_URL}asiakirja/${data.documentId}?signer=${data.allSigners?.[0]?.id}`}
+                                                onClick={(e) => (e.target as HTMLInputElement).select()}
+                                            />
+                                            <button
+                                                className={`btn ${copied ? 'btn-primary' : 'btn-secondary'}`}
+                                                title="Kopioi leikepöydälle"
+                                                style={{ minWidth: '120px' }}
+                                                onClick={() => {
+                                                    navigator.clipboard.writeText(`${window.location.origin}${import.meta.env.BASE_URL}asiakirja/${data.documentId}?signer=${data.allSigners?.[0]?.id}`);
+                                                    setCopied(true);
+                                                    toast.success("Vastaanottajan linkki kopioitu!");
+                                                    setTimeout(() => setCopied(false), 2000);
+                                                }}
+                                            >
+                                                {copied ? 'Kopioitu!' : 'Kopioi linkki'}
+                                            </button>
+                                        </div>
+                                    </>
+                                )}
+
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '1.5rem' }}>
                                     <div style={{ flex: 1, height: '1px', background: 'var(--border)' }}></div>
-                                    <span style={{ fontSize: '0.875rem', color: 'var(--text-muted)', fontWeight: 500 }}>VOIT MYÖS KOPIOIDA LINKIN TÄSTÄ</span>
+                                    <span style={{ fontSize: '0.875rem', color: 'var(--text-muted)', fontWeight: 500 }}>OMA PALUULINKKISI</span>
                                     <div style={{ flex: 1, height: '1px', background: 'var(--border)' }}></div>
                                 </div>
-
-                                <div style={{ display: 'flex', gap: '0.5rem' }}>
-                                    <input
-                                        type="text"
-                                        readOnly
-                                        className="form-input"
-                                        style={{ flex: 1, fontSize: '0.875rem', background: 'white' }}
-                                        value={`${window.location.origin}${import.meta.env.BASE_URL}asiakirja/${data.documentId}`}
-                                        onClick={(e) => (e.target as HTMLInputElement).select()}
-                                    />
-                                    <button
-                                        className={`btn ${copied ? 'btn-primary' : 'btn-secondary'}`}
-                                        title="Kopioi leikepöydälle"
-                                        style={{ minWidth: '120px' }}
-                                        onClick={() => {
-                                            navigator.clipboard.writeText(`${window.location.origin}${import.meta.env.BASE_URL}asiakirja/${data.documentId}`);
-                                            setCopied(true);
-                                            toast.success("Linkki kopioitu!");
-                                            setTimeout(() => setCopied(false), 2000);
-                                        }}
-                                    >
-                                        {copied ? 'Kopioitu!' : 'Kopioi linkki'}
-                                    </button>
+                                <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', textAlign: 'center', margin: 0 }}>
+                                    Laitoimme sinulle myös sähköpostia. Pääset takaisin maksamaan ja tunnistautumaan tästä linkistä:
+                                </p>
+                                <div style={{ background: 'white', padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px dashed var(--border)', fontSize: '0.875rem', wordBreak: 'break-all', textAlign: 'center' }}>
+                                    {window.location.origin}{import.meta.env.BASE_URL}lahettaja/{data.documentId}
                                 </div>
                             </div>
                         </div>

@@ -6,6 +6,7 @@ import { ArticleIndexView } from './views/ArticleIndexView';
 import { ArticlePostView } from './views/ArticlePostView';
 import { DocumentFlow } from './DocumentFlow';
 import { AuthCallbackRoute } from './AuthCallbackRoute';
+import { VerifyView } from './VerifyView';
 import './index.css';
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
           <Route path="/" element={<UploadView />} />
           <Route path="/asiakirja/:id" element={<DocumentFlow role="recipient" />} />
           <Route path="/lahettaja/:id" element={<DocumentFlow role="sender" />} />
+          <Route path="/verify/:id" element={<VerifyView />} />
           <Route path="/auth/callback" element={<AuthCallbackRoute />} />
           <Route path="/ehdot" element={<TermsView />} />
           <Route path="/tietosuoja" element={<PrivacyView />} />

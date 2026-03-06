@@ -130,13 +130,29 @@ export function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
                             </div>
                         </div>
 
-                        <button
-                            className="btn btn-primary"
-                            style={{ width: '100%', marginBottom: '1rem', padding: '1rem', fontSize: '1.125rem' }}
-                            onClick={() => setView('payment')}
-                        >
-                            Siirry maksamaan ja tunnistautumaan &rarr;
-                        </button>
+                        {data.allSigners?.length && !data.allSigners[0]?.paid ? (
+                            <button
+                                className="btn btn-primary"
+                                style={{ width: '100%', marginBottom: '1rem', padding: '1rem', fontSize: '1.125rem' }}
+                                onClick={() => setView('payment')}
+                            >
+                                Siirry maksamaan ja tunnistautumaan &rarr;
+                            </button>
+                        ) : (
+                            <button
+                                className="btn btn-primary"
+                                style={{ width: '100%', marginBottom: '1rem', padding: '1rem', fontSize: '1.125rem' }}
+                                onClick={async () => {
+                                    setView('loading');
+                                    const success = await initiateAuth(data, role);
+                                    if (!success) {
+                                        setView('start');
+                                    }
+                                }}
+                            >
+                                Jatka tunnistautumiseen &rarr;
+                            </button>
+                        )}
                     </div>
                 </div>
             )}
@@ -146,9 +162,13 @@ export function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
                     data={data}
                     isPaid={data.allSigners?.find(s => s.id === data.signerId)?.paid || false}
                     onSignClick={() => setView('payment')}
-                    onAuthDirectClick={() => {
-                        toast.success("Maksusi on jo hoidettu (Lähettäjä). Siirrytään tunnistautumiseen!");
-                        setView('authenticating');
+                    onAuthDirectClick={async () => {
+                        toast.success("Maksu on jo hoidettu (Lähettäjä). Siirrytään tunnistautumiseen!");
+                        setView('loading');
+                        const success = await initiateAuth(data, role);
+                        if (!success) {
+                            setView('start'); // Palaa takaisin jos epäonnistui
+                        }
                     }}
                     onPrivacyClick={() => navigate('/tietosuoja')}
                 />
@@ -157,9 +177,13 @@ export function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
             {view === 'payment' && (
                 <PaymentView
                     reason={role === 'sender' ? "Lähettäjän käsittely- ja tunnistautumismaksu" : "Allekirjoittajan käsittely- ja tunnistautumismaksu"}
-                    onPaymentSuccess={() => {
-                        toast.success("Maksu vahvistettu!");
-                        setView('authenticating');
+                    onPaymentSuccess={async () => {
+                        toast.success("Maksu vahvistettu! Siirrytään tunnistautumiseen...");
+                        setView('loading');
+                        const success = await initiateAuth(data, role);
+                        if (!success) {
+                            setView('start');
+                        }
                     }}
                     documentId={data.documentId!}
                     role={role}
@@ -172,19 +196,9 @@ export function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
             {view === 'authenticating' && (
                 <div className="container animate-fade-in">
                     <div className="card" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500 mb-4 mx-auto"></div>
                         <h2 style={{ marginBottom: '1rem' }}>Siirrytään tunnistautumiseen...</h2>
-                        <p style={{ marginBottom: '2rem', color: 'var(--text-muted)' }}>Maksu on vahvistettu. Seuraavaksi sinun tulee tunnistautua.</p>
-                        <button
-                            className="btn btn-primary"
-                            onClick={async () => {
-                                const success = await initiateAuth(data, role);
-                                if (!success) {
-                                    // Stay on this view so user can try again
-                                }
-                            }}
-                        >
-                            Jatka tunnistautumiseen
-                        </button>
+                        <p style={{ marginBottom: '2rem', color: 'var(--text-muted)' }}>Odota hetki, sinut ohjataan automaattisesti eteenpäin.</p>
                     </div>
                 </div>
             )}

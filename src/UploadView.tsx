@@ -23,6 +23,10 @@ export const UploadView: React.FC<UploadViewProps> = () => {
   const [isUploading, setIsUploading] = useState(false);
 
   const addRecipient = () => {
+    if (recipients.length >= 20) {
+      toast.error('Voit lisätä enintään 20 vastaanottajaa kerrallaan.');
+      return;
+    }
     setRecipients([...recipients, { id: crypto.randomUUID(), email: '' }]);
   };
 

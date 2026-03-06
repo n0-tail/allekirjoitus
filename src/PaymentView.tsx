@@ -186,7 +186,8 @@ export const PaymentView: React.FC<PaymentViewProps> = ({ onPaymentSuccess, reas
         };
 
         fetchIntent();
-    }, [onPaymentSuccess, payForAll, documentId, role, email, signerId]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [payForAll, documentId, role, email, signerId]);
 
     // Calculate total purely for UI consistency (real math is in backend)
     // Actually, in test mode the edge function returns 50 cents, but we display 1.49 for real feel

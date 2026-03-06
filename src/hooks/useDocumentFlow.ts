@@ -24,7 +24,12 @@ export function useDocumentFlow(id: string | undefined, role: 'sender' | 'recipi
                     // Jos maksu onnistui, ohjataan heti tunnistautumaan
                     if (searchParams.get('redirect_status') === 'succeeded') {
                         toast.success("Maksu vahvistettu! Siirrytään tunnistautumiseen...");
-                        setView('authenticating');
+                        // Käytettiin aiemmin setView('authenticating');
+                        import('../DocumentFlow').then(({ initiateAuth }) => {
+                            initiateAuth(JSON.parse(stashedData), role).then((success) => {
+                                if (!success) setView('start');
+                            });
+                        });
                         return;
                     } else {
                         setView('start'); // Jos peruutettu
@@ -102,7 +107,9 @@ export function useDocumentFlow(id: string | undefined, role: 'sender' | 'recipi
                         if (doc.sender_name) {
                             setView('waiting');
                         } else if (doc.sender_paid) {
-                            setView('authenticating');
+                            // Bug #2 Fix: Jos on jo maksettu, ohjataan aloitusnäkymään josta voi klikata itsensä tunnistautumaan.
+                            // Jos laitamme suoraan 'authenticating', se jää jumiin koska initiateAuth koodataan UX:n kautta.
+                            setView('start');
                         } else {
                             setView('start');
                         }

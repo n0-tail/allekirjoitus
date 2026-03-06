@@ -9,6 +9,7 @@ interface RecipientViewProps {
         recipient: string;
         fileName?: string;
         documentId?: string;
+        signerId?: string;
     };
     isPaid?: boolean;
     onSignClick: () => void;
@@ -64,7 +65,9 @@ export const RecipientView: React.FC<RecipientViewProps> = ({ data, isPaid, onSi
             documentId: data.documentId,
             sender: data.sender,
             recipient: data.recipient,
-            fileName: displayFileName
+            fileName: displayFileName,
+            role: 'recipient',
+            signerId: data.signerId
         }));
 
         // Pyydetään pääkomponenttia siirtymään maksu/tunnistautumis-näkymään
@@ -76,10 +79,11 @@ export const RecipientView: React.FC<RecipientViewProps> = ({ data, isPaid, onSi
             <div className="card">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2rem' }}>
                     <div>
-                        <h2 style={{ marginBottom: '0.5rem' }}>Allekirjoituspyyntö</h2>
-                        <p>Olet saanut asiakirjan allekirjoitettavaksi käyttäjältä <strong>{data.sender}</strong>.</p>
+                        <h2 style={{ marginBottom: '0.5rem' }}>Allekirjoituskutsu</h2>
+                        <p>Sinut on kutsuttu sähköisesti allekirjoittamaan tämä asiakirja.</p>
+                        <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>Lähettäjä: <strong>{data.sender}</strong></p>
                     </div>
-                    <span className="badge badge-pending">Odottaa allekirjoitusta</span>
+                    <span className="badge badge-pending">Odottaa sinua</span>
                 </div>
 
                 <div className="form-group" style={{ padding: '1.5rem', background: '#f8fafc', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)' }}>
@@ -112,7 +116,7 @@ export const RecipientView: React.FC<RecipientViewProps> = ({ data, isPaid, onSi
                             </button>
                             {isPaid ? (
                                 <button className="btn btn-primary" onClick={onAuthDirectClick}>
-                                    Tunnistaudu (Käsittelymaksu maksettu)
+                                    Siirry eteenpäin tunnistautumaan
                                 </button>
                             ) : (
                                 <button className="btn btn-primary" onClick={handleSignClick}>

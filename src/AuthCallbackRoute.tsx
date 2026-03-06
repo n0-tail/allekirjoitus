@@ -40,8 +40,8 @@ export function AuthCallbackRoute() {
                     const stashed = sessionStorage.getItem('signatureData');
                     if (stashed) {
                         const data = JSON.parse(stashed);
-                        // Varmistetaan, ettei menetetä payment/authenticating state
-                        sessionStorage.setItem('appState_view', 'authenticating');
+                        // Palautetaan aloitusnäkymä, jotta käyttäjä voi yrittää uudelleen
+                        sessionStorage.setItem('appState_view', 'start');
 
                         navigate(data.role === 'sender' ? `/lahettaja/${data.documentId}` : `/asiakirja/${data.documentId}`, { replace: true });
                         return;

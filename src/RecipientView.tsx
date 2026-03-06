@@ -93,7 +93,7 @@ export const RecipientView: React.FC<RecipientViewProps> = ({ data, isPaid, onSi
                         </svg>
                         <div>
                             <div style={{ fontWeight: 500, color: 'var(--text-main)' }}>{displayFileName}</div>
-                            <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>PDF Asiakirja • 1 sivu</div>
+                            <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>PDF Asiakirja</div>
                         </div>
                     </div>
                 </div>
@@ -120,7 +120,7 @@ export const RecipientView: React.FC<RecipientViewProps> = ({ data, isPaid, onSi
                                 </button>
                             ) : (
                                 <button className="btn btn-primary" onClick={handleSignClick}>
-                                    Tunnistaudu & Allekirjoita
+                                    Maksa & Allekirjoita
                                 </button>
                             )}
                         </div>

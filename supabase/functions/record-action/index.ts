@@ -58,6 +58,7 @@ serve(async (req) => {
             role: role,
             name: verifiedName,
             email: role === 'sender' ? (doc.sender_email || sender) : (updatedSigners.find((s: any) => s.id === signerId)?.email || recipient),
+            signerId: role === 'recipient' ? signerId : undefined,
             ip: clientIp,
             auth_method: authMethod,
             timestamp: timestampIso
@@ -206,9 +207,14 @@ serve(async (req) => {
         // Draw Signers Table
         let currentY = height - 250;
 
-        // Helper to find audit event for a specific role AND email
-        const getAuditData = (r: string, emailOrId: string) => {
-            return finalAuditTrail.slice().reverse().find((a: any) => a.role === r && a.email === emailOrId) || { ip: 'Ei tallennettu', auth_method: 'FTN' };
+        // Helper to find audit event for a specific role
+        const getAuditData = (r: string, identifier: string) => {
+            if (r === 'recipient') {
+                // Haetaan signerId:llä (uudet eventit) tai emaililla (fallback vanhoille eventeille)
+                return finalAuditTrail.slice().reverse().find((a: any) => a.role === r && (a.signerId === identifier || a.email === identifier)) || { ip: 'Ei tallennettu', auth_method: 'FTN' };
+            }
+            // Sender: haetaan emaililla
+            return finalAuditTrail.slice().reverse().find((a: any) => a.role === r && a.email === identifier) || { ip: 'Ei tallennettu', auth_method: 'FTN' };
         }
 
         const checkPagination = () => {
@@ -238,7 +244,7 @@ serve(async (req) => {
         // Recipients
         updatedSigners.forEach((s: any, index: number) => {
             checkPagination();
-            const recAudit = getAuditData('recipient', s.id);
+            const recAudit = getAuditData('recipient', s.id);  // Hakee signerId:llä tai emaililla
             auditPage.drawLine({ start: { x: 50, y: currentY }, end: { x: width - 50, y: currentY }, thickness: 1, color: rgb(0.9, 0.9, 0.9) });
             currentY -= 30;
             auditPage.drawText(`OSAPUOLI ${index + 2}: VASTAANOTTAJA`, { x: 50, y: currentY, size: 12, color: rgb(0.4, 0.4, 0.4) });

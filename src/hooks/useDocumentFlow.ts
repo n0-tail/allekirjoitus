@@ -24,7 +24,21 @@ export function useDocumentFlow(id: string | undefined, role: 'sender' | 'recipi
                     // Jos maksu onnistui, ohjataan heti tunnistautumaan
                     if (searchParams.get('redirect_status') === 'succeeded') {
                         toast.success("Maksu vahvistettu! Siirrytään tunnistautumiseen...");
-                        // Käytettiin aiemmin setView('authenticating');
+
+                        // Palautetaan payForAll sessionStoragesta ja kutsutaan confirm-payment
+                        const storedPayForAll = sessionStorage.getItem('payForAll') === 'true';
+                        import('../lib/supabase').then(({ supabase }) => {
+                            const parsedData = JSON.parse(stashedData);
+                            supabase.functions.invoke('confirm-payment', {
+                                body: {
+                                    documentId: parsedData.documentId,
+                                    role: parsedData.role || role,
+                                    signerId: parsedData.signerId,
+                                    payForAll: storedPayForAll
+                                }
+                            }).catch(err => console.warn('confirm-payment after redirect failed:', err));
+                        });
+
                         import('../DocumentFlow').then(({ initiateAuth }) => {
                             initiateAuth(JSON.parse(stashedData), role).then((success) => {
                                 if (!success) setView('start');
@@ -62,6 +76,8 @@ export function useDocumentFlow(id: string | undefined, role: 'sender' | 'recipi
                         return;
                     }
 
+                    const signersList = doc.signers || [];
+
                     const docData: SignatureData = {
                         file: null,
                         documentId: doc.id,
@@ -69,7 +85,8 @@ export function useDocumentFlow(id: string | undefined, role: 'sender' | 'recipi
                         recipient: '',
                         fileName: doc.file_name,
                         role: role,
-                        allSigners: doc.signers || []
+                        allSigners: signersList,
+                        senderPaid: !!doc.sender_paid,
                     };
 
                     if (role === 'recipient') {
@@ -79,7 +96,6 @@ export function useDocumentFlow(id: string | undefined, role: 'sender' | 'recipi
                             setView('error');
                             return;
                         }
-                        const signersList = doc.signers || [];
                         const targetSigner = signersList.find((s: any) => s.id === signerId);
 
                         if (!targetSigner) {
@@ -93,7 +109,13 @@ export function useDocumentFlow(id: string | undefined, role: 'sender' | 'recipi
                         setData(docData);
 
                         if (targetSigner.signed) {
-                            setView('waiting');
+                            // Jos kaikki on allekirjoittanut ja asiakirja on valmis, näytä success
+                            const allSigned = signersList.every((s: any) => s.signed === true) && !!doc.sender_name;
+                            if (allSigned && doc.status === 'signed') {
+                                setView('success');
+                            } else {
+                                setView('waiting');
+                            }
                         } else if (stashedSession === 'authenticating' || stashedSession === 'processing') {
                             // Retain current session state if they're mid-flow
                         } else {
@@ -101,16 +123,19 @@ export function useDocumentFlow(id: string | undefined, role: 'sender' | 'recipi
                         }
                     } else {
                         // SENDER
-                        docData.recipient = doc.signers && doc.signers.length > 0 ? doc.signers.map((s: any) => s.email).join(', ') : 'Vastaanottajat';
+                        docData.recipient = signersList.length > 0 ? signersList.map((s: any) => s.email).join(', ') : 'Vastaanottajat';
                         setData(docData);
 
-                        if (doc.sender_name) {
+                        const allRecipientsSigned = signersList.length > 0 && signersList.every((s: any) => s.signed === true);
+
+                        if (doc.sender_name && allRecipientsSigned && doc.status === 'signed') {
+                            // Kaikki on allekirjoittanut → näytä valmis-näkymä
+                            setView('success');
+                        } else if (doc.sender_name) {
+                            // Lähettäjä on tunnistautunut mutta odottaa vastaanottajia
                             setView('waiting');
-                        } else if (doc.sender_paid) {
-                            // Bug #2 Fix: Jos on jo maksettu, ohjataan aloitusnäkymään josta voi klikata itsensä tunnistautumaan.
-                            // Jos laitamme suoraan 'authenticating', se jää jumiin koska initiateAuth koodataan UX:n kautta.
-                            setView('start');
                         } else {
+                            // Lähettäjä ei ole vielä tunnistautunut
                             setView('start');
                         }
                     }

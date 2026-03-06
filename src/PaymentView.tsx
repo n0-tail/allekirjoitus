@@ -136,7 +136,15 @@ interface PaymentViewProps {
 export const PaymentView: React.FC<PaymentViewProps> = ({ onPaymentSuccess, reason, documentId, role, email, signerId, numSigners }) => {
     const [clientSecret, setClientSecret] = useState('');
     const [error, setError] = useState<string | null>(null);
-    const [payForAll, setPayForAll] = useState(false);
+    const [payForAll, setPayForAll] = useState(() => {
+        // Palautetaan aiemmin tallennettu arvo jos on (redirect-paluu)
+        return sessionStorage.getItem('payForAll') === 'true';
+    });
+
+    // Tallennetaan payForAll sessionStorageen aina kun se muuttuu
+    useEffect(() => {
+        sessionStorage.setItem('payForAll', payForAll ? 'true' : 'false');
+    }, [payForAll]);
 
     // We only recalculate intent if payForAll changes
     useEffect(() => {
@@ -146,9 +154,11 @@ export const PaymentView: React.FC<PaymentViewProps> = ({ onPaymentSuccess, reas
 
         if (secret && redirectStatus === 'succeeded') {
             // Maksu onnistui uudelleenohjauksen kautta (esim. Bancontact)
-            // Confirm in our DB directly
+            // Palautetaan payForAll sessionStoragesta
+            const storedPayForAll = sessionStorage.getItem('payForAll') === 'true';
+            // Confirm in our DB directly with correct payForAll
             supabase.functions.invoke('confirm-payment', {
-                body: { documentId, role, signerId, payForAll }
+                body: { documentId, role, signerId, payForAll: storedPayForAll }
             }).catch(err => console.warn('confirm-payment after redirect failed:', err));
             onPaymentSuccess();
             return;

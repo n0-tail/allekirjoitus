@@ -8,4 +8,5 @@ export interface SignatureData {
     role?: 'sender' | 'recipient';
     signerId?: string;
     allSigners?: any[];
+    senderPaid?: boolean;
 }

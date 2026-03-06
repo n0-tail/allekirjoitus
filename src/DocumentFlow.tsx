@@ -94,7 +94,7 @@ export function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
                             <h3 style={{ fontSize: '1rem', marginBottom: '1.5rem', color: 'var(--text-main)' }}>Kutsu on lähetetty sähköpostitse</h3>
 
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                {data.allSigners && data.allSigners.length === 1 && (
+                                {data.allSigners && data.allSigners.length > 0 && (
                                     <>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.5rem' }}>
                                             <div style={{ flex: 1, height: '1px', background: 'var(--border)' }}></div>
@@ -102,35 +102,40 @@ export function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
                                             <div style={{ flex: 1, height: '1px', background: 'var(--border)' }}></div>
                                         </div>
 
-                                        <div style={{ display: 'flex', gap: '0.5rem' }}>
-                                            <input
-                                                type="text"
-                                                readOnly
-                                                className="form-input"
-                                                style={{ flex: 1, fontSize: '0.875rem', background: 'white' }}
-                                                value={`${window.location.origin}${import.meta.env.BASE_URL}asiakirja/${data.documentId}?signer=${data.allSigners?.[0]?.id}`}
-                                                onClick={(e) => (e.target as HTMLInputElement).select()}
-                                            />
-                                            <button
-                                                className={`btn ${copied ? 'btn-primary' : 'btn-secondary'}`}
-                                                title="Kopioi leikepöydälle"
-                                                style={{ minWidth: '120px' }}
-                                                onClick={() => {
-                                                    navigator.clipboard.writeText(`${window.location.origin}${import.meta.env.BASE_URL}asiakirja/${data.documentId}?signer=${data.allSigners?.[0]?.id}`);
-                                                    setCopied(true);
-                                                    toast.success("Vastaanottajan linkki kopioitu!");
-                                                    setTimeout(() => setCopied(false), 2000);
-                                                }}
-                                            >
-                                                {copied ? 'Kopioitu!' : 'Kopioi linkki'}
-                                            </button>
-                                        </div>
+                                        {data.allSigners.map((signer) => {
+                                            const signerLink = `${window.location.origin}${import.meta.env.BASE_URL}asiakirja/${data.documentId}?signer=${signer.id}`;
+                                            return (
+                                                <div key={signer.id} style={{ display: 'flex', gap: '0.5rem' }}>
+                                                    <input
+                                                        type="text"
+                                                        readOnly
+                                                        className="form-input"
+                                                        style={{ flex: 1, fontSize: '0.875rem', background: 'white' }}
+                                                        value={signerLink}
+                                                        onClick={(e) => (e.target as HTMLInputElement).select()}
+                                                    />
+                                                    <button
+                                                        className={`btn ${copied ? 'btn-primary' : 'btn-secondary'}`}
+                                                        title="Kopioi leikepöydälle"
+                                                        style={{ minWidth: '120px' }}
+                                                        onClick={() => {
+                                                            navigator.clipboard.writeText(signerLink);
+                                                            setCopied(true);
+                                                            toast.success(`Vastaanottajan ${signer.email} linkki kopioitu!`);
+                                                            setTimeout(() => setCopied(false), 2000);
+                                                        }}
+                                                    >
+                                                        {copied ? 'Kopioitu!' : 'Kopioi linkki'}
+                                                    </button>
+                                                </div>
+                                            );
+                                        })}
                                     </>
                                 )}
                             </div>
                         </div>
 
-                        {data.allSigners?.length && !data.allSigners[0]?.paid ? (
+                        {!data.senderPaid ? (
                             <button
                                 className="btn btn-primary"
                                 style={{ width: '100%', marginBottom: '1rem', padding: '1rem', fontSize: '1.125rem' }}

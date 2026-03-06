@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { supabase } from './lib/supabase';
 
 
@@ -19,8 +19,13 @@ interface ProcessingViewProps {
 
 export const ProcessingView: React.FC<ProcessingViewProps> = ({ data, onSuccess, onWaiting, onFail }) => {
     const [status, setStatus] = useState('Viimeistellään asiakirjaa...');
+    const hasRun = useRef(false);
 
     useEffect(() => {
+        // Estetään duplikaattikutsut (React strict mode + inline callback -muutokset)
+        if (hasRun.current) return;
+        hasRun.current = true;
+
         let isMounted = true;
 
         const processDocument = async () => {
@@ -64,7 +69,7 @@ export const ProcessingView: React.FC<ProcessingViewProps> = ({ data, onSuccess,
         return () => {
             isMounted = false;
         };
-    }, [data, onSuccess, onFail]);
+    }, []);  // tyhjä deps-array: ajetaan vain kerran mount-vaiheessa
 
     return (
         <div className="container animate-fade-in">

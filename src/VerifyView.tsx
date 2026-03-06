@@ -36,23 +36,23 @@ export const VerifyView = () => {
 
     if (loading) {
         return (
-            <div className="min-h-[60vh] flex flex-col items-center justify-center p-4">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500 mb-4"></div>
-                <p className="text-gray-500">Haetaan allekirjoitustietoja...</p>
+            <div style={{ minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+                <div className="spinner" style={{ borderTopColor: '#10b981', marginBottom: '1rem' }}></div>
+                <p style={{ color: 'var(--text-muted)' }}>Haetaan allekirjoitustietoja...</p>
             </div>
         );
     }
 
     if (error) {
         return (
-            <div className="min-h-[60vh] flex flex-col items-center justify-center p-4">
-                <div className="bg-red-50 text-red-600 p-6 rounded-2xl max-w-md w-full border border-red-100 text-center">
-                    <svg className="w-12 h-12 mx-auto mb-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div style={{ minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+                <div style={{ background: '#fef2f2', color: '#dc2626', padding: '1.5rem', borderRadius: '1rem', maxWidth: '28rem', width: '100%', border: '1px solid #fee2e2', textAlign: 'center' }}>
+                    <svg style={{ width: '48px', height: '48px', margin: '0 auto 1rem auto', color: '#ef4444' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                     </svg>
-                    <h2 className="text-xl font-bold mb-2">Tarkistus epäonnistui</h2>
+                    <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem' }}>Tarkistus epäonnistui</h2>
                     <p>{error}</p>
-                    <Link to="/" className="inline-block mt-6 text-emerald-600 hover:text-emerald-700 font-medium">
+                    <Link to="/" style={{ display: 'inline-block', marginTop: '1.5rem', color: '#10b981', fontWeight: 500, textDecoration: 'none' }}>
                         Palaa etusivulle
                     </Link>
                 </div>
@@ -67,105 +67,110 @@ export const VerifyView = () => {
     ];
 
     return (
-        <div className="max-w-3xl mx-auto p-4 sm:p-6 lg:p-8 animate-fade-in relative z-10">
-            <div className="text-center mb-10 mt-8">
-                <p className="inline-block px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-100/50 text-emerald-600 font-medium text-sm tracking-wide shadow-sm mb-4">
+        <div style={{ maxWidth: '48rem', margin: '0 auto', padding: '1rem' }} className="animate-fade-in">
+            <div style={{ textAlign: 'center', marginBottom: '2.5rem', marginTop: '2rem' }}>
+                <p style={{ display: 'inline-block', padding: '0.375rem 1rem', borderRadius: '9999px', background: '#ecfdf5', border: '1px solid rgba(16, 185, 129, 0.2)', color: '#10b981', fontWeight: 500, fontSize: '0.875rem', letterSpacing: '0.05em', marginBottom: '1rem' }}>
                     Todistuksen tarkistus (Aitoustodistus)
                 </p>
-                <h1 className="text-4xl md:text-5xl font-extrabold text-slate-800 tracking-tight mb-4">
+                <h1 style={{ fontSize: 'clamp(2rem, 5vw, 2.75rem)', fontWeight: 800, color: '#1e293b', letterSpacing: '-0.025em', marginBottom: '1rem' }}>
                     Validointiportaali
                 </h1>
-                <p className="text-lg text-slate-500 max-w-xl mx-auto">
+                <p style={{ fontSize: '1.125rem', color: '#64748b', maxWidth: '36rem', margin: '0 auto' }}>
                     Tarkista sähköisesti allekirjoitetun asiakirjan aitous ja tila.
                 </p>
             </div>
 
-            <div className="bg-white/80 backdrop-blur-xl rounded-3xl p-6 sm:p-8 shadow-xl shadow-slate-200/50 border border-slate-100 relative overflow-hidden group hover:shadow-2xl hover:shadow-emerald-200/20 transition-all duration-300">
-                <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-                <div className="relative">
-                    <div className="flex items-start justify-between sm:items-center flex-col sm:flex-row gap-4 mb-8">
-                        <div>
-                            <h2 className="text-2xl font-bold text-slate-800">Allekirjoituksen tila</h2>
-                            <p className="text-sm text-slate-500 mt-1">ID: {docData?.id}</p>
-                        </div>
-
-                        <div className={`flex items-center gap-2 px-4 py-2 rounded-full font-medium ${isSigned ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-amber-50 text-amber-600 border border-amber-100'}`}>
-                            {isSigned ? (
-                                <>
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                    </svg>
-                                    Hyväksytty
-                                </>
-                            ) : (
-                                <>
-                                    <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></div>
-                                    Odottaa allekirjoituksia
-                                </>
-                            )}
-                        </div>
+            <div className="card" style={{ position: 'relative', overflow: 'hidden' }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
+                    <div>
+                        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#1e293b' }}>Allekirjoituksen tila</h2>
+                        <p style={{ fontSize: '0.875rem', color: '#64748b', marginTop: '0.25rem' }}>ID: {docData?.id}</p>
                     </div>
 
-                    <div className="grid sm:grid-cols-2 gap-6 mb-8">
-                        <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
-                            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Tiedoston nimi</p>
-                            <p className="text-slate-800 font-medium truncate" title={docData?.file_name}>
-                                {docData?.file_name || 'Tuntematon asiakirja'}
-                            </p>
-                        </div>
-                        <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
-                            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Laskettu SHA-256 Tiiviste</p>
-                            <p className="text-slate-800 font-medium text-sm font-mono break-all line-clamp-2" title={docData?.document_hash || 'Ei vielä laskettu'}>
-                                {docData?.document_hash || 'Lasketaan kun kaikki ovat allekirjoittaneet'}
-                            </p>
-                        </div>
+                    <div style={{
+                        display: 'flex', alignItems: 'center', gap: '0.5rem',
+                        padding: '0.5rem 1rem', borderRadius: '9999px', fontWeight: 500,
+                        background: isSigned ? '#ecfdf5' : '#fffbeb',
+                        color: isSigned ? '#10b981' : '#f59e0b',
+                        border: `1px solid ${isSigned ? '#d1fae5' : '#fef3c7'}`
+                    }}>
+                        {isSigned ? (
+                            <>
+                                <svg style={{ width: '20px', height: '20px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                </svg>
+                                Hyväksytty
+                            </>
+                        ) : (
+                            <>
+                                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#f59e0b', animation: 'pulse 2s ease-in-out infinite' }}></div>
+                                Odottaa allekirjoituksia
+                            </>
+                        )}
                     </div>
+                </div>
 
-                    <h3 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-                        <svg className="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                        </svg>
-                        Osapuolet ({participants.length})
-                    </h3>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
+                    <div style={{ padding: '1rem', borderRadius: '1rem', background: '#f8fafc', border: '1px solid var(--border)' }}>
+                        <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>Tiedoston nimi</p>
+                        <p style={{ color: '#1e293b', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {docData?.file_name || 'Tuntematon asiakirja'}
+                        </p>
+                    </div>
+                    <div style={{ padding: '1rem', borderRadius: '1rem', background: '#f8fafc', border: '1px solid var(--border)' }}>
+                        <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>Laskettu SHA-256 Tiiviste</p>
+                        <p style={{ color: '#1e293b', fontWeight: 500, fontSize: '0.875rem', fontFamily: 'monospace', wordBreak: 'break-all' }}>
+                            {docData?.document_hash || 'Lasketaan kun kaikki ovat allekirjoittaneet'}
+                        </p>
+                    </div>
+                </div>
 
-                    <div className="space-y-3 mb-8">
-                        {participants.map((p, idx) => {
-                            // Hakee oikean audit trailin jos doc on signed
-                            const auditLogEntry = (docData?.audit_trail || []).slice().reverse().find((a: any) => a.email === p.email);
+                <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#1e293b', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <svg style={{ width: '20px', height: '20px', color: '#10b981' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                    Osapuolet ({participants.length})
+                </h3>
 
-                            return (
-                                <div key={idx} className="flex items-center justify-between p-4 rounded-xl bg-white border border-slate-200 shadow-sm hover:border-emerald-200 transition-colors">
-                                    <div className="flex flex-col">
-                                        <span className="font-medium text-slate-800 flex items-center gap-2">
-                                            {p.name || 'Nimi ei vielä vahvistettu'}
-                                            {(idx === 0 || p.signed) && (
-                                                <svg className="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                </svg>
-                                            )}
-                                        </span>
-                                        <span className="text-sm text-slate-500">{p.email}</span>
-                                    </div>
-                                    {auditLogEntry && (
-                                        <div className="hidden sm:flex flex-col text-right">
-                                            <span className="text-xs text-slate-400">IP: {auditLogEntry.ip}</span>
-                                            <span className="text-xs text-slate-400">Tunnistus: {auditLogEntry.auth_method.replace("Vahva sähköinen tunnistautuminen (FTN)", "Vahva FTN")}</span>
-                                        </div>
-                                    )}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '2rem' }}>
+                    {participants.map((p, idx) => {
+                        const auditLogEntry = (docData?.audit_trail || []).slice().reverse().find((a: any) => a.email === p.email);
+
+                        return (
+                            <div key={idx} style={{
+                                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                                padding: '1rem', borderRadius: '0.75rem', background: 'white',
+                                border: '1px solid var(--border)'
+                            }}>
+                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                    <span style={{ fontWeight: 500, color: '#1e293b', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                        {p.name || 'Nimi ei vielä vahvistettu'}
+                                        {(idx === 0 || p.signed) && (
+                                            <svg style={{ width: '16px', height: '16px', color: '#10b981' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                        )}
+                                    </span>
+                                    <span style={{ fontSize: '0.875rem', color: '#64748b' }}>{p.email}</span>
                                 </div>
-                            );
-                        })}
-                    </div>
+                                {auditLogEntry && (
+                                    <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'right' }}>
+                                        <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>IP: {auditLogEntry.ip}</span>
+                                        <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Tunnistus: {auditLogEntry.auth_method.replace("Vahva sähköinen tunnistautuminen (FTN)", "Vahva FTN")}</span>
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
+                </div>
 
-                    <div className="mt-8 pt-6 border-t border-slate-100 text-center">
-                        <Link to="/" className="inline-flex items-center justify-center gap-2 bg-slate-900 text-white px-6 py-3 rounded-xl font-medium hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 group">
-                            Takaisin palveluun
-                            <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                            </svg>
-                        </Link>
-                    </div>
+                <div style={{ marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid var(--border)', textAlign: 'center' }}>
+                    <Link to="/" className="btn btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
+                        Takaisin palveluun
+                        <svg style={{ width: '16px', height: '16px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </Link>
                 </div>
             </div>
         </div>

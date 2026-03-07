@@ -297,6 +297,14 @@ serve(async (req) => {
 
         const pdfBytes = await pdfDoc.save();
 
+        // Base64-encode the stamped PDF for email attachment (chunked to avoid stack overflow)
+        let binaryStr = '';
+        const chunkSize = 8192;
+        for (let i = 0; i < pdfBytes.length; i += chunkSize) {
+            binaryStr += String.fromCharCode(...pdfBytes.subarray(i, i + chunkSize));
+        }
+        const pdfBase64 = btoa(binaryStr);
+
         const { error: uploadError } = await supabase.storage
             .from('pdfs')
             .upload(filePath, pdfBytes.buffer, { upsert: true, contentType: 'application/pdf' });
@@ -352,6 +360,10 @@ serve(async (req) => {
                             to: [emailTarget],
                             subject: `Asiakirja valmis: Kaikki osapuolet ovat allekirjoittaneet`,
                             html: emailHtml,
+                            attachments: [{
+                                filename: freshDoc.file_name || fileName || 'asiakirja.pdf',
+                                content: pdfBase64,
+                            }],
                         }),
                     });
                     if (!res.ok) {

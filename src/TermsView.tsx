@@ -1,7 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const TermsView: React.FC = () => {
+    useEffect(() => {
+        document.title = "Käyttöehdot | Helppo Allekirjoitus";
+        const metaDescription = document.querySelector('meta[name="description"]');
+        if (metaDescription) {
+            metaDescription.setAttribute('content', 'Helppo Allekirjoitus -palvelun käyttöehdot. Tutustu sähköisen allekirjoituspalvelumme ehtoihin, vastuisiin, teknisiin rajoitteisiin ja eIDAS-yhteensopivuuteen.');
+        }
+    }, []);
+
     return (
         <div className="min-h-screen bg-gray-50 text-gray-900 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">

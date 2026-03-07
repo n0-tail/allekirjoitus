@@ -106,6 +106,18 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSuccess, reason, totalAmo
                     </div>
                 )}
                 <PaymentElement
+                    options={{
+                        wallets: {
+                            applePay: 'auto',
+                            googlePay: 'auto'
+                        },
+                        layout: {
+                            type: 'accordion',
+                            defaultCollapsed: false,
+                            radios: false,
+                            spacedAccordionItems: true
+                        }
+                    }}
                     onReady={() => setIsElementReady(true)}
                     onLoadError={(e) => setErrorMessage(`Maksutapojen lataus epäonnistui: ${e.error.message}`)}
                 />
@@ -228,7 +240,47 @@ export const PaymentView: React.FC<PaymentViewProps> = ({ onPaymentSuccess, reas
         <div className="container animate-fade-in">
             <div className="card" style={{ maxWidth: '500px', margin: '0 auto' }}>
                 <h2 style={{ marginBottom: '1.5rem', textAlign: 'center' }}>Vahvista maksu</h2>
-                <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: 'stripe' } }}>
+                <Elements stripe={stripePromise} options={{
+                    clientSecret,
+                    locale: 'fi',
+                    appearance: {
+                        theme: 'stripe',
+                        variables: {
+                            colorPrimary: '#2563eb',
+                            colorBackground: '#ffffff',
+                            colorText: '#1e293b',
+                            colorDanger: '#ef4444',
+                            fontFamily: 'system-ui, -apple-system, sans-serif',
+                            spacingUnit: '4px',
+                            borderRadius: '8px',
+                        },
+                        rules: {
+                            '.Tab': {
+                                border: '1px solid #e2e8f0',
+                                boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.03)',
+                            },
+                            '.Tab:hover': {
+                                color: '#1e293b',
+                            },
+                            '.Tab--selected': {
+                                borderColor: '#2563eb',
+                                boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.03), 0px 0px 0px 1px #2563eb',
+                            },
+                            '.Input': {
+                                padding: '12px',
+                                border: '1px solid #e2e8f0',
+                                boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)',
+                            },
+                            '.Input:focus': {
+                                borderColor: '#2563eb',
+                                boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.03), 0px 0px 0px 1px #2563eb',
+                            },
+                            '.Label': {
+                                fontWeight: '500',
+                            }
+                        }
+                    }
+                }}>
                     <CheckoutForm
                         onSuccess={onPaymentSuccess}
                         reason={reason}

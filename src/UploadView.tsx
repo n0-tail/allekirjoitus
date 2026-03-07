@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { supabase } from './lib/supabase';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -7,6 +7,15 @@ interface UploadViewProps { }
 
 export const UploadView: React.FC<UploadViewProps> = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.title = "Helppo Allekirjoitus – Sähköinen allekirjoitus verkossa | eIDAS & FTN";
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', 'Allekirjoita sopimukset sähköisesti pankkitunnuksilla. Vahva FTN-tunnistautuminen, juridisesti sitova eIDAS-yhteensopiva palvelu. Helppo, turvallinen ja edullinen.');
+    }
+  }, []);
+
   const [file, setFile] = useState<File | null>(null);
   const [sender, setSender] = useState('');
   interface Recipient {
@@ -338,7 +347,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
               </svg>
             </div>
             <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>Maksa & Tunnistaudu</h3>
-            <p style={{ color: 'var(--text-muted)' }}>Molemmat osapuolet maksavat 1,49 € käsittelykulun ja tunnistautuvat vahvasti omilla pankkitunnuksillaan.</p>
+            <p style={{ color: 'var(--text-muted)' }}>Kaikki osapuolet tunnistautuvat vahvasti omilla pankkitunnuksillaan. Kulu on 1,49 € / hlö (lähettäjä voi myös maksaa kaikkien puolesta).</p>
           </div>
 
           <div style={{ textAlign: 'center', padding: '1rem' }} className="step-card">
@@ -431,7 +440,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
           <details style={{ background: '#f8fafc', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', padding: '1rem 1.5rem' }}>
             <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: '1rem', color: 'var(--text-main)' }}>Paljonko palvelu maksaa?</summary>
             <p style={{ marginTop: '0.75rem', color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
-              Palvelun käyttö maksaa 1,49 € per osapuoli. Maksu sisältää tunnistautumisen, asiakirjan käsittelyn ja allekirjoitustodistuksen. Ei kuukausimaksuja tai piilokustannuksia.
+              Palvelun käyttö maksaa 1,49 € per henkilö (lähettäjä voi myös maksaa kaikkien puolesta). Maksu sisältää tunnistautumisen, asiakirjan käsittelyn ja allekirjoitustodistuksen. Ei kuukausimaksuja tai piilokustannuksia.
             </p>
           </details>
 
@@ -482,7 +491,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                 "name": "Paljonko palvelu maksaa?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Palvelun käyttö maksaa 1,49 € per osapuoli. Maksu sisältää tunnistautumisen, asiakirjan käsittelyn ja allekirjoitustodistuksen. Ei kuukausimaksuja tai piilokustannuksia."
+                  "text": "Palvelun käyttö maksaa 1,49 € per henkilö (lähettäjä voi myös maksaa kaikkien puolesta). Maksu sisältää tunnistautumisen, asiakirjan käsittelyn ja allekirjoitustodistuksen. Ei kuukausimaksuja tai piilokustannuksia."
                 }
               },
               {

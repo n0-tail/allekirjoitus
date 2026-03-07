@@ -1,7 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const PrivacyView: React.FC = () => {
+    useEffect(() => {
+        document.title = "Tietosuojaseloste | Helppo Allekirjoitus";
+        const metaDescription = document.querySelector('meta[name="description"]');
+        if (metaDescription) {
+            metaDescription.setAttribute('content', 'Helppo Allekirjoitus -palvelun tietosuojaseloste. Lue kuinka suojaamme tietosi ja asiakirjasi zero-knowledge-periaatteella. Emme varastoi asiakirjojasi pysyvästi.');
+        }
+    }, []);
+
     return (
         <div className="min-h-screen bg-gray-50 text-gray-900 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">

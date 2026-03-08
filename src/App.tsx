@@ -16,7 +16,7 @@ function App() {
     <>
       <header className="app-header">
         <div className="app-logo" onClick={() => navigate('/')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
-          <img src={`${import.meta.env.BASE_URL}logo.jpg`} alt="Helppo Allekirjoitus" style={{ height: '36px', width: 'auto', borderRadius: '4px' }} />
+          <img src={`${import.meta.env.BASE_URL}logo.jpg`} alt="Helppo Allekirjoitus" width={161} height={36} style={{ height: '36px', width: '161px', borderRadius: '4px' }} />
         </div>
       </header>
 

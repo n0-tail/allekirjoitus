@@ -33,7 +33,9 @@ serve(async (req) => {
         const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
 
         // Capture IP for Audit Trail
-        const clientIp = req.headers.get("x-forwarded-for") || req.headers.get("cf-connecting-ip") || "Tuntematon IP";
+        const rawIp = req.headers.get("x-forwarded-for") || req.headers.get("cf-connecting-ip") || "";
+        const clientIp = rawIp.split(',')[0].trim() || "Tuntematon IP";
+
         const authMethod = "Vahva sähköinen tunnistautuminen (FTN)";
         const timestampIso = new Date().toISOString();
 
@@ -182,30 +184,64 @@ serve(async (req) => {
         const { width, height } = auditPage.getSize();
         const timestamp = new Date().toLocaleString('fi-FI', { timeZone: 'Europe/Helsinki' });
 
+        // Draw Top Header Bar (Brand Color)
+        auditPage.drawRectangle({
+            x: 0,
+            y: height - 15,
+            width: width,
+            height: 15,
+            color: rgb(0.145, 0.388, 0.922) // Primary blue (#2563eb)
+        });
+
+        // Add Branding Text Top Left
+        auditPage.drawText('Helppo Allekirjoitus', {
+            x: 50,
+            y: height - 40,
+            size: 16,
+            color: rgb(0.145, 0.388, 0.922),
+        });
+
+        // Add "Luotettava Sähköinen Allekirjoitus" tag top right
+        auditPage.drawText('Luotettava Sähköinen Allekirjoitus', {
+            x: width - 210,
+            y: height - 35,
+            size: 10,
+            color: rgb(0.5, 0.5, 0.5)
+        });
+
         // Visual "Approved" Checkmark (Green Circle with Check)
         // We draw two overlapping circles (one hollow, one filled) or just standard SVG path if supported.
         // PDF-lib supports drawing SVG paths directly:
         const checkmarkPath = "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z";
         auditPage.drawSvgPath(checkmarkPath, {
-            x: 50,
-            y: height - 50,
-            scale: 2,
+            x: (width / 2) - 15,
+            y: height - 85,
+            scale: 1.5,
             color: rgb(0.133, 0.773, 0.369) // Green (#22c55e)
         });
 
-        // Draw Audit Trail Header
-        auditPage.drawText('SÄHKÖINEN ALLEKIRJOITUSTODISTUS', { x: 110, y: height - 70, size: 20, color: rgb(0, 0, 0) });
-        auditPage.drawText(`Vahvistettu ${timestamp}`, { x: 110, y: height - 90, size: 12, color: rgb(0.4, 0.4, 0.4) });
+        // Draw Audit Trail Header centered
+        auditPage.drawText('SÄHKÖINEN ALLEKIRJOITUSTODISTUS', { x: (width / 2) - 170, y: height - 120, size: 18, color: rgb(0.066, 0.094, 0.153) }); // gray-900
+        auditPage.drawText(`Vahvistettu ${timestamp}`, { x: (width / 2) - 60, y: height - 140, size: 11, color: rgb(0.4, 0.4, 0.4) });
 
-        // Draw Document Info Block (Gray background box)
-        auditPage.drawRectangle({ x: 50, y: height - 210, width: width - 100, height: 90, color: rgb(0.96, 0.97, 0.98) });
-        auditPage.drawText('Asiakirjan tiedot', { x: 70, y: height - 145, size: 14, color: rgb(0.1, 0.1, 0.1) });
-        auditPage.drawText(`Tunnus (ID): ${documentId}`, { x: 70, y: height - 165, size: 10, color: rgb(0.3, 0.3, 0.3) });
-        auditPage.drawText(`Tiedosto: ${freshDoc.file_name || fileName || 'asiakirja.pdf'}`, { x: 70, y: height - 180, size: 10, color: rgb(0.3, 0.3, 0.3) });
-        auditPage.drawText(`SHA-256 Tiiviste: ${documentHash}`, { x: 70, y: height - 195, size: 8, color: rgb(0.5, 0.5, 0.5) });
+        // Draw Document Info Block (Gray background box with border)
+        auditPage.drawRectangle({
+            x: 50,
+            y: height - 250,
+            width: width - 100,
+            height: 90,
+            color: rgb(0.976, 0.98, 0.984), // slate-50
+            borderColor: rgb(0.898, 0.906, 0.922), // slate-200
+            borderWidth: 1
+        });
+
+        auditPage.drawText('Asiakirjan tiedot', { x: 70, y: height - 185, size: 13, color: rgb(0.1, 0.1, 0.1) });
+        auditPage.drawText(`Tunnus (ID): ${documentId}`, { x: 70, y: height - 205, size: 10, color: rgb(0.2, 0.2, 0.2) });
+        auditPage.drawText(`Tiedosto: ${freshDoc.file_name || fileName || 'asiakirja.pdf'}`, { x: 70, y: height - 220, size: 10, color: rgb(0.2, 0.2, 0.2) });
+        auditPage.drawText(`SHA-256 Tiiviste: ${documentHash}`, { x: 70, y: height - 235, size: 8, color: rgb(0.5, 0.5, 0.5) });
 
         // Draw Signers Table
-        let currentY = height - 250;
+        let currentY = height - 290;
 
         // Helper to find audit event for a specific role
         const getAuditData = (r: string, identifier: string) => {

@@ -204,7 +204,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                   <p style={{ fontSize: '0.875rem', marginTop: '0.25rem', color: 'var(--primary)' }}>Asiakirja on valmis ladattavaksi</p>
                 </div>
               ) : (
-                <p>Raahaa ja pudota PDF -tiedosto tähän, tai klikkaa selataksesi laitteeltasi</p>
+                <p>Raahaa ja pudota PDF-tiedosto tähän tai klikkaa selataksesi laitteeltasi</p>
               )}
             </div>
 

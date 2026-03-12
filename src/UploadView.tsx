@@ -69,9 +69,12 @@ export const UploadView: React.FC<UploadViewProps> = () => {
       setIsUploading(true);
 
       try {
-        // 1. Generate unique ID
+        // 1. Generate unique ID and normalize filename
         const docId = crypto.randomUUID();
-        const filePath = `${docId}/${encodeURIComponent(file.name)}`;
+        // Supabase Storage can be very strict about characters. 
+        // We replace any non-alphanumeric, non-dot, non-dash characters with underscores.
+        const safeFileName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+        const filePath = `${docId}/${safeFileName}`;
 
         // 2. Upload file to Supabase Storage
         const { error: uploadError } = await supabase.storage
@@ -87,7 +90,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
             id: docId,
             sender_email: sender,
             signers: recipients,
-            file_name: file.name,
+            file_name: safeFileName,
             status: 'pending'
           });
 

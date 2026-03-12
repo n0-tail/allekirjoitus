@@ -29,7 +29,8 @@ export const RecipientView: React.FC<RecipientViewProps> = ({ data, isPaid, onSi
 
         setIsDownloading(true);
         try {
-            const filePath = `${data.documentId}/${encodeURIComponent(displayFileName)}`;
+            const safeFileName = displayFileName.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+            const filePath = `${data.documentId}/${safeFileName}`;
             const { data: urlData, error } = await supabase.storage.from('pdfs').createSignedUrl(filePath, 60); // 60 sekuntia voimassa
 
             if (error) {

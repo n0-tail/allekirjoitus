@@ -96,20 +96,29 @@ export const UploadView: React.FC<UploadViewProps> = () => {
 
         if (dbError) throw new Error(`Virhe tietokantaan tallennettaessa: ${dbError.message}`);
 
-        // We catch the email error but don't stop the flow, as the user can still copy the link manually in the UI
-        try {
-          await supabase.functions.invoke('send-email', {
-            body: { documentId: docId, emailType: 'invitation' }
-          });
-        } catch {
-          console.warn("Sähköpostin lähetys epäonnistui (reunafunktiota ei ehkä ole vielä julkaistu), jatketaan silti.");
-        }
+        // We fire and forget the email sending to prevent blocking the UI for several seconds
+        supabase.functions.invoke('send-email', {
+          body: { documentId: docId, emailType: 'invitation' }
+        }).catch(err => {
+          console.warn("Sähköpostin lähetys epäonnistui (reunafunktiota ei ehkä ole vielä julkaistu):", err);
+        });
 
         // 5. Proceed to next view via React Router
         navigate(`/lahettaja/${docId}`);
       } catch (err: unknown) {
         console.error('Upload failed:', err);
-        toast.error(err instanceof Error ? err.message : 'Tuntematon virhe tapahtui');
+        const errorMessage = err instanceof Error ? err.message : 'Tuntematon virhe tapahtui';
+        toast.error(errorMessage);
+
+        // Report critical upload errors to admin
+        supabase.functions.invoke('send-email', {
+          body: {
+            emailType: 'admin_error',
+            errorContext: 'Tiedoston lataus epäonnistui (UploadView.tsx)',
+            errorDetails: err instanceof Error ? err.stack || err.message : String(err)
+          }
+        }).catch(e => console.error("Admin-ilmoituksen lähetys epäonnistui:", e));
+
       } finally {
         setIsUploading(false);
       }

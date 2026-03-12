@@ -14,35 +14,61 @@ serve(async (req) => {
     }
 
     try {
-        const { documentId, emailType } = await req.json()
+        const payload = await req.json()
+        const { documentId, emailType, errorDetails, errorContext } = payload
 
         if (!RESEND_API_KEY) {
             throw new Error('RESEND_API_KEY environment variable is missing')
         }
 
-        if (!documentId || !emailType) {
-            throw new Error('documentId and emailType are required')
+        if (!emailType) {
+            throw new Error('emailType is required')
         }
 
-        const supabaseUrl = Deno.env.get('SUPABASE_URL')!
-        const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-        const supabase = createClient(supabaseUrl, supabaseServiceKey)
-
-        // Fetch document from database – only trusted data is used for email content
-        const { data: doc, error: dbError } = await supabase
-            .from('documents')
-            .select('id, sender_email, signers, file_name')
-            .eq('id', documentId)
-            .single()
-
-        if (dbError || !doc) {
-            throw new Error('Asiakirjaa ei löytynyt tietokannasta.')
-        }
-
-        const baseUrl = 'https://helppoallekirjoitus.fi'
         const emailPromises: Promise<any>[] = []
 
-        if (emailType === 'invitation') {
+        if (emailType === 'admin_error') {
+            const html = `<div style="font-family: sans-serif; max-width: 800px; padding: 20px;">
+                <h2 style="color: #dc2626; margin-top: 0;">Järjestelmävirhe (Helppo Allekirjoitus)</h2>
+                <p><strong>Aikaleima:</strong> ${new Date().toLocaleString('fi-FI')}</p>
+                <p><strong>Konteksti:</strong> ${errorContext || 'Tuntematon'}</p>
+                <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; margin-top: 20px;">
+                    <pre style="white-space: pre-wrap; font-size: 14px; color: #1e293b; margin: 0; font-family: monospace;">${typeof errorDetails === 'object' ? JSON.stringify(errorDetails, null, 2) : (errorDetails || 'Ei tarkempia tietoja')}</pre>
+                </div>
+            </div>`;
+            
+            emailPromises.push(
+                fetch('https://api.resend.com/emails', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${RESEND_API_KEY}` },
+                    body: JSON.stringify({
+                        from: 'Helppo Allekirjoitus Error <noreply@helppoallekirjoitus.fi>',
+                        to: ['antti.nikkanen@polarcomp.fi'],
+                        subject: `🚨 [VIRHE] Helppo Allekirjoitus: ${errorContext || 'Tuntematon virhe'}`,
+                        html,
+                    }),
+                })
+            )
+        } else if (emailType === 'invitation') {
+            if (!documentId) throw new Error('documentId is required')
+
+            const supabaseUrl = Deno.env.get('SUPABASE_URL')!
+            const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+            const supabase = createClient(supabaseUrl, supabaseServiceKey)
+
+            // Fetch document from database – only trusted data is used for email content
+            const { data: doc, error: dbError } = await supabase
+                .from('documents')
+                .select('id, sender_email, signers, file_name')
+                .eq('id', documentId)
+                .single()
+
+            if (dbError || !doc) {
+                throw new Error('Asiakirjaa ei löytynyt tietokannasta.')
+            }
+
+            const baseUrl = 'https://helppoallekirjoitus.fi'
+
             // Send invitation to each signer
             for (const signer of (doc.signers || [])) {
                 const link = `${baseUrl}/asiakirja/${doc.id}?signer=${signer.id}`

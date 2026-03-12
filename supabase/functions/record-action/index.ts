@@ -163,7 +163,8 @@ serve(async (req) => {
         }
 
         // 4. BOTH are present => STAMP THE PDF!
-        const filePath = `${documentId}/${freshDoc.file_name || fileName || 'asiakirja.pdf'}`;
+        const rawFileName = freshDoc.file_name || fileName || 'asiakirja.pdf';
+        const filePath = `${documentId}/${encodeURIComponent(rawFileName)}`;
         const { data: fileBlob, error: downloadError } = await supabase.storage.from('pdfs').download(filePath);
         if (downloadError) throw new Error(`PDF latausvirhe: ${downloadError.message}`);
 

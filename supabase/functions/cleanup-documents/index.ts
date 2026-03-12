@@ -43,7 +43,7 @@ Deno.serve(async (req) => {
 
     // 3. Process each document: Delete from Storage FIRST, then from Database
     for (const doc of docsToDelete) {
-      const filePath = `${doc.id}/${doc.file_name}`;
+      const filePath = `${doc.id}/${encodeURIComponent(doc.file_name)}`;
 
       // Delete from storage
       const { error: storageError } = await supabase.storage

@@ -71,7 +71,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
       try {
         // 1. Generate unique ID
         const docId = crypto.randomUUID();
-        const filePath = `${docId}/${file.name}`;
+        const filePath = `${docId}/${encodeURIComponent(file.name)}`;
 
         // 2. Upload file to Supabase Storage
         const { error: uploadError } = await supabase.storage

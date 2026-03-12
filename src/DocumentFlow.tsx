@@ -61,7 +61,7 @@ export function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const { data, view, setView } = useDocumentFlow(id, role);
-    const [copied, setCopied] = useState(false);
+    const [copiedId, setCopiedId] = useState<string | null>(null);
 
     if (view === 'loading') return <div style={{ textAlign: 'center', padding: '4rem' }}>Ladataan asiakirjaa...</div>;
     if (view === 'error' || !data) return <div style={{ textAlign: 'center', padding: '4rem', color: 'red' }}>Asiakirjan lataaminen epäonnistui. Se on joko vanhentunut tai sitä ei ole olemassa.</div>;
@@ -115,17 +115,17 @@ export function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
                                                         onClick={(e) => (e.target as HTMLInputElement).select()}
                                                     />
                                                     <button
-                                                        className={`btn ${copied ? 'btn-primary' : 'btn-secondary'}`}
+                                                        className={`btn ${copiedId === signer.id ? 'btn-primary' : 'btn-secondary'}`}
                                                         title="Kopioi leikepöydälle"
                                                         style={{ minWidth: '120px' }}
                                                         onClick={() => {
                                                             navigator.clipboard.writeText(signerLink);
-                                                            setCopied(true);
+                                                            setCopiedId(signer.id);
                                                             toast.success(`Vastaanottajan ${signer.email} linkki kopioitu!`);
-                                                            setTimeout(() => setCopied(false), 2000);
+                                                            setTimeout(() => setCopiedId(null), 2000);
                                                         }}
                                                     >
-                                                        {copied ? 'Kopioitu!' : 'Kopioi linkki'}
+                                                        {copiedId === signer.id ? 'Kopioitu!' : 'Kopioi linkki'}
                                                     </button>
                                                 </div>
                                             );
@@ -201,7 +201,7 @@ export function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
             {view === 'authenticating' && (
                 <div className="container animate-fade-in">
                     <div className="card" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
-                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500 mb-4 mx-auto"></div>
+                        <div className="spinner" style={{ margin: '0 auto 1rem auto', borderTopColor: 'var(--primary)' }}></div>
                         <h2 style={{ marginBottom: '1rem' }}>Siirrytään tunnistautumiseen...</h2>
                         <p style={{ marginBottom: '2rem', color: 'var(--text-muted)' }}>Odota hetki, sinut ohjataan automaattisesti eteenpäin.</p>
                     </div>

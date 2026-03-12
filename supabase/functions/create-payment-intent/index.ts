@@ -20,7 +20,7 @@ serve(async (req) => {
   try {
     const { documentId, role, email, signerId, payForAll } = await req.json().catch(() => ({ documentId: 'unknown', role: 'unknown', email: '', signerId: undefined, payForAll: false }))
 
-    let finalAmount = 50; // default 50 cents testing minimum
+    let finalAmount = 149; // 1.49 euro processing fee
 
     if (documentId !== 'unknown') {
       const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
@@ -43,7 +43,7 @@ serve(async (req) => {
 
         if (payForAll && role === 'sender' && doc.signers) {
           // Sender + all signers
-          finalAmount = (1 + doc.signers.length) * 50; // default test amount, will use real amount logic if you have it
+          finalAmount = (1 + doc.signers.length) * 149;
         }
       }
     }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from './lib/supabase';
 
@@ -7,17 +7,43 @@ export const VerifyView = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [docData, setDocData] = useState<any | null>(null);
+    const [fileHash, setFileHash] = useState<string | null>(null);
+    const [isCalculatingHash, setIsCalculatingHash] = useState(false);
+    const [hashMatch, setHashMatch] = useState<boolean | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setIsCalculatingHash(true);
+        setHashMatch(null);
+
+        try {
+            const buffer = await file.arrayBuffer();
+            const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const calculatedHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+            setFileHash(calculatedHash);
+
+            if (docData?.document_hash) {
+                setHashMatch(calculatedHash === docData.document_hash);
+            }
+        } catch (error) {
+            console.error('Virhe tiivisteen laskennassa:', error);
+        } finally {
+            setIsCalculatingHash(false);
+        }
+    };
 
     useEffect(() => {
         const fetchDoc = async () => {
             try {
                 if (!id) throw new Error('Virheellinen linkki.');
 
-                const { data, error: dbError } = await supabase
-                    .from('documents')
-                    .select('id, sender_name, sender_email, signers, status, file_name, created_at, updated_at, document_hash, audit_trail')
-                    .eq('id', id)
-                    .single();
+                const { data: docArray, error: dbError } = await supabase.rpc('get_document_by_id', { doc_id: id });
+                const data = docArray?.[0] || null;
 
                 if (dbError || !data) {
                     throw new Error('Asiakirjaa ei löytynyt tai tarkistuslinkki on vanhentunut.');
@@ -124,6 +150,90 @@ export const VerifyView = () => {
                         </p>
                     </div>
                 </div>
+
+                {docData?.document_hash && (
+                    <div style={{ marginBottom: '2rem', padding: '1.5rem', borderRadius: '1rem', background: hashMatch === true ? '#ecfdf5' : hashMatch === false ? '#fef2f2' : '#f8fafc', border: `1px solid ${hashMatch === true ? '#10b981' : hashMatch === false ? '#ef4444' : 'var(--border)'}` }}>
+                        <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#1e293b', marginBottom: '0.75rem' }}>Varmenna asiakirjan aitous</h3>
+                        <p style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '1rem' }}>
+                            Voit ladata tähän laitteellasi olevan PDF-tiedoston varmistaaksesi, että sitä ei ole peukaloitu. Tiedostoa ei lähetetä palvelimelle, vaan tarkistus tehdään turvallisesti selaimessasi.
+                        </p>
+
+                        <input
+                            type="file"
+                            accept="application/pdf"
+                            ref={fileInputRef}
+                            style={{ display: 'none' }}
+                            onChange={handleFileUpload}
+                        />
+
+                        {hashMatch === null && !isCalculatingHash && (
+                            <button
+                                onClick={() => fileInputRef.current?.click()}
+                                className="btn btn-secondary"
+                                style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', background: '#fff', border: '1px solid var(--border)', padding: '0.75rem', borderRadius: '0.5rem', cursor: 'pointer', fontWeight: 500 }}
+                            >
+                                <svg style={{ width: '20px', height: '20px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                                </svg>
+                                Valitse asiakirja (PDF) tarkistettavaksi
+                            </button>
+                        )}
+
+                        {isCalculatingHash && (
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', padding: '1rem', color: '#64748b' }}>
+                                <div className="spinner" style={{ width: '16px', height: '16px', borderTopColor: '#64748b' }}></div>
+                                Lasketaan tiivistettä...
+                            </div>
+                        )}
+
+                        {hashMatch !== null && (
+                            <div style={{ marginTop: '0.5rem' }}>
+                                {hashMatch ? (
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: '#059669', background: 'rgba(16, 185, 129, 0.1)', padding: '1rem', borderRadius: '0.5rem' }}>
+                                        <div style={{ background: '#10b981', color: 'white', borderRadius: '50%', padding: '0.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                            <svg style={{ width: '20px', height: '20px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <strong style={{ display: 'block' }}>Asiakirja on aito ja muuttumaton!</strong>
+                                            <span style={{ fontSize: '0.875rem', color: '#047857' }}>Tiedoston tiiviste vastaa palvelimelle tallennettua alkuperäistä tiivistettä.</span>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', color: '#dc2626', background: 'rgba(239, 68, 68, 0.1)', padding: '1rem', borderRadius: '0.5rem' }}>
+                                        <div style={{ background: '#ef4444', color: 'white', borderRadius: '50%', padding: '0.25rem', marginTop: '0.125rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                            <svg style={{ width: '20px', height: '20px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
+                                        </div>
+                                        <div style={{ flex: 1 }}>
+                                            <strong style={{ display: 'block' }}>Virhe: Tiiviste ei täsmää!</strong>
+                                            <span style={{ fontSize: '0.875rem', display: 'block', marginBottom: '0.5rem', color: '#b91c1c' }}>Asiakirjaa on saatettu muokata alkuperäisen allekirjoituksen jälkeen, tai kyseessä on väärä tiedosto.</span>
+
+                                            <div style={{ fontSize: '0.75rem', background: 'white', padding: '0.5rem', borderRadius: '0.5rem', fontFamily: 'monospace', wordBreak: 'break-all', marginBottom: '0.5rem', border: '1px solid #fca5a5' }}>
+                                                <strong>Laskettu:</strong> {fileHash}<br />
+                                                <strong>Odotettu:</strong> {docData.document_hash}
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                <div style={{ textAlign: 'center' }}>
+                                    <button
+                                        onClick={() => {
+                                            if (fileInputRef.current) fileInputRef.current.value = '';
+                                            fileInputRef.current?.click();
+                                        }}
+                                        style={{ marginTop: '1rem', background: 'transparent', border: 'none', color: '#64748b', fontSize: '0.875rem', cursor: 'pointer', textDecoration: 'underline' }}
+                                    >
+                                        Tarkista toinen tiedosto
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
 
                 <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#1e293b', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <svg style={{ width: '20px', height: '20px', color: '#10b981' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -13,12 +13,14 @@ export function AuthCallbackRoute() {
             onSuccess={(name) => {
                 let currentRole: 'sender' | 'recipient' = 'recipient';
                 let docId = '';
+                let signerParam = '';
                 try {
                     const stashed = sessionStorage.getItem('signatureData');
                     if (stashed) {
                         const stashedData = JSON.parse(stashed);
                         if (stashedData.role) currentRole = stashedData.role;
                         if (stashedData.documentId) docId = stashedData.documentId;
+                        if (stashedData.signerId) signerParam = `?signer=${stashedData.signerId}`;
 
                         // Päivitetään heti data ja view processing-tilaan tulevaa Flow'ta varten
                         sessionStorage.setItem('appState_view', 'processing');
@@ -30,7 +32,7 @@ export function AuthCallbackRoute() {
                 if (currentRole === 'sender') {
                     navigate(`/lahettaja/${docId}`, { replace: true });
                 } else {
-                    navigate(`/asiakirja/${docId}`, { replace: true });
+                    navigate(`/asiakirja/${docId}${signerParam}`, { replace: true });
                 }
             }}
             onFail={(err) => {
@@ -43,7 +45,8 @@ export function AuthCallbackRoute() {
                         // Palautetaan aloitusnäkymä, jotta käyttäjä voi yrittää uudelleen
                         sessionStorage.setItem('appState_view', 'start');
 
-                        navigate(data.role === 'sender' ? `/lahettaja/${data.documentId}` : `/asiakirja/${data.documentId}`, { replace: true });
+                        const sParam = data.signerId ? `?signer=${data.signerId}` : '';
+                        navigate(data.role === 'sender' ? `/lahettaja/${data.documentId}` : `/asiakirja/${data.documentId}${sParam}`, { replace: true });
                         return;
                     }
                 } catch (_) { }

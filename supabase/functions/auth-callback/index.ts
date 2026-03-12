@@ -88,7 +88,6 @@ serve(async (req: Request) => {
       JSON.stringify({
         success: true,
         name: fullName,
-        _debug_claims: decodedJws
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );

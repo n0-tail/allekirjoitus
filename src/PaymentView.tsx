@@ -15,12 +15,9 @@ interface CheckoutFormProps {
     setPayForAll?: (val: boolean) => void;
     numSigners: number;
     showPayForAllToggle: boolean;
-    documentId: string;
-    role: 'sender' | 'recipient';
-    signerId?: string;
 }
 
-const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSuccess, reason, totalAmount, payForAll, setPayForAll, numSigners, showPayForAllToggle, documentId, role, signerId }) => {
+const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSuccess, reason, totalAmount, payForAll, setPayForAll, numSigners, showPayForAllToggle }) => {
     const stripe = useStripe();
     const elements = useElements();
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -55,14 +52,8 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSuccess, reason, totalAmo
                 setErrorMessage(error.message || 'Maksussa tapahtui virhe.');
                 setIsProcessing(false);
             } else {
-                // Payment successful - confirm in our DB directly (don't rely on webhook)
-                try {
-                    await supabase.functions.invoke('confirm-payment', {
-                        body: { documentId, role, signerId, payForAll }
-                    });
-                } catch (confirmErr) {
-                    console.warn('confirm-payment call failed, webhook should handle it:', confirmErr);
-                }
+                // Payment successful - confirmation happens via Stripe webhook in the background.
+                // We do NOT use confirm-payment edge function anymore due to security risks.
                 onSuccess();
             }
         } catch (err: any) {
@@ -153,29 +144,26 @@ export const PaymentView: React.FC<PaymentViewProps> = ({ onPaymentSuccess, reas
         return sessionStorage.getItem('payForAll') === 'true';
     });
 
-    // Tallennetaan payForAll sessionStorageen aina kun se muuttuu
     useEffect(() => {
         sessionStorage.setItem('payForAll', payForAll ? 'true' : 'false');
+
+        // Cleanup function for when component is disposed/unmounted successfully.
+        // We only clear it when unmounting if the interaction is done, so we leave it 
+        // to be cleared explicitly inside the checkout success OR on unmount generally.
+        return () => {
+            // Keep it if we are redirecting out to Stripe and back, else clean it.
+        };
     }, [payForAll]);
 
     // We only recalculate intent if payForAll changes
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const secret = params.get('payment_intent_client_secret');
-        const redirectStatus = params.get('redirect_status');
 
-        if (secret && redirectStatus === 'succeeded') {
-            // Maksu onnistui uudelleenohjauksen kautta (esim. Bancontact)
-            // Palautetaan payForAll sessionStoragesta
-            const storedPayForAll = sessionStorage.getItem('payForAll') === 'true';
-            // Confirm in our DB directly with correct payForAll
-            supabase.functions.invoke('confirm-payment', {
-                body: { documentId, role, signerId, payForAll: storedPayForAll }
-            }).catch(err => console.warn('confirm-payment after redirect failed:', err));
-            onPaymentSuccess();
-            return;
-        } else if (secret && redirectStatus) {
-            setError(`Maksu ei mennyt läpi (Tila: ${redirectStatus}). Lataa sivu uudelleen yrittääksesi uudestaan.`);
+        if (secret) {
+            // Redirect-paluun käsittely tapahtuu useDocumentFlow:ssa,
+            // ei PaymentView:ssä. Jos päädymme silti tänne, näytetään virhe.
+            setError('Maksun palautus käsitellään. Lataa sivu uudelleen.');
             return;
         }
 
@@ -212,8 +200,8 @@ export const PaymentView: React.FC<PaymentViewProps> = ({ onPaymentSuccess, reas
     }, [payForAll, documentId, role, email, signerId]);
 
     // Calculate total purely for UI consistency (real math is in backend)
-    // Actually, in test mode the edge function returns 50 cents, but we display 1.49 for real feel
-    const FEE_CENTS = 149; // 1.49 EUR for UI
+    // Actually, in test mode the edge function returns 149 cents, but we display 1.49 for real feel
+    const FEE_CENTS = 149; // 1.49 EUR
     const totalAmount = (payForAll && role === 'sender') ? (1 + numSigners) * FEE_CENTS : FEE_CENTS;
 
     if (error) {
@@ -289,9 +277,6 @@ export const PaymentView: React.FC<PaymentViewProps> = ({ onPaymentSuccess, reas
                         setPayForAll={role === 'sender' ? setPayForAll : undefined}
                         numSigners={numSigners}
                         showPayForAllToggle={role === 'sender'}
-                        documentId={documentId}
-                        role={role}
-                        signerId={signerId}
                     />
                 </Elements>
             </div>

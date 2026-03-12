@@ -1,0 +1,147 @@
+[dotenv@17.3.1] injecting env (10) from .env.local -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+[
+  {
+    "id": "3b227b02-36f0-4e66-ae1d-b6faee0950d2",
+    "sender_name": null,
+    "sender_email": "antti.nikkanen@gmail.com",
+    "sender_paid": false,
+    "signers": [
+      {
+        "id": "757586b9-3b6a-4154-9a24-18d0b225b35c",
+        "email": "antti.nikkanen@polarcomp.fi"
+      }
+    ],
+    "status": "pending",
+    "created_at": "2026-03-09T11:55:17.882884+00:00",
+    "audit_trail": []
+  },
+  {
+    "id": "5588496e-b2ae-464a-b291-7efcd3068ec6",
+    "sender_name": "Antti Olavi Nikkanen",
+    "sender_email": "antti.nikkanen@gmail.com",
+    "sender_paid": true,
+    "signers": [
+      {
+        "id": "1bfce839-b44c-44bc-9e2c-015f18ecffab",
+        "name": "Antti Olavi Nikkanen",
+        "paid": true,
+        "email": "antti.nikkanen@polarcomp.fi",
+        "signed": true
+      }
+    ],
+    "status": "signed",
+    "created_at": "2026-03-09T11:04:47.796391+00:00",
+    "audit_trail": [
+      {
+        "ip": "86.115.201.203",
+        "name": "Antti Olavi Nikkanen",
+        "role": "sender",
+        "email": "antti.nikkanen@gmail.com",
+        "action": "signed",
+        "timestamp": "2026-03-09T11:05:25.171Z",
+        "auth_method": "Vahva sähköinen tunnistautuminen (FTN)"
+      },
+      {
+        "ip": "86.115.201.203",
+        "name": "Antti Olavi Nikkanen",
+        "role": "recipient",
+        "email": "antti.nikkanen@polarcomp.fi",
+        "action": "signed",
+        "signerId": "1bfce839-b44c-44bc-9e2c-015f18ecffab",
+        "timestamp": "2026-03-09T11:05:37.861Z",
+        "auth_method": "Vahva sähköinen tunnistautuminen (FTN)"
+      }
+    ]
+  },
+  {
+    "id": "48579b51-7002-4558-88c0-a89a6c43920c",
+    "sender_name": "MATTI SAKARI UURTAMO",
+    "sender_email": "matti.uurtamo@lapinliha.fi",
+    "sender_paid": true,
+    "signers": [
+      {
+        "id": "25a8b60d-c15f-4c06-a431-67a92e16dfee",
+        "name": "JAN LUNDVALL",
+        "paid": true,
+        "email": "emil.lundvall@lapinliha.fi",
+        "signed": true
+      }
+    ],
+    "status": "signed",
+    "created_at": "2026-03-09T07:31:57.932809+00:00",
+    "audit_trail": [
+      {
+        "ip": "193.211.52.10,193.211.52.10, 13.248.100.54",
+        "name": "MATTI SAKARI UURTAMO",
+        "role": "sender",
+        "email": "matti.uurtamo@lapinliha.fi",
+        "action": "signed",
+        "timestamp": "2026-03-09T07:32:39.977Z",
+        "auth_method": "Vahva sähköinen tunnistautuminen (FTN)"
+      },
+      {
+        "ip": "193.211.52.10,193.211.52.10, 13.248.100.51",
+        "name": "JAN LUNDVALL",
+        "role": "recipient",
+        "email": "emil.lundvall@lapinliha.fi",
+        "action": "signed",
+        "signerId": "25a8b60d-c15f-4c06-a431-67a92e16dfee",
+        "timestamp": "2026-03-09T07:51:04.759Z",
+        "auth_method": "Vahva sähköinen tunnistautuminen (FTN)"
+      }
+    ]
+  },
+  {
+    "id": "3dd69584-7747-40e7-8029-dbb8e0b8ef47",
+    "sender_name": "MATTI SAKARI UURTAMO",
+    "sender_email": "matti.uurtamo@lapinliha.fi",
+    "sender_paid": true,
+    "signers": [
+      {
+        "id": "9bc7f9cc-1c11-456a-9bd7-6eaa2a0ac2e7",
+        "name": "TARJA MARITA VARTIALA",
+        "paid": true,
+        "email": "tarja.vartiala@lapinliha.fi",
+        "signed": true
+      }
+    ],
+    "status": "signed",
+    "created_at": "2026-03-09T07:05:50.676084+00:00",
+    "audit_trail": [
+      {
+        "ip": "193.211.52.10,193.211.52.10, 13.248.100.76",
+        "name": "MATTI SAKARI UURTAMO",
+        "role": "sender",
+        "email": "matti.uurtamo@lapinliha.fi",
+        "action": "signed",
+        "timestamp": "2026-03-09T07:06:34.845Z",
+        "auth_method": "Vahva sähköinen tunnistautuminen (FTN)"
+      },
+      {
+        "ip": "193.211.52.10,193.211.52.10, 13.248.100.54",
+        "name": "TARJA MARITA VARTIALA",
+        "role": "recipient",
+        "email": "tarja.vartiala@lapinliha.fi",
+        "action": "signed",
+        "signerId": "9bc7f9cc-1c11-456a-9bd7-6eaa2a0ac2e7",
+        "timestamp": "2026-03-09T07:12:43.811Z",
+        "auth_method": "Vahva sähköinen tunnistautuminen (FTN)"
+      }
+    ]
+  },
+  {
+    "id": "047b4822-75db-4b41-babb-65a0d070ff1e",
+    "sender_name": null,
+    "sender_email": "antti.nikkanen@gmail.com",
+    "sender_paid": false,
+    "signers": [
+      {
+        "id": "e934cd56-37be-4b22-b54c-05586a27defa",
+        "email": "antti.nikkanen@gmail.com"
+      }
+    ],
+    "status": "pending",
+    "created_at": "2026-03-07T05:53:54.17532+00:00",
+    "audit_trail": []
+  }
+]

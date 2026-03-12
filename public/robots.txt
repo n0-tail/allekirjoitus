@@ -16,4 +16,9 @@ Allow: /
 User-agent: anthropic-ai
 Allow: /
 
+Disallow: /asiakirja/
+Disallow: /lahettaja/
+Disallow: /verify/
+Disallow: /auth/
+
 Sitemap: https://helppoallekirjoitus.fi/sitemap.xml

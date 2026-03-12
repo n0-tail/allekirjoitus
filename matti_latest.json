@@ -1,0 +1,41 @@
+{
+  "id": "48579b51-7002-4558-88c0-a89a6c43920c",
+  "sender_email": "matti.uurtamo@lapinliha.fi",
+  "status": "signed",
+  "file_name": "Lomautusilmoitus Emil.pdf",
+  "document_hash": "83b87b4c615cf519f894e489ddb46120f50072946d716ec2d45ddae692aac28c",
+  "audit_trail": [
+    {
+      "ip": "193.211.52.10,193.211.52.10, 13.248.100.54",
+      "name": "MATTI SAKARI UURTAMO",
+      "role": "sender",
+      "email": "matti.uurtamo@lapinliha.fi",
+      "action": "signed",
+      "timestamp": "2026-03-09T07:32:39.977Z",
+      "auth_method": "Vahva sähköinen tunnistautuminen (FTN)"
+    },
+    {
+      "ip": "193.211.52.10,193.211.52.10, 13.248.100.51",
+      "name": "JAN LUNDVALL",
+      "role": "recipient",
+      "email": "emil.lundvall@lapinliha.fi",
+      "action": "signed",
+      "signerId": "25a8b60d-c15f-4c06-a431-67a92e16dfee",
+      "timestamp": "2026-03-09T07:51:04.759Z",
+      "auth_method": "Vahva sähköinen tunnistautuminen (FTN)"
+    }
+  ],
+  "created_at": "2026-03-09T07:31:57.932809+00:00",
+  "updated_at": "2026-03-09T07:31:57.932809+00:00",
+  "sender_name": "MATTI SAKARI UURTAMO",
+  "sender_paid": true,
+  "signers": [
+    {
+      "id": "25a8b60d-c15f-4c06-a431-67a92e16dfee",
+      "name": "JAN LUNDVALL",
+      "paid": true,
+      "email": "emil.lundvall@lapinliha.fi",
+      "signed": true
+    }
+  ]
+}

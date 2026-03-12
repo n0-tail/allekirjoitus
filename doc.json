@@ -1,0 +1,62 @@
+[dotenv@17.3.1] injecting env (10) from .env.local -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+[
+  {
+    "id": "9141a010-be77-47f0-a919-01e0fbd22a7f",
+    "sender_name": "Antti Nikkanen",
+    "sender_email": "antti.nikkanen@gmail.com",
+    "sender_paid": true,
+    "signers": [
+      {
+        "id": "6df06bb5-5413-4826-b104-f3fbc761e8c0",
+        "name": "Teppo Testaaja",
+        "paid": true,
+        "email": "antti.nikkanen@polarcomp.fi",
+        "signed": true
+      }
+    ],
+    "status": "signed",
+    "created_at": "2026-03-09T13:22:37.327936+00:00",
+    "audit_trail": [
+      {
+        "ip": "86.115.201.203",
+        "name": "Teppo Testaaja",
+        "role": "recipient",
+        "email": "antti.nikkanen@polarcomp.fi",
+        "action": "signed",
+        "signerId": "6df06bb5-5413-4826-b104-f3fbc761e8c0",
+        "timestamp": "2026-03-09T13:27:27.515Z",
+        "auth_method": "Vahva sähköinen tunnistautuminen (FTN)"
+      },
+      {
+        "ip": "86.115.201.203",
+        "name": "Teppo Testaaja",
+        "role": "recipient",
+        "email": "antti.nikkanen@polarcomp.fi",
+        "action": "signed",
+        "signerId": "6df06bb5-5413-4826-b104-f3fbc761e8c0",
+        "timestamp": "2026-03-09T13:28:21.453Z",
+        "auth_method": "Vahva sähköinen tunnistautuminen (FTN)"
+      },
+      {
+        "ip": "86.115.201.203",
+        "name": "Teppo Testaaja",
+        "role": "recipient",
+        "email": "antti.nikkanen@polarcomp.fi",
+        "action": "signed",
+        "signerId": "6df06bb5-5413-4826-b104-f3fbc761e8c0",
+        "timestamp": "2026-03-09T13:37:48.902Z",
+        "auth_method": "Vahva sähköinen tunnistautuminen (FTN)"
+      },
+      {
+        "ip": "86.115.201.203",
+        "name": "Teppo Testaaja",
+        "role": "recipient",
+        "email": "antti.nikkanen@polarcomp.fi",
+        "action": "signed",
+        "signerId": "6df06bb5-5413-4826-b104-f3fbc761e8c0",
+        "timestamp": "2026-03-09T13:43:35.216Z",
+        "auth_method": "Vahva sähköinen tunnistautuminen (FTN)"
+      }
+    ]
+  }
+]

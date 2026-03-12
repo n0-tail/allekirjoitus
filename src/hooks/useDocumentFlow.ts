@@ -14,52 +14,58 @@ export function useDocumentFlow(id: string | undefined, role: 'sender' | 'recipi
     useEffect(() => {
         if (!id) return;
 
-        // Jos olemme palanneet onnistuneesta maksusta (Stripe redirect_status)
+        // Kuunnellaan Stripe redirect_status, mutta EI luoteta siihen suoraan.
         if (searchParams.get('payment_intent_client_secret')) {
             const stashedData = sessionStorage.getItem('appState_data');
             if (stashedData) {
                 try {
                     setData(JSON.parse(stashedData));
-
-                    // Jos maksu onnistui, ohjataan heti tunnistautumaan
                     if (searchParams.get('redirect_status') === 'succeeded') {
-                        toast.success("Maksu vahvistettu! Siirrytään tunnistautumiseen...");
+                        toast.success("Maksu rekisteröity. Odotetaan vahvistusta tietokannasta...");
 
-                        // Palautetaan payForAll sessionStoragesta ja kutsutaan confirm-payment
-                        const storedPayForAll = sessionStorage.getItem('payForAll') === 'true';
-                        import('../lib/supabase').then(({ supabase }) => {
-                            const parsedData = JSON.parse(stashedData);
-                            supabase.functions.invoke('confirm-payment', {
-                                body: {
-                                    documentId: parsedData.documentId,
-                                    role: parsedData.role || role,
-                                    signerId: parsedData.signerId,
-                                    payForAll: storedPayForAll
-                                }
-                            }).catch(err => console.warn('confirm-payment after redirect failed:', err));
-                        });
+                        let attempts = 0;
+                        const maxAttempts = 20;
+                        const checkPaymentStatus = async () => {
+                            attempts++;
+                            const { data: dbData } = await supabase.rpc('get_document_by_id', { doc_id: id });
+                            const doc = dbData && dbData.length > 0 ? dbData[0] : null;
+                            const isSender = role === 'sender';
+                            const stashedTargetId = JSON.parse(stashedData).signerId;
+                            const isPaid = doc ? (isSender ? doc.sender_paid : doc.signers?.find((s: any) => s.id === stashedTargetId)?.paid) : false;
 
-                        import('../DocumentFlow').then(({ initiateAuth }) => {
-                            initiateAuth(JSON.parse(stashedData), role).then((success) => {
-                                if (!success) setView('start');
-                            });
-                        });
+                            if (isPaid) {
+                                toast.success("Maksu vahvistettu! Siirrytään tunnistautumiseen...");
+                                import('../DocumentFlow').then(({ initiateAuth }) => {
+                                    initiateAuth(JSON.parse(stashedData), role).then((success) => {
+                                        if (!success) setView('start');
+                                    });
+                                });
+                            } else if (attempts < maxAttempts) {
+                                setTimeout(checkPaymentStatus, 1500);
+                            } else {
+                                toast.error("Maksua ei voitu vahvistaa järjestelmästä ajoissa. Yritä ladata sivu uudelleen hetken kuluttua.");
+                                setView('start');
+                            }
+                        };
+                        checkPaymentStatus();
                         return;
                     } else {
-                        setView('start'); // Jos peruutettu
+                        setView('start'); // Jos maksu on peruutettu
+                        return;
                     }
                 } catch { }
             }
         }
 
-        supabase.from('documents').select('*').eq('id', id).single()
-            .then(({ data: docDataDB, error }) => {
-                const doc = docDataDB;
+        const fetchDoc = async () => {
+            try {
+                const { data: docDataDB, error } = await supabase.rpc('get_document_by_id', { doc_id: id });
+                const doc = docDataDB && docDataDB.length > 0 ? docDataDB[0] : null;
+
                 if (error || !doc) {
                     toast.error("Asiakirjaa ei löytynyt järjestelmästä.");
                     setView('error');
                 } else {
-                    // Haetaan sessionstoragesta jos siellä on jo jotain (esim OIDC paluu)
                     const stashedSession = sessionStorage.getItem('appState_view');
                     const stashedData = sessionStorage.getItem('appState_data');
 
@@ -68,9 +74,7 @@ export function useDocumentFlow(id: string | undefined, role: 'sender' | 'recipi
                         setView('processing');
                         sessionStorage.removeItem('appState_view');
                         return;
-                    }
-
-                    if (stashedSession === 'authenticating' && stashedData) {
+                    } else if (stashedSession === 'authenticating' && stashedData) {
                         setData(JSON.parse(stashedData));
                         setView('authenticating');
                         return;
@@ -140,7 +144,13 @@ export function useDocumentFlow(id: string | undefined, role: 'sender' | 'recipi
                         }
                     }
                 }
-            });
+            } catch (err) {
+                console.error("Failed to load document:", err);
+                setView('error');
+            }
+        };
+
+        fetchDoc();
     }, [id, role, searchParams]);
 
     useEffect(() => {

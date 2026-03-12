@@ -1,0 +1,1217 @@
+diff --git a/fetch_recent_docs.mjs b/fetch_recent_docs.mjs
+index c038b99..0ea06e0 100644
+--- a/fetch_recent_docs.mjs
++++ b/fetch_recent_docs.mjs
+@@ -1,18 +1,16 @@
+-import { createClient } from "npm:@supabase/supabase-js@2.39.8";
++import { createClient } from '@supabase/supabase-js';
++import dotenv from 'dotenv';
++dotenv.config({ path: '.env.local' });
+ 
+-// The supabase admin key should be retrieved from process.env if available
+-const supabaseUrl = process.env.SUPABASE_URL || 'https://vjyugemmqwghvdmbcpek.supabase.co';
+-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'MISSING';
++const supabase = createClient(process.env.VITE_SUPABASE_URL, process.env.VITE_SUPABASE_ANON_KEY);
+ 
+-// We just want to safely query the 'documents' table to look at 'signers'
+-async function run() {
+-    if (supabaseServiceKey === 'MISSING') {
+-        console.error("Missing SUPABASE_SERVICE_ROLE_KEY environment variable. Cannot test DB directly.");
+-        return;
+-    }
+-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+-    const { data, error } = await supabase.from('documents').select('*').limit(3).order('created_at', { ascending: false });
+-    console.dir(data, { depth: null });
++async function checkDocs() {
++    const { data: docs } = await supabase.from('documents')
++        .select('id, sender_name, sender_email, sender_paid, signers, status, created_at, audit_trail')
++        .order('created_at', { ascending: false })
++        .limit(5);
++
++    console.log(JSON.stringify(docs, null, 2));
+ }
+ 
+-run();
++checkDocs();
+diff --git a/package.json b/package.json
+index 6735a19..d38a76d 100644
+--- a/package.json
++++ b/package.json
+@@ -11,7 +11,8 @@
+     "build:vite": "vite build",
+     "lint": "eslint .",
+     "preview": "vite preview",
+-    "predeploy": "npm run build && node -e \"import('node:fs').then(fs => fs.copyFileSync('dist/index.html', 'dist/404.html'))\"",
++    "postbuild": "node postbuild.js",
++    "predeploy": "npm run build",
+     "deploy": "gh-pages -d dist",
+     "mock-idura": "node mock-idura/server.js",
+     "test:mock-idura": "node mock-idura/test.js"
+@@ -48,4 +49,4 @@
+     "typescript-eslint": "^8.48.0",
+     "vite": "^7.3.1"
+   }
+-}
++}
+\ No newline at end of file
+diff --git a/public/robots.txt b/public/robots.txt
+index 20c3548..da6b6b9 100644
+--- a/public/robots.txt
++++ b/public/robots.txt
+@@ -16,4 +16,9 @@ Allow: /
+ User-agent: anthropic-ai
+ Allow: /
+ 
++Disallow: /asiakirja/
++Disallow: /lahettaja/
++Disallow: /verify/
++Disallow: /auth/
++
+ Sitemap: https://helppoallekirjoitus.fi/sitemap.xml
+diff --git a/src/AuthCallbackRoute.tsx b/src/AuthCallbackRoute.tsx
+index 457ed8c..6078ebb 100644
+--- a/src/AuthCallbackRoute.tsx
++++ b/src/AuthCallbackRoute.tsx
+@@ -13,12 +13,14 @@ export function AuthCallbackRoute() {
+             onSuccess={(name) => {
+                 let currentRole: 'sender' | 'recipient' = 'recipient';
+                 let docId = '';
++                let signerParam = '';
+                 try {
+                     const stashed = sessionStorage.getItem('signatureData');
+                     if (stashed) {
+                         const stashedData = JSON.parse(stashed);
+                         if (stashedData.role) currentRole = stashedData.role;
+                         if (stashedData.documentId) docId = stashedData.documentId;
++                        if (stashedData.signerId) signerParam = `?signer=${stashedData.signerId}`;
+ 
+                         // Päivitetään heti data ja view processing-tilaan tulevaa Flow'ta varten
+                         sessionStorage.setItem('appState_view', 'processing');
+@@ -30,7 +32,7 @@ export function AuthCallbackRoute() {
+                 if (currentRole === 'sender') {
+                     navigate(`/lahettaja/${docId}`, { replace: true });
+                 } else {
+-                    navigate(`/asiakirja/${docId}`, { replace: true });
++                    navigate(`/asiakirja/${docId}${signerParam}`, { replace: true });
+                 }
+             }}
+             onFail={(err) => {
+@@ -43,7 +45,8 @@ export function AuthCallbackRoute() {
+                         // Palautetaan aloitusnäkymä, jotta käyttäjä voi yrittää uudelleen
+                         sessionStorage.setItem('appState_view', 'start');
+ 
+-                        navigate(data.role === 'sender' ? `/lahettaja/${data.documentId}` : `/asiakirja/${data.documentId}`, { replace: true });
++                        const sParam = data.signerId ? `?signer=${data.signerId}` : '';
++                        navigate(data.role === 'sender' ? `/lahettaja/${data.documentId}` : `/asiakirja/${data.documentId}${sParam}`, { replace: true });
+                         return;
+                     }
+                 } catch (_) { }
+diff --git a/src/DocumentFlow.tsx b/src/DocumentFlow.tsx
+index 96f96f9..9be6f3f 100644
+--- a/src/DocumentFlow.tsx
++++ b/src/DocumentFlow.tsx
+@@ -61,7 +61,7 @@ export function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
+     const { id } = useParams<{ id: string }>();
+     const navigate = useNavigate();
+     const { data, view, setView } = useDocumentFlow(id, role);
+-    const [copied, setCopied] = useState(false);
++    const [copiedId, setCopiedId] = useState<string | null>(null);
+ 
+     if (view === 'loading') return <div style={{ textAlign: 'center', padding: '4rem' }}>Ladataan asiakirjaa...</div>;
+     if (view === 'error' || !data) return <div style={{ textAlign: 'center', padding: '4rem', color: 'red' }}>Asiakirjan lataaminen epäonnistui. Se on joko vanhentunut tai sitä ei ole olemassa.</div>;
+@@ -115,17 +115,17 @@ export function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
+                                                         onClick={(e) => (e.target as HTMLInputElement).select()}
+                                                     />
+                                                     <button
+-                                                        className={`btn ${copied ? 'btn-primary' : 'btn-secondary'}`}
++                                                        className={`btn ${copiedId === signer.id ? 'btn-primary' : 'btn-secondary'}`}
+                                                         title="Kopioi leikepöydälle"
+                                                         style={{ minWidth: '120px' }}
+                                                         onClick={() => {
+                                                             navigator.clipboard.writeText(signerLink);
+-                                                            setCopied(true);
++                                                            setCopiedId(signer.id);
+                                                             toast.success(`Vastaanottajan ${signer.email} linkki kopioitu!`);
+-                                                            setTimeout(() => setCopied(false), 2000);
++                                                            setTimeout(() => setCopiedId(null), 2000);
+                                                         }}
+                                                     >
+-                                                        {copied ? 'Kopioitu!' : 'Kopioi linkki'}
++                                                        {copiedId === signer.id ? 'Kopioitu!' : 'Kopioi linkki'}
+                                                     </button>
+                                                 </div>
+                                             );
+@@ -201,7 +201,7 @@ export function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
+             {view === 'authenticating' && (
+                 <div className="container animate-fade-in">
+                     <div className="card" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
+-                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500 mb-4 mx-auto"></div>
++                        <div className="spinner" style={{ margin: '0 auto 1rem auto', borderTopColor: 'var(--primary)' }}></div>
+                         <h2 style={{ marginBottom: '1rem' }}>Siirrytään tunnistautumiseen...</h2>
+                         <p style={{ marginBottom: '2rem', color: 'var(--text-muted)' }}>Odota hetki, sinut ohjataan automaattisesti eteenpäin.</p>
+                     </div>
+diff --git a/src/PaymentView.tsx b/src/PaymentView.tsx
+index 33b1a6a..e563902 100644
+--- a/src/PaymentView.tsx
++++ b/src/PaymentView.tsx
+@@ -15,12 +15,9 @@ interface CheckoutFormProps {
+     setPayForAll?: (val: boolean) => void;
+     numSigners: number;
+     showPayForAllToggle: boolean;
+-    documentId: string;
+-    role: 'sender' | 'recipient';
+-    signerId?: string;
+ }
+ 
+-const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSuccess, reason, totalAmount, payForAll, setPayForAll, numSigners, showPayForAllToggle, documentId, role, signerId }) => {
++const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSuccess, reason, totalAmount, payForAll, setPayForAll, numSigners, showPayForAllToggle }) => {
+     const stripe = useStripe();
+     const elements = useElements();
+     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+@@ -55,14 +52,8 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSuccess, reason, totalAmo
+                 setErrorMessage(error.message || 'Maksussa tapahtui virhe.');
+                 setIsProcessing(false);
+             } else {
+-                // Payment successful - confirm in our DB directly (don't rely on webhook)
+-                try {
+-                    await supabase.functions.invoke('confirm-payment', {
+-                        body: { documentId, role, signerId, payForAll }
+-                    });
+-                } catch (confirmErr) {
+-                    console.warn('confirm-payment call failed, webhook should handle it:', confirmErr);
+-                }
++                // Payment successful - confirmation happens via Stripe webhook in the background.
++                // We do NOT use confirm-payment edge function anymore due to security risks.
+                 onSuccess();
+             }
+         } catch (err: any) {
+@@ -153,9 +144,15 @@ export const PaymentView: React.FC<PaymentViewProps> = ({ onPaymentSuccess, reas
+         return sessionStorage.getItem('payForAll') === 'true';
+     });
+ 
+-    // Tallennetaan payForAll sessionStorageen aina kun se muuttuu
+     useEffect(() => {
+         sessionStorage.setItem('payForAll', payForAll ? 'true' : 'false');
++
++        // Cleanup function for when component is disposed/unmounted successfully.
++        // We only clear it when unmounting if the interaction is done, so we leave it 
++        // to be cleared explicitly inside the checkout success OR on unmount generally.
++        return () => {
++            // Keep it if we are redirecting out to Stripe and back, else clean it.
++        };
+     }, [payForAll]);
+ 
+     // We only recalculate intent if payForAll changes
+@@ -166,12 +163,8 @@ export const PaymentView: React.FC<PaymentViewProps> = ({ onPaymentSuccess, reas
+ 
+         if (secret && redirectStatus === 'succeeded') {
+             // Maksu onnistui uudelleenohjauksen kautta (esim. Bancontact)
+-            // Palautetaan payForAll sessionStoragesta
+-            const storedPayForAll = sessionStorage.getItem('payForAll') === 'true';
+-            // Confirm in our DB directly with correct payForAll
+-            supabase.functions.invoke('confirm-payment', {
+-                body: { documentId, role, signerId, payForAll: storedPayForAll }
+-            }).catch(err => console.warn('confirm-payment after redirect failed:', err));
++            // Webhook hoitaa maksumerkinnän
++            sessionStorage.removeItem('payForAll'); // Clean it up after success
+             onPaymentSuccess();
+             return;
+         } else if (secret && redirectStatus) {
+@@ -213,7 +206,7 @@ export const PaymentView: React.FC<PaymentViewProps> = ({ onPaymentSuccess, reas
+ 
+     // Calculate total purely for UI consistency (real math is in backend)
+     // Actually, in test mode the edge function returns 50 cents, but we display 1.49 for real feel
+-    const FEE_CENTS = 149; // 1.49 EUR for UI
++    const FEE_CENTS = 50; // 0.50 EUR for testing
+     const totalAmount = (payForAll && role === 'sender') ? (1 + numSigners) * FEE_CENTS : FEE_CENTS;
+ 
+     if (error) {
+@@ -289,9 +282,6 @@ export const PaymentView: React.FC<PaymentViewProps> = ({ onPaymentSuccess, reas
+                         setPayForAll={role === 'sender' ? setPayForAll : undefined}
+                         numSigners={numSigners}
+                         showPayForAllToggle={role === 'sender'}
+-                        documentId={documentId}
+-                        role={role}
+-                        signerId={signerId}
+                     />
+                 </Elements>
+             </div>
+diff --git a/src/ProcessingView.tsx b/src/ProcessingView.tsx
+index 3bbcb57..1651b1d 100644
+--- a/src/ProcessingView.tsx
++++ b/src/ProcessingView.tsx
+@@ -34,13 +34,26 @@ export const ProcessingView: React.FC<ProcessingViewProps> = ({ data, onSuccess,
+                     throw new Error('Asiakirjan tunniste, nimi tai rooli puuttuu. Et voi jatkaa ilman backend-reititystä.');
+                 }
+ 
++                // Retrieve the authenticated name from OIDC callback
++                const storedAuth = sessionStorage.getItem('authData');
++                if (!storedAuth) {
++                    throw new Error("Tunnistautumistietoja ei löytynyt välimuistista. Sinun täytyy tunnistautua uudelleen.");
++                }
++
++                const authData = JSON.parse(storedAuth);
++                if (!authData.success || !authData.name) {
++                    throw new Error("Vahvaa sähköistä tunnistautumista ei voitu vahvistaa.");
++                }
++
++                setStatus('Odotetaan maksuvahvistusta (tässä voi kestää muutama sekunti)...');
++
+                 setStatus('Tallennetaan allekirjoitusta palvelimelle...');
+                 const { data: resData, error: invokeError } = await supabase.functions.invoke('record-action', {
+                     body: {
+                         documentId: data.documentId,
+                         fileName: data.fileName,
+                         role: data.role,
+-                        verifiedName: data.verifiedName,
++                        verifiedName: authData.name,
+                         sender: data.sender,
+                         recipient: data.recipient,
+                         signerId: data.signerId
+diff --git a/src/UploadView.tsx b/src/UploadView.tsx
+index 9c802c2..1281fe3 100644
+--- a/src/UploadView.tsx
++++ b/src/UploadView.tsx
+@@ -95,58 +95,9 @@ export const UploadView: React.FC<UploadViewProps> = () => {
+ 
+         // We catch the email error but don't stop the flow, as the user can still copy the link manually in the UI
+         try {
+-          // Send personal invitation to each signer
+-          const emailPromises = recipients.map(rec => {
+-            const link = `${window.location.origin}${import.meta.env.BASE_URL}asiakirja/${docId}?signer=${rec.id}`;
+-            return supabase.functions.invoke('send-email', {
+-              body: {
+-                to: rec.email,
+-                subject: `Allekirjoituspyyntö: ${file.name}`,
+-                html: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
+-                  <h2 style="color: #111827; margin-top: 0;">Hei!</h2>
+-                  <p style="color: #374151; font-size: 16px; line-height: 1.5;">
+-                    <strong>${sender}</strong> on lähettänyt sinulle asiakirjan <em>(${file.name})</em> sähköisesti allekirjoitettavaksi.
+-                  </p>
+-                  <div style="margin: 30px 0;">
+-                    <a href="${link}" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500; display: inline-block;">
+-                      Avaa ja allekirjoita asiakirja
+-                    </a>
+-                  </div>
+-                  <p style="color: #6b7280; font-size: 14px; margin-bottom: 0;">
+-                    Ystävällisin terveisin,<br>Allekirjoitus
+-                  </p>
+-                </div>`
+-              }
+-            });
+-          });
+-
+-          // Lähetetään sähköposti myös lähettäjälle itselleen paluulinkillä
+-          const senderLink = `${window.location.origin}${import.meta.env.BASE_URL}lahettaja/${docId}`;
+-          const senderEmailPromise = supabase.functions.invoke('send-email', {
+-            body: {
+-              to: sender,
+-              subject: `Allekirjoituspyyntösi: ${file.name}`,
+-              html: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
+-                <h2 style="color: #111827; margin-top: 0;">Allekirjoituspyyntösi on luotu!</h2>
+-                <p style="color: #374151; font-size: 16px; line-height: 1.5;">
+-                  Olet luonut sähköisen allekirjoituspyynnön asiakirjalle <em>(${file.name})</em>.
+-                </p>
+-                <p style="color: #374151; font-size: 16px; line-height: 1.5;">
+-                  Sinun tulee maksaa käsittelymaksu ja tunnistautua asettaaksesi oman allekirjoituksesi asiakirjaan. Voit palata maksamaan ja tunnistautumaan myöhemmin tästä linkistä:
+-                </p>
+-                <div style="margin: 30px 0;">
+-                  <a href="${senderLink}" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500; display: inline-block;">
+-                    Jatka maksulinkkiin
+-                  </a>
+-                </div>
+-                <p style="color: #6b7280; font-size: 14px; margin-bottom: 0;">
+-                  Ystävällisin terveisin,<br>Allekirjoitus
+-                </p>
+-              </div>`
+-            }
++          await supabase.functions.invoke('send-email', {
++            body: { documentId: docId, emailType: 'invitation' }
+           });
+-
+-          await Promise.all([...emailPromises, senderEmailPromise]);
+         } catch {
+           console.warn("Sähköpostin lähetys epäonnistui (reunafunktiota ei ehkä ole vielä julkaistu), jatketaan silti.");
+         }
+diff --git a/src/VerifyView.tsx b/src/VerifyView.tsx
+index f31c5a9..d71060f 100644
+--- a/src/VerifyView.tsx
++++ b/src/VerifyView.tsx
+@@ -1,4 +1,4 @@
+-import { useEffect, useState } from 'react';
++import { useEffect, useState, useRef } from 'react';
+ import { useParams, Link } from 'react-router-dom';
+ import { supabase } from './lib/supabase';
+ 
+@@ -7,17 +7,43 @@ export const VerifyView = () => {
+     const [loading, setLoading] = useState(true);
+     const [error, setError] = useState<string | null>(null);
+     const [docData, setDocData] = useState<any | null>(null);
++    const [fileHash, setFileHash] = useState<string | null>(null);
++    const [isCalculatingHash, setIsCalculatingHash] = useState(false);
++    const [hashMatch, setHashMatch] = useState<boolean | null>(null);
++    const fileInputRef = useRef<HTMLInputElement>(null);
++
++    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
++        const file = e.target.files?.[0];
++        if (!file) return;
++
++        setIsCalculatingHash(true);
++        setHashMatch(null);
++
++        try {
++            const buffer = await file.arrayBuffer();
++            const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
++            const hashArray = Array.from(new Uint8Array(hashBuffer));
++            const calculatedHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
++
++            setFileHash(calculatedHash);
++
++            if (docData?.document_hash) {
++                setHashMatch(calculatedHash === docData.document_hash);
++            }
++        } catch (error) {
++            console.error('Virhe tiivisteen laskennassa:', error);
++        } finally {
++            setIsCalculatingHash(false);
++        }
++    };
+ 
+     useEffect(() => {
+         const fetchDoc = async () => {
+             try {
+                 if (!id) throw new Error('Virheellinen linkki.');
+ 
+-                const { data, error: dbError } = await supabase
+-                    .from('documents')
+-                    .select('id, sender_name, sender_email, signers, status, file_name, created_at, updated_at, document_hash, audit_trail')
+-                    .eq('id', id)
+-                    .single();
++                const { data: docArray, error: dbError } = await supabase.rpc('get_document_by_id', { doc_id: id });
++                const data = docArray?.[0] || null;
+ 
+                 if (dbError || !data) {
+                     throw new Error('Asiakirjaa ei löytynyt tai tarkistuslinkki on vanhentunut.');
+@@ -125,6 +151,90 @@ export const VerifyView = () => {
+                     </div>
+                 </div>
+ 
++                {docData?.document_hash && (
++                    <div style={{ marginBottom: '2rem', padding: '1.5rem', borderRadius: '1rem', background: hashMatch === true ? '#ecfdf5' : hashMatch === false ? '#fef2f2' : '#f8fafc', border: `1px solid ${hashMatch === true ? '#10b981' : hashMatch === false ? '#ef4444' : 'var(--border)'}` }}>
++                        <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#1e293b', marginBottom: '0.75rem' }}>Varmenna asiakirjan aitous</h3>
++                        <p style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '1rem' }}>
++                            Voit ladata tähän laitteellasi olevan PDF-tiedoston varmistaaksesi, että sitä ei ole peukaloitu. Tiedostoa ei lähetetä palvelimelle, vaan tarkistus tehdään turvallisesti selaimessasi.
++                        </p>
++
++                        <input
++                            type="file"
++                            accept="application/pdf"
++                            ref={fileInputRef}
++                            style={{ display: 'none' }}
++                            onChange={handleFileUpload}
++                        />
++
++                        {hashMatch === null && !isCalculatingHash && (
++                            <button
++                                onClick={() => fileInputRef.current?.click()}
++                                className="btn btn-secondary"
++                                style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', background: '#fff', border: '1px solid var(--border)', padding: '0.75rem', borderRadius: '0.5rem', cursor: 'pointer', fontWeight: 500 }}
++                            >
++                                <svg style={{ width: '20px', height: '20px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
++                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
++                                </svg>
++                                Valitse asiakirja (PDF) tarkistettavaksi
++                            </button>
++                        )}
++
++                        {isCalculatingHash && (
++                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', padding: '1rem', color: '#64748b' }}>
++                                <div className="spinner" style={{ width: '16px', height: '16px', borderTopColor: '#64748b' }}></div>
++                                Lasketaan tiivistettä...
++                            </div>
++                        )}
++
++                        {hashMatch !== null && (
++                            <div style={{ marginTop: '0.5rem' }}>
++                                {hashMatch ? (
++                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: '#059669', background: 'rgba(16, 185, 129, 0.1)', padding: '1rem', borderRadius: '0.5rem' }}>
++                                        <div style={{ background: '#10b981', color: 'white', borderRadius: '50%', padding: '0.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
++                                            <svg style={{ width: '20px', height: '20px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
++                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
++                                            </svg>
++                                        </div>
++                                        <div>
++                                            <strong style={{ display: 'block' }}>Asiakirja on aito ja muuttumaton!</strong>
++                                            <span style={{ fontSize: '0.875rem', color: '#047857' }}>Tiedoston tiiviste vastaa palvelimelle tallennettua alkuperäistä tiivistettä.</span>
++                                        </div>
++                                    </div>
++                                ) : (
++                                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', color: '#dc2626', background: 'rgba(239, 68, 68, 0.1)', padding: '1rem', borderRadius: '0.5rem' }}>
++                                        <div style={{ background: '#ef4444', color: 'white', borderRadius: '50%', padding: '0.25rem', marginTop: '0.125rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
++                                            <svg style={{ width: '20px', height: '20px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
++                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
++                                            </svg>
++                                        </div>
++                                        <div style={{ flex: 1 }}>
++                                            <strong style={{ display: 'block' }}>Virhe: Tiiviste ei täsmää!</strong>
++                                            <span style={{ fontSize: '0.875rem', display: 'block', marginBottom: '0.5rem', color: '#b91c1c' }}>Asiakirjaa on saatettu muokata alkuperäisen allekirjoituksen jälkeen, tai kyseessä on väärä tiedosto.</span>
++
++                                            <div style={{ fontSize: '0.75rem', background: 'white', padding: '0.5rem', borderRadius: '0.5rem', fontFamily: 'monospace', wordBreak: 'break-all', marginBottom: '0.5rem', border: '1px solid #fca5a5' }}>
++                                                <strong>Laskettu:</strong> {fileHash}<br />
++                                                <strong>Odotettu:</strong> {docData.document_hash}
++                                            </div>
++                                        </div>
++                                    </div>
++                                )}
++
++                                <div style={{ textAlign: 'center' }}>
++                                    <button
++                                        onClick={() => {
++                                            if (fileInputRef.current) fileInputRef.current.value = '';
++                                            fileInputRef.current?.click();
++                                        }}
++                                        style={{ marginTop: '1rem', background: 'transparent', border: 'none', color: '#64748b', fontSize: '0.875rem', cursor: 'pointer', textDecoration: 'underline' }}
++                                    >
++                                        Tarkista toinen tiedosto
++                                    </button>
++                                </div>
++                            </div>
++                        )}
++                    </div>
++                )}
++
+                 <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#1e293b', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                     <svg style={{ width: '20px', height: '20px', color: '#10b981' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+diff --git a/src/hooks/useDocumentFlow.ts b/src/hooks/useDocumentFlow.ts
+index a17e9bb..1c1667c 100644
+--- a/src/hooks/useDocumentFlow.ts
++++ b/src/hooks/useDocumentFlow.ts
+@@ -25,19 +25,8 @@ export function useDocumentFlow(id: string | undefined, role: 'sender' | 'recipi
+                     if (searchParams.get('redirect_status') === 'succeeded') {
+                         toast.success("Maksu vahvistettu! Siirrytään tunnistautumiseen...");
+ 
+-                        // Palautetaan payForAll sessionStoragesta ja kutsutaan confirm-payment
+-                        const storedPayForAll = sessionStorage.getItem('payForAll') === 'true';
+-                        import('../lib/supabase').then(({ supabase }) => {
+-                            const parsedData = JSON.parse(stashedData);
+-                            supabase.functions.invoke('confirm-payment', {
+-                                body: {
+-                                    documentId: parsedData.documentId,
+-                                    role: parsedData.role || role,
+-                                    signerId: parsedData.signerId,
+-                                    payForAll: storedPayForAll
+-                                }
+-                            }).catch(err => console.warn('confirm-payment after redirect failed:', err));
+-                        });
++                        // Odotamme stripe-webhookin merkitsevän maksun suoritetuksi.
++                        // Emme kysy asiakkaalta onnistuiko maksu itse vaarallisella confirm-payment-kutsulla.
+ 
+                         import('../DocumentFlow').then(({ initiateAuth }) => {
+                             initiateAuth(JSON.parse(stashedData), role).then((success) => {
+@@ -52,28 +41,21 @@ export function useDocumentFlow(id: string | undefined, role: 'sender' | 'recipi
+             }
+         }
+ 
+-        supabase.from('documents').select('*').eq('id', id).single()
+-            .then(({ data: docDataDB, error }) => {
+-                const doc = docDataDB;
++        const fetchDoc = async () => {
++            try {
++                const { data: docDataDB, error } = await supabase.rpc('get_document_by_id', { doc_id: id });
++                const doc = docDataDB && docDataDB.length > 0 ? docDataDB[0] : null;
++
+                 if (error || !doc) {
+                     toast.error("Asiakirjaa ei löytynyt järjestelmästä.");
+                     setView('error');
+                 } else {
+-                    // Haetaan sessionstoragesta jos siellä on jo jotain (esim OIDC paluu)
+                     const stashedSession = sessionStorage.getItem('appState_view');
+-                    const stashedData = sessionStorage.getItem('appState_data');
+-
+-                    if (stashedSession === 'processing' && stashedData) {
+-                        setData(JSON.parse(stashedData));
++                    if (stashedSession === 'processing') {
+                         setView('processing');
+                         sessionStorage.removeItem('appState_view');
+-                        return;
+-                    }
+-
+-                    if (stashedSession === 'authenticating' && stashedData) {
+-                        setData(JSON.parse(stashedData));
++                    } else if (stashedSession === 'authenticating') {
+                         setView('authenticating');
+-                        return;
+                     }
+ 
+                     const signersList = doc.signers || [];
+@@ -140,7 +122,13 @@ export function useDocumentFlow(id: string | undefined, role: 'sender' | 'recipi
+                         }
+                     }
+                 }
+-            });
++            } catch (err) {
++                console.error("Failed to load document:", err);
++                setView('error');
++            }
++        };
++
++        fetchDoc();
+     }, [id, role, searchParams]);
+ 
+     useEffect(() => {
+diff --git a/supabase/config.toml b/supabase/config.toml
+index d78d0ee..ab83611 100644
+--- a/supabase/config.toml
++++ b/supabase/config.toml
+@@ -31,3 +31,14 @@ entrypoint = "./functions/cleanup-documents/index.ts"
+ # Specifies static files to be bundled with the function. Supports glob patterns.
+ # For example, if you want to serve static HTML pages in your function:
+ # static_files = [ "./functions/cleanup-documents/*.html" ]
++
++[functions.test-stripe]
++enabled = true
++verify_jwt = true
++import_map = "./functions/test-stripe/deno.json"
++# Uncomment to specify a custom file path to the entrypoint.
++# Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
++entrypoint = "./functions/test-stripe/index.ts"
++# Specifies static files to be bundled with the function. Supports glob patterns.
++# For example, if you want to serve static HTML pages in your function:
++# static_files = [ "./functions/test-stripe/*.html" ]
+diff --git a/supabase/functions/auth-callback/index.ts b/supabase/functions/auth-callback/index.ts
+index 48c6796..2d927ce 100644
+--- a/supabase/functions/auth-callback/index.ts
++++ b/supabase/functions/auth-callback/index.ts
+@@ -88,7 +88,6 @@ serve(async (req: Request) => {
+       JSON.stringify({
+         success: true,
+         name: fullName,
+-        _debug_claims: decodedJws
+       }),
+       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+     );
+diff --git a/supabase/functions/confirm-payment/index.ts b/supabase/functions/confirm-payment/index.ts
+deleted file mode 100644
+index 5d400f2..0000000
+--- a/supabase/functions/confirm-payment/index.ts
++++ /dev/null
+@@ -1,113 +0,0 @@
+-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.8"
+-
+-const corsHeaders = {
+-    'Access-Control-Allow-Origin': '*',
+-    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+-}
+-
+-serve(async (req) => {
+-    if (req.method === 'OPTIONS') {
+-        return new Response('ok', { headers: corsHeaders })
+-    }
+-
+-    try {
+-        const { documentId, role, signerId, payForAll } = await req.json()
+-        console.log('[CONFIRM-PAYMENT] Called with:', { documentId, role, signerId, payForAll })
+-
+-        if (!documentId || !role) {
+-            return new Response(JSON.stringify({ error: 'Missing documentId or role' }), {
+-                headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+-                status: 400,
+-            })
+-        }
+-
+-        const supabaseUrl = Deno.env.get('SUPABASE_URL')!
+-        const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+-        const supabase = createClient(supabaseUrl, supabaseServiceKey)
+-
+-        if (role === 'sender') {
+-            if (payForAll) {
+-                // Fetch current signers, mark ALL as paid
+-                const { data: doc, error: fetchErr } = await supabase
+-                    .from('documents')
+-                    .select('signers')
+-                    .eq('id', documentId)
+-                    .single()
+-
+-                if (fetchErr || !doc) {
+-                    console.error('[CONFIRM-PAYMENT] Failed to fetch doc:', fetchErr?.message)
+-                    return new Response(JSON.stringify({ error: 'Document not found' }), {
+-                        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+-                        status: 404,
+-                    })
+-                }
+-
+-                const updatedSigners = (doc.signers || []).map((s: any) => ({ ...s, paid: true }))
+-                console.log('[CONFIRM-PAYMENT] Marking all signers as paid:', updatedSigners.length)
+-
+-                const { error: updateErr } = await supabase
+-                    .from('documents')
+-                    .update({ sender_paid: true, signers: updatedSigners })
+-                    .eq('id', documentId)
+-
+-                if (updateErr) {
+-                    console.error('[CONFIRM-PAYMENT] DB update failed:', updateErr.message)
+-                    return new Response(JSON.stringify({ error: updateErr.message }), {
+-                        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+-                        status: 500,
+-                    })
+-                }
+-
+-                console.log('[CONFIRM-PAYMENT] SUCCESS: All signers marked paid for', documentId)
+-            } else {
+-                // Just mark sender as paid
+-                const { error } = await supabase
+-                    .from('documents')
+-                    .update({ sender_paid: true })
+-                    .eq('id', documentId)
+-
+-                if (error) {
+-                    console.error('[CONFIRM-PAYMENT] sender_paid update failed:', error.message)
+-                } else {
+-                    console.log('[CONFIRM-PAYMENT] sender_paid set for', documentId)
+-                }
+-            }
+-        } else if (role === 'recipient' && signerId) {
+-            // Fetch and update just this signer
+-            const { data: doc, error: fetchErr } = await supabase
+-                .from('documents')
+-                .select('signers')
+-                .eq('id', documentId)
+-                .single()
+-
+-            if (!fetchErr && doc && doc.signers) {
+-                const updatedSigners = doc.signers.map((s: any) =>
+-                    s.id === signerId ? { ...s, paid: true } : s
+-                )
+-
+-                const { error } = await supabase
+-                    .from('documents')
+-                    .update({ signers: updatedSigners })
+-                    .eq('id', documentId)
+-
+-                if (error) {
+-                    console.error('[CONFIRM-PAYMENT] signer update failed:', error.message)
+-                } else {
+-                    console.log('[CONFIRM-PAYMENT] Signer', signerId, 'marked paid')
+-                }
+-            }
+-        }
+-
+-        return new Response(JSON.stringify({ success: true }), {
+-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+-            status: 200,
+-        })
+-    } catch (err: any) {
+-        console.error('[CONFIRM-PAYMENT] Error:', err.message)
+-        return new Response(JSON.stringify({ error: err.message }), {
+-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+-            status: 500,
+-        })
+-    }
+-})
+diff --git a/supabase/functions/create-payment-intent/index.ts b/supabase/functions/create-payment-intent/index.ts
+index 7e7e9a8..fc981f7 100644
+--- a/supabase/functions/create-payment-intent/index.ts
++++ b/supabase/functions/create-payment-intent/index.ts
+@@ -20,7 +20,7 @@ serve(async (req) => {
+   try {
+     const { documentId, role, email, signerId, payForAll } = await req.json().catch(() => ({ documentId: 'unknown', role: 'unknown', email: '', signerId: undefined, payForAll: false }))
+ 
+-    let finalAmount = 50; // default 50 cents testing minimum
++    let finalAmount = 50; // 0.50 euro default minimum processing fee for testing
+ 
+     if (documentId !== 'unknown') {
+       const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+@@ -43,7 +43,7 @@ serve(async (req) => {
+ 
+         if (payForAll && role === 'sender' && doc.signers) {
+           // Sender + all signers
+-          finalAmount = (1 + doc.signers.length) * 50; // default test amount, will use real amount logic if you have it
++          finalAmount = (1 + doc.signers.length) * 50;
+         }
+       }
+     }
+diff --git a/supabase/functions/record-action/index.ts b/supabase/functions/record-action/index.ts
+index ed2c3b8..b032a95 100644
+--- a/supabase/functions/record-action/index.ts
++++ b/supabase/functions/record-action/index.ts
+@@ -1,6 +1,6 @@
+ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.8";
+-import { PDFDocument, rgb } from "npm:pdf-lib";
++import { PDFDocument, rgb, StandardFonts } from "npm:pdf-lib";
+ import QRCode from "npm:qrcode";
+ 
+ const corsHeaders = {
+@@ -50,6 +50,7 @@ serve(async (req) => {
+             throw new Error(`Failed to fetch document state: ${fetchError?.message}`);
+         }
+ 
++
+         // 2. Update the correct name/signed status AND Audit Trail based on role
+         let updatedSigners = doc.signers || [];
+         let updatedAuditTrail = doc.audit_trail || [];
+@@ -160,10 +161,10 @@ serve(async (req) => {
+ 
+         const arrayBuffer = await fileBlob.arrayBuffer();
+ 
+-        // Calculate SHA-256 Hash of original document
+-        const documentHash = await generateHash(arrayBuffer);
+-
+         const pdfDoc = await PDFDocument.load(arrayBuffer);
++        const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
++        const helveticaBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
++
+         const originalPages = pdfDoc.getPages();
+         const numPages = originalPages.length;
+ 
+@@ -171,10 +172,11 @@ serve(async (req) => {
+         // using standard Helvetica (implicit in pdf-lib when not embedded)
+         for (let i = 0; i < numPages; i++) {
+             const page = originalPages[i];
+-            page.drawText(`Helppo Allekirjoitus | Doc ID: ${documentId} | Sivu ${i + 1}/${numPages}`, {
++            page.drawText(`Allekirjoitettu helppoallekirjoitus.fi -palvelussa | Tunnus: ${documentId} | Sivu ${i + 1}/${numPages}`, {
+                 x: 20,
+                 y: 15,
+                 size: 8,
++                font: helveticaFont,
+                 color: rgb(0.5, 0.5, 0.5)
+             });
+         }
+@@ -187,58 +189,94 @@ serve(async (req) => {
+         // Draw Top Header Bar (Brand Color)
+         auditPage.drawRectangle({
+             x: 0,
+-            y: height - 15,
++            y: height - 10,
+             width: width,
+-            height: 15,
++            height: 10,
+             color: rgb(0.145, 0.388, 0.922) // Primary blue (#2563eb)
+         });
+ 
+-        // Add Branding Text Top Left
+-        auditPage.drawText('Helppo Allekirjoitus', {
+-            x: 50,
+-            y: height - 40,
+-            size: 16,
+-            color: rgb(0.145, 0.388, 0.922),
+-        });
++        // Add Logo
++        try {
++            const logoRes = await fetch('https://helppoallekirjoitus.fi/logo.jpg');
++            if (logoRes.ok) {
++                const logoBuffer = await logoRes.arrayBuffer();
++                const brandLogo = await pdfDoc.embedJpg(logoBuffer);
++                const logoDims = brandLogo.scaleToFit(140, 40);
++                auditPage.drawImage(brandLogo, {
++                    x: 50,
++                    y: height - 25 - logoDims.height,
++                    width: logoDims.width,
++                    height: logoDims.height,
++                });
++            } else {
++                auditPage.drawText('Helppo Allekirjoitus', { x: 50, y: height - 45, size: 16, font: helveticaBold, color: rgb(0.145, 0.388, 0.922) });
++            }
++        } catch {
++            auditPage.drawText('Helppo Allekirjoitus', { x: 50, y: height - 45, size: 16, font: helveticaBold, color: rgb(0.145, 0.388, 0.922) });
++        }
+ 
+         // Add "Luotettava Sähköinen Allekirjoitus" tag top right
+-        auditPage.drawText('Luotettava Sähköinen Allekirjoitus', {
+-            x: width - 210,
+-            y: height - 35,
++        const rightText = 'Luotettava Sähköinen Allekirjoitus';
++        const rightTextWidth = helveticaFont.widthOfTextAtSize(rightText, 10);
++        auditPage.drawText(rightText, {
++            x: width - 50 - rightTextWidth,
++            y: height - 40,
+             size: 10,
++            font: helveticaFont,
+             color: rgb(0.5, 0.5, 0.5)
+         });
+ 
+         // Visual "Approved" Checkmark (Green Circle with Check)
+-        // We draw two overlapping circles (one hollow, one filled) or just standard SVG path if supported.
+-        // PDF-lib supports drawing SVG paths directly:
+         const checkmarkPath = "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z";
+         auditPage.drawSvgPath(checkmarkPath, {
+             x: (width / 2) - 15,
+-            y: height - 85,
+-            scale: 1.5,
++            y: height - 70, // Moved up to avoid overlapping with text
++            scale: 1.25,
+             color: rgb(0.133, 0.773, 0.369) // Green (#22c55e)
+         });
+ 
+-        // Draw Audit Trail Header centered
+-        auditPage.drawText('SÄHKÖINEN ALLEKIRJOITUSTODISTUS', { x: (width / 2) - 170, y: height - 120, size: 18, color: rgb(0.066, 0.094, 0.153) }); // gray-900
+-        auditPage.drawText(`Vahvistettu ${timestamp}`, { x: (width / 2) - 60, y: height - 140, size: 11, color: rgb(0.4, 0.4, 0.4) });
++        // Center Title
++        const titleText = 'SÄHKÖINEN ALLEKIRJOITUSTODISTUS';
++        const titleTextWidth = helveticaBold.widthOfTextAtSize(titleText, 18);
++        auditPage.drawText(titleText, {
++            x: (width / 2) - (titleTextWidth / 2),
++            y: height - 120,
++            size: 18,
++            font: helveticaBold,
++            color: rgb(0.066, 0.094, 0.153) // gray-900
++        });
++
++        // Center Timestamp
++        const timeText = `Vahvistettu ${timestamp}`;
++        const timeTextWidth = helveticaFont.widthOfTextAtSize(timeText, 11);
++        auditPage.drawText(timeText, {
++            x: (width / 2) - (timeTextWidth / 2),
++            y: height - 140,
++            size: 11,
++            font: helveticaFont,
++            color: rgb(0.4, 0.4, 0.4)
++        });
+ 
+         // Draw Document Info Block (Gray background box with border)
+         auditPage.drawRectangle({
+             x: 50,
+             y: height - 250,
+             width: width - 100,
+-            height: 90,
++            height: 85,
+             color: rgb(0.976, 0.98, 0.984), // slate-50
+             borderColor: rgb(0.898, 0.906, 0.922), // slate-200
+             borderWidth: 1
+         });
+ 
+-        auditPage.drawText('Asiakirjan tiedot', { x: 70, y: height - 185, size: 13, color: rgb(0.1, 0.1, 0.1) });
+-        auditPage.drawText(`Tunnus (ID): ${documentId}`, { x: 70, y: height - 205, size: 10, color: rgb(0.2, 0.2, 0.2) });
+-        auditPage.drawText(`Tiedosto: ${freshDoc.file_name || fileName || 'asiakirja.pdf'}`, { x: 70, y: height - 220, size: 10, color: rgb(0.2, 0.2, 0.2) });
+-        auditPage.drawText(`SHA-256 Tiiviste: ${documentHash}`, { x: 70, y: height - 235, size: 8, color: rgb(0.5, 0.5, 0.5) });
++        auditPage.drawText('Asiakirjan tiedot', { x: 70, y: height - 185, size: 12, font: helveticaBold, color: rgb(0.1, 0.1, 0.1) });
++
++        auditPage.drawText(`Tunnus (ID):`, { x: 70, y: height - 205, size: 10, font: helveticaBold, color: rgb(0.2, 0.2, 0.2) });
++        auditPage.drawText(`${documentId}`, { x: 140, y: height - 205, size: 10, font: helveticaFont, color: rgb(0.2, 0.2, 0.2) });
++
++        auditPage.drawText(`Tiedosto:`, { x: 70, y: height - 220, size: 10, font: helveticaBold, color: rgb(0.2, 0.2, 0.2) });
++        auditPage.drawText(`${freshDoc.file_name || fileName || 'asiakirja.pdf'}`, { x: 140, y: height - 220, size: 10, font: helveticaFont, color: rgb(0.2, 0.2, 0.2) });
++
++        auditPage.drawText(`Tarkista aitous: helppoallekirjoitus.fi/verify/${documentId}`, { x: 70, y: height - 235, size: 8, font: helveticaFont, color: rgb(0.5, 0.5, 0.5) });
+ 
+         // Draw Signers Table
+         let currentY = height - 290;
+@@ -246,10 +284,8 @@ serve(async (req) => {
+         // Helper to find audit event for a specific role
+         const getAuditData = (r: string, identifier: string) => {
+             if (r === 'recipient') {
+-                // Haetaan signerId:llä (uudet eventit) tai emaililla (fallback vanhoille eventeille)
+                 return finalAuditTrail.slice().reverse().find((a: any) => a.role === r && (a.signerId === identifier || a.email === identifier)) || { ip: 'Ei tallennettu', auth_method: 'FTN' };
+             }
+-            // Sender: haetaan emaililla
+             return finalAuditTrail.slice().reverse().find((a: any) => a.role === r && a.email === identifier) || { ip: 'Ei tallennettu', auth_method: 'FTN' };
+         }
+ 
+@@ -257,7 +293,7 @@ serve(async (req) => {
+             if (currentY < 130) {
+                 auditPage = pdfDoc.addPage();
+                 currentY = height - 70;
+-                auditPage.drawText('SÄHKÖINEN ALLEKIRJOITUSTODISTUS (Jatkoa)', { x: 50, y: height - 40, size: 14, color: rgb(0, 0, 0) });
++                auditPage.drawText('SÄHKÖINEN ALLEKIRJOITUSTODISTUS (Jatkoa)', { x: 50, y: height - 40, size: 14, font: helveticaBold, color: rgb(0, 0, 0) });
+             }
+         };
+ 
+@@ -265,40 +301,40 @@ serve(async (req) => {
+         checkPagination();
+         const senderAudit = getAuditData('sender', freshDoc.sender_email);
+         auditPage.drawLine({ start: { x: 50, y: currentY }, end: { x: width - 50, y: currentY }, thickness: 1, color: rgb(0.9, 0.9, 0.9) });
+-        currentY -= 30;
+-        auditPage.drawText('OSAPUOLI 1: LÄHETTÄJÄ', { x: 50, y: currentY, size: 12, color: rgb(0.4, 0.4, 0.4) });
+-        currentY -= 20;
+-        auditPage.drawText(`${freshDoc.sender_name}`, { x: 50, y: currentY, size: 14, color: rgb(0, 0, 0) });
++        currentY -= 25;
++        auditPage.drawText('OSAPUOLI 1: LÄHETTÄJÄ', { x: 50, y: currentY, size: 10, font: helveticaBold, color: rgb(0.5, 0.5, 0.5) });
++        currentY -= 18;
++        auditPage.drawText(`${freshDoc.sender_name}`, { x: 50, y: currentY, size: 14, font: helveticaBold, color: rgb(0.1, 0.1, 0.1) });
+         currentY -= 15;
+-        auditPage.drawText(`${freshDoc.sender_email || sender}`, { x: 50, y: currentY, size: 10, color: rgb(0.3, 0.3, 0.3) });
++        auditPage.drawText(`${freshDoc.sender_email || sender}`, { x: 50, y: currentY, size: 10, font: helveticaFont, color: rgb(0.3, 0.3, 0.3) });
+         currentY -= 15;
+-        auditPage.drawText(`Tunnistus: ${senderAudit.auth_method}`, { x: 50, y: currentY, size: 10, color: rgb(0.3, 0.3, 0.3) });
++        auditPage.drawText(`Tunnistus: ${senderAudit.auth_method}`, { x: 50, y: currentY, size: 10, font: helveticaFont, color: rgb(0.3, 0.3, 0.3) });
+         currentY -= 15;
+-        auditPage.drawText(`IP-osoite: ${senderAudit.ip}`, { x: 50, y: currentY, size: 10, color: rgb(0.3, 0.3, 0.3) });
++        auditPage.drawText(`IP-osoite: ${senderAudit.ip}`, { x: 50, y: currentY, size: 10, font: helveticaFont, color: rgb(0.3, 0.3, 0.3) });
+         currentY -= 20;
+ 
+         // Recipients
+         updatedSigners.forEach((s: any, index: number) => {
+             checkPagination();
+-            const recAudit = getAuditData('recipient', s.id);  // Hakee signerId:llä tai emaililla
++            const recAudit = getAuditData('recipient', s.id);
+             auditPage.drawLine({ start: { x: 50, y: currentY }, end: { x: width - 50, y: currentY }, thickness: 1, color: rgb(0.9, 0.9, 0.9) });
+-            currentY -= 30;
+-            auditPage.drawText(`OSAPUOLI ${index + 2}: VASTAANOTTAJA`, { x: 50, y: currentY, size: 12, color: rgb(0.4, 0.4, 0.4) });
+-            currentY -= 20;
+-            auditPage.drawText(`${s.name}`, { x: 50, y: currentY, size: 14, color: rgb(0, 0, 0) });
++            currentY -= 25;
++            auditPage.drawText(`OSAPUOLI ${index + 2}: VASTAANOTTAJA`, { x: 50, y: currentY, size: 10, font: helveticaBold, color: rgb(0.5, 0.5, 0.5) });
++            currentY -= 18;
++            auditPage.drawText(`${s.name}`, { x: 50, y: currentY, size: 14, font: helveticaBold, color: rgb(0.1, 0.1, 0.1) });
+             currentY -= 15;
+-            auditPage.drawText(`${s.email}`, { x: 50, y: currentY, size: 10, color: rgb(0.3, 0.3, 0.3) });
++            auditPage.drawText(`${s.email}`, { x: 50, y: currentY, size: 10, font: helveticaFont, color: rgb(0.3, 0.3, 0.3) });
+             currentY -= 15;
+-            auditPage.drawText(`Tunnistus: ${recAudit.auth_method}`, { x: 50, y: currentY, size: 10, color: rgb(0.3, 0.3, 0.3) });
++            auditPage.drawText(`Tunnistus: ${recAudit.auth_method}`, { x: 50, y: currentY, size: 10, font: helveticaFont, color: rgb(0.3, 0.3, 0.3) });
+             currentY -= 15;
+-            auditPage.drawText(`IP-osoite: ${recAudit.ip}`, { x: 50, y: currentY, size: 10, color: rgb(0.3, 0.3, 0.3) });
++            auditPage.drawText(`IP-osoite: ${recAudit.ip}`, { x: 50, y: currentY, size: 10, font: helveticaFont, color: rgb(0.3, 0.3, 0.3) });
+             currentY -= 20;
+         });
+ 
+         // Add QR Code for verification at the bottom
+         if (currentY < 160) {
+             auditPage = pdfDoc.addPage();
+-            auditPage.drawText('SÄHKÖINEN ALLEKIRJOITUSTODISTUS (Jatkoa)', { x: 50, y: height - 40, size: 14, color: rgb(0, 0, 0) });
++            auditPage.drawText('SÄHKÖINEN ALLEKIRJOITUSTODISTUS (Jatkoa)', { x: 50, y: height - 40, size: 14, font: helveticaBold, color: rgb(0, 0, 0) });
+         }
+ 
+         const verifyUrl = `https://helppoallekirjoitus.fi/verify/${documentId}`;
+@@ -311,27 +347,36 @@ serve(async (req) => {
+                 const qrImage = await pdfDoc.embedPng(qrImageArrayBuffer);
+                 auditPage.drawImage(qrImage, {
+                     x: 50,
+-                    y: 70,
+-                    width: 70,
+-                    height: 70,
++                    y: 65,
++                    width: 65,
++                    height: 65,
+                 });
+-                auditPage.drawText('Skannaa QR-koodi', { x: 130, y: 120, size: 10, color: rgb(0.2, 0.2, 0.2) });
+-                auditPage.drawText('tarkistaaksesi asiakirjan', { x: 130, y: 105, size: 10, color: rgb(0.2, 0.2, 0.2) });
+-                auditPage.drawText('aitouden palvelusta.', { x: 130, y: 90, size: 10, color: rgb(0.2, 0.2, 0.2) });
++                auditPage.drawText('Skannaa QR-koodi', { x: 125, y: 115, size: 9, font: helveticaBold, color: rgb(0.2, 0.2, 0.2) });
++                auditPage.drawText('tarkistaaksesi asiakirjan', { x: 125, y: 102, size: 9, font: helveticaFont, color: rgb(0.3, 0.3, 0.3) });
++                auditPage.drawText('aitouden palvelusta.', { x: 125, y: 89, size: 9, font: helveticaFont, color: rgb(0.3, 0.3, 0.3) });
+             }
+         } catch (qrErr) {
+             console.error("QR Code generation failed:", qrErr);
+             // Fallback text if QR fails
+-            auditPage.drawText(`Validointilinkki: ${verifyUrl}`, { x: 50, y: 100, size: 10, color: rgb(0.2, 0.2, 0.2) });
++            auditPage.drawText(`Validointilinkki: ${verifyUrl}`, { x: 50, y: 100, size: 10, font: helveticaFont, color: rgb(0.2, 0.2, 0.2) });
+         }
+ 
++        // Marketing / Branding Text
++        auditPage.drawText('Allekirjoitettu turvallisesti helppoallekirjoitus.fi -palvelussa.', {
++            x: 50,
++            y: 50,
++            size: 9,
++            font: helveticaBold,
++            color: rgb(0.145, 0.388, 0.922), // Primary Blue
++        });
+ 
+         // Footer disclaimer
+-        // Note: drawText does not auto-wrap. This is short enough.
+-        auditPage.drawText('Tämä sivu on automaattinen palveluntarjoajan varmenne vahvasta sähköisestä', { x: 50, y: 40, size: 8, color: rgb(0.5, 0.5, 0.5) });
+-        auditPage.drawText('tunnistautumisesta (FTN) ja maksujen suorittamisesta suojatussa ympäristössä.', { x: 50, y: 30, size: 8, color: rgb(0.5, 0.5, 0.5) });
++        auditPage.drawText('Tämä sivu on automaattinen palveluntarjoajan varmenne vahvasta sähköisestä', { x: 50, y: 35, size: 7, font: helveticaFont, color: rgb(0.5, 0.5, 0.5) });
++        auditPage.drawText('tunnistautumisesta (FTN) ja maksujen suorittamisesta suojatussa ympäristössä.', { x: 50, y: 25, size: 7, font: helveticaFont, color: rgb(0.5, 0.5, 0.5) });
+ 
++        // Save the final PDF once — hash is computed from these exact bytes
+         const pdfBytes = await pdfDoc.save();
++        const finalPdfHash = await generateHash(pdfBytes.buffer);
+ 
+         // Base64-encode the stamped PDF for email attachment (chunked to avoid stack overflow)
+         let binaryStr = '';
+@@ -349,7 +394,7 @@ serve(async (req) => {
+         // Update DB status to fully signed and store the DOCUMENT HASH for future verification
+         await supabase.from('documents').update({
+             status: 'signed',
+-            document_hash: documentHash
++            document_hash: finalPdfHash
+         }).eq('id', documentId);
+ 
+         // Generate Signed URL (with error handling)
+@@ -423,8 +468,8 @@ serve(async (req) => {
+             status: 200,
+         });
+     } catch (error: any) {
+-        console.error('Record action error:', error);
+-        return new Response(JSON.stringify({ error: error.message }), {
++        console.error('[CRITICAL] Record action error:', error);
++        return new Response(JSON.stringify({ error: error.message, stack: error.stack }), {
+             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+             status: 400,
+         });
+diff --git a/supabase/functions/send-email/index.ts b/supabase/functions/send-email/index.ts
+index 2e8a993..1a68394 100644
+--- a/supabase/functions/send-email/index.ts
++++ b/supabase/functions/send-email/index.ts
+@@ -1,4 +1,5 @@
+ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
++import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.8"
+ 
+ const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')
+ 
+@@ -13,33 +14,111 @@ serve(async (req) => {
+     }
+ 
+     try {
+-        const { to, subject, html } = await req.json()
++        const { documentId, emailType } = await req.json()
+ 
+         if (!RESEND_API_KEY) {
+             throw new Error('RESEND_API_KEY environment variable is missing')
+         }
+ 
+-        const res = await fetch('https://api.resend.com/emails', {
+-            method: 'POST',
+-            headers: {
+-                'Content-Type': 'application/json',
+-                Authorization: `Bearer ${RESEND_API_KEY}`,
+-            },
+-            body: JSON.stringify({
+-                from: 'Helppo Allekirjoitus <noreply@helppoallekirjoitus.fi>',
+-                to: [to],
+-                subject: subject,
+-                html: html,
+-            }),
+-        })
++        if (!documentId || !emailType) {
++            throw new Error('documentId and emailType are required')
++        }
++
++        const supabaseUrl = Deno.env.get('SUPABASE_URL')!
++        const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
++        const supabase = createClient(supabaseUrl, supabaseServiceKey)
++
++        // Fetch document from database – only trusted data is used for email content
++        const { data: doc, error: dbError } = await supabase
++            .from('documents')
++            .select('id, sender_email, signers, file_name')
++            .eq('id', documentId)
++            .single()
++
++        if (dbError || !doc) {
++            throw new Error('Asiakirjaa ei löytynyt tietokannasta.')
++        }
++
++        const baseUrl = 'https://helppoallekirjoitus.fi'
++        const emailPromises: Promise<any>[] = []
++
++        if (emailType === 'invitation') {
++            // Send invitation to each signer
++            for (const signer of (doc.signers || [])) {
++                const link = `${baseUrl}/asiakirja/${doc.id}?signer=${signer.id}`
++                const html = `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
++                  <h2 style="color: #111827; margin-top: 0;">Hei!</h2>
++                  <p style="color: #374151; font-size: 16px; line-height: 1.5;">
++                    <strong>${doc.sender_email}</strong> on lähettänyt sinulle asiakirjan <em>(${doc.file_name})</em> sähköisesti allekirjoitettavaksi.
++                  </p>
++                  <div style="margin: 30px 0;">
++                    <a href="${link}" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500; display: inline-block;">
++                      Avaa ja allekirjoita asiakirja
++                    </a>
++                  </div>
++                  <p style="color: #6b7280; font-size: 14px; margin-bottom: 0;">
++                    Ystävällisin terveisin,<br>Allekirjoitus
++                  </p>
++                </div>`
++
++                emailPromises.push(
++                    fetch('https://api.resend.com/emails', {
++                        method: 'POST',
++                        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${RESEND_API_KEY}` },
++                        body: JSON.stringify({
++                            from: 'Helppo Allekirjoitus <noreply@helppoallekirjoitus.fi>',
++                            to: [signer.email],
++                            subject: `Allekirjoituspyyntö: ${doc.file_name}`,
++                            html,
++                        }),
++                    })
++                )
++            }
++
++            // Send confirmation to sender
++            const senderLink = `${baseUrl}/lahettaja/${doc.id}`
++            const senderHtml = `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
++                <h2 style="color: #111827; margin-top: 0;">Allekirjoituspyyntösi on luotu!</h2>
++                <p style="color: #374151; font-size: 16px; line-height: 1.5;">
++                  Olet luonut sähköisen allekirjoituspyynnön asiakirjalle <em>(${doc.file_name})</em>.
++                </p>
++                <p style="color: #374151; font-size: 16px; line-height: 1.5;">
++                  Sinun tulee maksaa käsittelymaksu ja tunnistautua asettaaksesi oman allekirjoituksesi asiakirjaan. Voit palata maksamaan ja tunnistautumaan myöhemmin tästä linkistä:
++                </p>
++                <div style="margin: 30px 0;">
++                  <a href="${senderLink}" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500; display: inline-block;">
++                    Jatka maksulinkkiin
++                  </a>
++                </div>
++                <p style="color: #6b7280; font-size: 14px; margin-bottom: 0;">
++                  Ystävällisin terveisin,<br>Allekirjoitus
++                </p>
++              </div>`
++
++            emailPromises.push(
++                fetch('https://api.resend.com/emails', {
++                    method: 'POST',
++                    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${RESEND_API_KEY}` },
++                    body: JSON.stringify({
++                        from: 'Helppo Allekirjoitus <noreply@helppoallekirjoitus.fi>',
++                        to: [doc.sender_email],
++                        subject: `Allekirjoituspyyntösi: ${doc.file_name}`,
++                        html: senderHtml,
++                    }),
++                })
++            )
++        } else {
++            throw new Error(`Unknown emailType: ${emailType}`)
++        }
+ 
+-        const data = await res.json()
++        const results = await Promise.allSettled(emailPromises)
++        const failed = results.filter(r => r.status === 'rejected').length
+ 
+-        return new Response(JSON.stringify(data), {
++        return new Response(JSON.stringify({ sent: results.length - failed, failed }), {
+             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+-            status: res.ok ? 200 : 400,
++            status: 200,
+         })
+-    } catch (error) {
++    } catch (error: any) {
+         return new Response(JSON.stringify({ error: error.message }), {
+             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+             status: 500,
+diff --git a/supabase/functions/stripe-webhook/index.ts b/supabase/functions/stripe-webhook/index.ts
+index 81e78fd..24ccb5b 100644
+--- a/supabase/functions/stripe-webhook/index.ts
++++ b/supabase/functions/stripe-webhook/index.ts
+@@ -8,21 +8,27 @@ const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') as string, {
+ });
+ 
+ serve(async (req) => {
++    console.log('[WEBHOOK] Request received:', req.method, req.url);
+     const signature = req.headers.get('stripe-signature');
+     const endpointSecret = Deno.env.get('STRIPE_WEBHOOK_SECRET');
+ 
++    console.log('[WEBHOOK] Has signature:', !!signature, 'Has endpointSecret:', !!endpointSecret);
++
+     if (!signature || !endpointSecret) {
++        console.error('[WEBHOOK] Missing signature or secret. Signature:', !!signature, 'Secret:', !!endpointSecret);
+         return new Response('Missing Stripe signature or Webhook secret', { status: 400 });
+     }
+ 
+     try {
+         const bodyText = await req.text();
++        console.log('[WEBHOOK] Received payload length:', bodyText.length);
+         const event = await stripe.webhooks.constructEventAsync(bodyText, signature, endpointSecret);
++        console.log('[WEBHOOK] Event constructed successfully:', event.type);
+ 
+         if (event.type === 'payment_intent.succeeded') {
+             const paymentIntent = event.data.object;
+             const { documentId, role, signerId } = paymentIntent.metadata;
+-            console.log('[WEBHOOK] payment_intent.succeeded received. Full metadata:', JSON.stringify(paymentIntent.metadata));
++            console.log('[WEBHOOK] payment_intent.succeeded. Metadata:', JSON.stringify(paymentIntent.metadata));
+ 
+             if (documentId && role) {
+                 // Initialize Supabase admin client

@@ -95,58 +95,9 @@ export const UploadView: React.FC<UploadViewProps> = () => {
 
         // We catch the email error but don't stop the flow, as the user can still copy the link manually in the UI
         try {
-          // Send personal invitation to each signer
-          const emailPromises = recipients.map(rec => {
-            const link = `${window.location.origin}${import.meta.env.BASE_URL}asiakirja/${docId}?signer=${rec.id}`;
-            return supabase.functions.invoke('send-email', {
-              body: {
-                to: rec.email,
-                subject: `Allekirjoituspyyntö: ${file.name}`,
-                html: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
-                  <h2 style="color: #111827; margin-top: 0;">Hei!</h2>
-                  <p style="color: #374151; font-size: 16px; line-height: 1.5;">
-                    <strong>${sender}</strong> on lähettänyt sinulle asiakirjan <em>(${file.name})</em> sähköisesti allekirjoitettavaksi.
-                  </p>
-                  <div style="margin: 30px 0;">
-                    <a href="${link}" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500; display: inline-block;">
-                      Avaa ja allekirjoita asiakirja
-                    </a>
-                  </div>
-                  <p style="color: #6b7280; font-size: 14px; margin-bottom: 0;">
-                    Ystävällisin terveisin,<br>Allekirjoitus
-                  </p>
-                </div>`
-              }
-            });
+          await supabase.functions.invoke('send-email', {
+            body: { documentId: docId, emailType: 'invitation' }
           });
-
-          // Lähetetään sähköposti myös lähettäjälle itselleen paluulinkillä
-          const senderLink = `${window.location.origin}${import.meta.env.BASE_URL}lahettaja/${docId}`;
-          const senderEmailPromise = supabase.functions.invoke('send-email', {
-            body: {
-              to: sender,
-              subject: `Allekirjoituspyyntösi: ${file.name}`,
-              html: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
-                <h2 style="color: #111827; margin-top: 0;">Allekirjoituspyyntösi on luotu!</h2>
-                <p style="color: #374151; font-size: 16px; line-height: 1.5;">
-                  Olet luonut sähköisen allekirjoituspyynnön asiakirjalle <em>(${file.name})</em>.
-                </p>
-                <p style="color: #374151; font-size: 16px; line-height: 1.5;">
-                  Sinun tulee maksaa käsittelymaksu ja tunnistautua asettaaksesi oman allekirjoituksesi asiakirjaan. Voit palata maksamaan ja tunnistautumaan myöhemmin tästä linkistä:
-                </p>
-                <div style="margin: 30px 0;">
-                  <a href="${senderLink}" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500; display: inline-block;">
-                    Jatka maksulinkkiin
-                  </a>
-                </div>
-                <p style="color: #6b7280; font-size: 14px; margin-bottom: 0;">
-                  Ystävällisin terveisin,<br>Allekirjoitus
-                </p>
-              </div>`
-            }
-          });
-
-          await Promise.all([...emailPromises, senderEmailPromise]);
         } catch {
           console.warn("Sähköpostin lähetys epäonnistui (reunafunktiota ei ehkä ole vielä julkaistu), jatketaan silti.");
         }

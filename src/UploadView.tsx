@@ -90,7 +90,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
             id: docId,
             sender_email: sender,
             signers: recipients,
-            file_name: safeFileName,
+            file_name: file.name,
             status: 'pending'
           });
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from './lib/supabase';
+import { reportError } from './lib/errorReporter';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
@@ -111,13 +112,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
         toast.error(errorMessage);
 
         // Report critical upload errors to admin
-        supabase.functions.invoke('send-email', {
-          body: {
-            emailType: 'admin_error',
-            errorContext: 'Tiedoston lataus epäonnistui (UploadView.tsx)',
-            errorDetails: err instanceof Error ? err.stack || err.message : String(err)
-          }
-        }).catch(e => console.error("Admin-ilmoituksen lähetys epäonnistui:", e));
+        reportError('Tiedoston lataus epäonnistui (UploadView.tsx)', err);
 
       } finally {
         setIsUploading(false);

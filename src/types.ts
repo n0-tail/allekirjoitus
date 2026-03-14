@@ -9,4 +9,5 @@ export interface SignatureData {
     signerId?: string;
     allSigners?: any[];
     senderPaid?: boolean;
+    senderSigned?: boolean;
 }

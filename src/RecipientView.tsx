@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { supabase } from './lib/supabase';
+import { reportError } from './lib/errorReporter';
 import toast from 'react-hot-toast';
 
 interface RecipientViewProps {
@@ -49,6 +50,7 @@ export const RecipientView: React.FC<RecipientViewProps> = ({ data, isPaid, onSi
             }
         } catch (err: unknown) {
             console.error(err);
+            reportError('Tiedoston lataus epäonnistui (RecipientView)', err);
             toast.error(err instanceof Error ? err.message : 'Tuntematon virhe tapahtui tiedostoa ladattaessa.');
         } finally {
             setIsDownloading(false);

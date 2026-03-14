@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from './lib/supabase';
+import { reportError } from './lib/errorReporter';
 
 export const VerifyView = () => {
     const { id } = useParams<{ id: string }>();
@@ -52,6 +53,7 @@ export const VerifyView = () => {
                 setDocData(data);
             } catch (err: any) {
                 setError(err.message || 'Tapahtui tuntematon virhe.');
+                reportError('Validointiportaali: Asiakirjan haku (VerifyView)', err);
             } finally {
                 setLoading(false);
             }
@@ -135,6 +137,16 @@ export const VerifyView = () => {
                         )}
                     </div>
                 </div>
+
+                {docData?.is_purged && (
+                    <div style={{ padding: '1.25rem', borderRadius: '1rem', background: '#f8fafc', border: '1px dashed #cbd5e1', marginBottom: '2rem', textAlign: 'center' }}>
+                        <p style={{ fontSize: '0.875rem', color: '#64748b', margin: 0 }}>
+                            <strong style={{ color: '#475569', display: 'block', marginBottom: '0.25rem' }}>Tietosuoja-asetukset aktiivisia</strong>
+                            Henkilötiedot ja tapahtumaloki on poistettu palvelimelta automaattisesti, koska asiakirjan vahvistamisesta on yli 30 päivää.
+                            Asiakirjan aitous ja muuttumattomuus on edelleen todennettavissa alla olevalla tarkistuksella.
+                        </p>
+                    </div>
+                )}
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
                     <div style={{ padding: '1rem', borderRadius: '1rem', background: '#f8fafc', border: '1px solid var(--border)' }}>
@@ -235,44 +247,48 @@ export const VerifyView = () => {
                     </div>
                 )}
 
-                <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#1e293b', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <svg style={{ width: '20px', height: '20px', color: '#10b981' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                    </svg>
-                    Osapuolet ({participants.length})
-                </h3>
+                {!docData?.is_purged && (
+                    <>
+                        <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#1e293b', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <svg style={{ width: '20px', height: '20px', color: '#10b981' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                            Osapuolet ({participants.length})
+                        </h3>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '2rem' }}>
-                    {participants.map((p, idx) => {
-                        const auditLogEntry = (docData?.audit_trail || []).slice().reverse().find((a: any) => a.email === p.email);
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '2rem' }}>
+                            {participants.map((p, idx) => {
+                                const auditLogEntry = (docData?.audit_trail || []).slice().reverse().find((a: any) => a.email === p.email);
 
-                        return (
-                            <div key={idx} style={{
-                                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                                padding: '1rem', borderRadius: '0.75rem', background: 'white',
-                                border: '1px solid var(--border)'
-                            }}>
-                                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                    <span style={{ fontWeight: 500, color: '#1e293b', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                        {p.name || 'Nimi ei vielä vahvistettu'}
-                                        {(idx === 0 || p.signed) && (
-                                            <svg style={{ width: '16px', height: '16px', color: '#10b981' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                            </svg>
+                                return (
+                                    <div key={idx} style={{
+                                        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                                        padding: '1rem', borderRadius: '0.75rem', background: 'white',
+                                        border: '1px solid var(--border)'
+                                    }}>
+                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                            <span style={{ fontWeight: 500, color: '#1e293b', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                {p.name || 'Nimi ei vielä vahvistettu'}
+                                                {(idx === 0 || p.signed) && (
+                                                    <svg style={{ width: '16px', height: '16px', color: '#10b981' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    </svg>
+                                                )}
+                                            </span>
+                                            <span style={{ fontSize: '0.875rem', color: '#64748b' }}>{p.email}</span>
+                                        </div>
+                                        {auditLogEntry && (
+                                            <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'right' }}>
+                                                <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>IP: {auditLogEntry.ip}</span>
+                                                <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Tunnistus: {auditLogEntry.auth_method.replace("Vahva sähköinen tunnistautuminen (FTN)", "Vahva FTN")}</span>
+                                            </div>
                                         )}
-                                    </span>
-                                    <span style={{ fontSize: '0.875rem', color: '#64748b' }}>{p.email}</span>
-                                </div>
-                                {auditLogEntry && (
-                                    <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'right' }}>
-                                        <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>IP: {auditLogEntry.ip}</span>
-                                        <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Tunnistus: {auditLogEntry.auth_method.replace("Vahva sähköinen tunnistautuminen (FTN)", "Vahva FTN")}</span>
                                     </div>
-                                )}
-                            </div>
-                        );
-                    })}
-                </div>
+                                );
+                            })}
+                        </div>
+                    </>
+                )}
 
                 <div style={{ marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid var(--border)', textAlign: 'center' }}>
                     <Link to="/" className="btn btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>

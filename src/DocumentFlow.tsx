@@ -220,26 +220,47 @@ export function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
                 />
             )}
 
-            {view === 'waiting' && (
-                <div className="container animate-fade-in">
-                    <div className="card" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
-                        <div style={{ color: '#f59e0b', margin: '0 auto 1.5rem auto' }}>
-                            <svg style={{ width: '64px', height: '64px', margin: '0 auto' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
+            {view === 'waiting' && (() => {
+                const totalSigners = (data.allSigners?.length || 0) + 1;
+                const signedCount = (data.allSigners?.filter(s => s.signed).length || 0) + (data.senderSigned ? 1 : 0);
+                const allSigned = signedCount === totalSigners;
+
+                return (
+                    <div className="container animate-fade-in">
+                        <div className="card" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
+                            <div style={{ color: allSigned ? '#10b981' : '#f59e0b', margin: '0 auto 1.5rem auto' }}>
+                                {allSigned ? (
+                                    <svg style={{ width: '64px', height: '64px', margin: '0 auto' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                ) : (
+                                    <svg style={{ width: '64px', height: '64px', margin: '0 auto' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                )}
+                            </div>
+                            
+                            {allSigned ? (
+                                <>
+                                    <h2 style={{ marginBottom: '1rem', fontSize: '1.75rem' }}>Asiakirjaa viimeistellään</h2>
+                                    <p style={{ fontSize: '1.125rem', color: 'var(--text-muted)' }}>
+                                        Kaikki osapuolet ovat allekirjoittaneet asiakirjan. Järjestelmä luo parhaillaan lopullista PDF-tiedostoa. Tämä voi kestää hetken.<br /><br />
+                                        <strong style={{ color: 'var(--text-main)' }}>Valmiina: {signedCount} / {totalSigners}</strong>
+                                    </p>
+                                </>
+                            ) : (
+                                <>
+                                    <h2 style={{ marginBottom: '1rem', fontSize: '1.75rem' }}>Odotetaan muita osapuolia</h2>
+                                    <p style={{ fontSize: '1.125rem', color: 'var(--text-muted)' }}>
+                                        Allekirjoituksesi on kirjattu järjestelmään. Odotamme vielä muiden osapuolten tunnistautumisia, ennen kuin lopullinen asiakirja voidaan luoda.<br /><br />
+                                        <strong style={{ color: 'var(--text-main)' }}>Valmiina: {signedCount} / {totalSigners}</strong>
+                                    </p>
+                                </>
+                            )}
                         </div>
-                        <h2 style={{ marginBottom: '1rem', fontSize: '1.75rem' }}>Odotetaan muita osapuolia</h2>
-                        {data.allSigners && data.allSigners.length > 0 ? (
-                            <p style={{ fontSize: '1.125rem', color: 'var(--text-muted)' }}>
-                                Allekirjoituksesi on kirjattu järjestelmään. Odotamme vielä muiden osapuolten tunnistautumisia, ennen kuin lopullinen asiakirja voidaan luoda.<br /><br />
-                                <strong style={{ color: 'var(--text-main)' }}>Valmiina: {data.allSigners.filter(s => s.signed).length} / {data.allSigners.length}</strong>
-                            </p>
-                        ) : (
-                            <p>Allekirjoituksesi on kirjattu järjestelmään. Odotamme vielä toisen osapuolen tunnistautumista...</p>
-                        )}
                     </div>
-                </div>
-            )}
+                );
+            })()}
 
             {view === 'success' && <SuccessView data={data} onReset={() => navigate('/')} />}
         </>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from './lib/supabase';
+import { reportError } from './lib/errorReporter';
 
 interface OidcCallbackViewProps {
     code: string;
@@ -45,6 +46,7 @@ export const OidcCallbackView: React.FC<OidcCallbackViewProps> = ({ code, onSucc
 
             } catch (err: unknown) {
                 console.error('OIDC Callback Error:', err);
+                reportError('Tunnistautuminen epäonnistui (OidcCallbackView)', err);
                 if (isMounted) {
                     onFail(err instanceof Error ? err.message : 'Tuntematon virhe tunnistuksessa.');
                 }

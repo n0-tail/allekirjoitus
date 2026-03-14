@@ -3,6 +3,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import toast from 'react-hot-toast';
 import { supabase } from './lib/supabase';
+import { reportError } from './lib/errorReporter';
 
 // Initialize Stripe. Uses Vite env var.
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '');
@@ -58,6 +59,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSuccess, reason, totalAmo
             }
         } catch (err: any) {
             setErrorMessage(err.message || 'Maksussa tapahtui virhe.');
+            reportError('Maksun käsittely epäonnistui (PaymentView.Checkout)', err);
             setIsProcessing(false);
         }
     };
@@ -191,6 +193,7 @@ export const PaymentView: React.FC<PaymentViewProps> = ({ onPaymentSuccess, reas
                 }
             } catch (err: any) {
                 console.error('Failed to init payment:', err);
+                reportError('Maksun alustus epäonnistui (PaymentView.Intent)', err);
                 setError(err.message || 'Maksuyhteyden alustaminen epäonnistui.');
             }
         };

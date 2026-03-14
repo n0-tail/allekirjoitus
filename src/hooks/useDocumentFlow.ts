@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { supabase } from '../lib/supabase';
+import { reportError } from '../lib/errorReporter';
 import type { SignatureData } from '../types';
 
 export type ViewState = 'loading' | 'start' | 'payment' | 'authenticating' | 'processing' | 'waiting' | 'success' | 'error';
@@ -43,6 +44,7 @@ export function useDocumentFlow(id: string | undefined, role: 'sender' | 'recipi
                             } else if (attempts < maxAttempts) {
                                 setTimeout(checkPaymentStatus, 1500);
                             } else {
+                                reportError('Maksua ei vahvistettu (useDocumentFlow)', new Error('Maksua ei voitu vahvistaa järjestelmästä ajoissa'));
                                 toast.error("Maksua ei voitu vahvistaa järjestelmästä ajoissa. Yritä ladata sivu uudelleen hetken kuluttua.");
                                 setView('start');
                             }
@@ -91,6 +93,7 @@ export function useDocumentFlow(id: string | undefined, role: 'sender' | 'recipi
                         role: role,
                         allSigners: signersList,
                         senderPaid: !!doc.sender_paid,
+                        senderSigned: !!doc.sender_name,
                     };
 
                     if (role === 'recipient') {
@@ -146,6 +149,7 @@ export function useDocumentFlow(id: string | undefined, role: 'sender' | 'recipi
                 }
             } catch (err) {
                 console.error("Failed to load document:", err);
+                reportError('Asiakirjan haku epäonnistui (useDocumentFlow)', err);
                 setView('error');
             }
         };

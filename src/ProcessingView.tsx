@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { supabase } from './lib/supabase';
+import { reportError } from './lib/errorReporter';
 
 
 interface ProcessingViewProps {
@@ -60,6 +61,7 @@ export const ProcessingView: React.FC<ProcessingViewProps> = ({ data, onSuccess,
                 }
             } catch (err: unknown) {
                 console.error(err);
+                reportError('Allekirjoituksen tallennus epäonnistui (ProcessingView)', err);
                 if (isMounted) onFail(err instanceof Error ? err.message : 'Tuntematon virhe käsittelyssä.');
             }
         };

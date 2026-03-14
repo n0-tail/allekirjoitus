@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { supabase } from './lib/supabase';
+import { reportError } from './lib/errorReporter';
 import toast from 'react-hot-toast';
 
 interface SuccessViewProps {
@@ -44,6 +45,7 @@ export const SuccessView: React.FC<SuccessViewProps> = ({ data, onReset }) => {
             }
         } catch (err: unknown) {
             console.error(err);
+            reportError('Tiedoston lataus epäonnistui (SuccessView)', err);
             toast.error(err instanceof Error ? err.message : 'Tuntematon virhe tapahtui tiedostoa ladattaessa.');
         } finally {
             setIsDownloading(false);

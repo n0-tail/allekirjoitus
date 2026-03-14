@@ -120,6 +120,11 @@ export function useDocumentFlow(id: string | undefined, role: 'sender' | 'recipi
                             const allSigned = signersList.every((s: any) => s.signed === true) && !!doc.sender_name;
                             if (allSigned && doc.status === 'signed') {
                                 setView('success');
+                            } else if (allSigned && doc.status !== 'signed') {
+                                // AUTO-RECOVERY: Kaikki allekirjoitettu mutta PDF uupuu (esim. reunanauhan virhe)
+                                docData.verifiedName = targetSigner.name;
+                                setData(docData);
+                                setView('processing');
                             } else {
                                 setView('waiting');
                             }
@@ -138,6 +143,11 @@ export function useDocumentFlow(id: string | undefined, role: 'sender' | 'recipi
                         if (doc.sender_name && allRecipientsSigned && doc.status === 'signed') {
                             // Kaikki on allekirjoittanut → näytä valmis-näkymä
                             setView('success');
+                        } else if (doc.sender_name && allRecipientsSigned && doc.status !== 'signed') {
+                            // AUTO-RECOVERY: Kaikki allekirjoitettu mutta PDF uupuu
+                            docData.verifiedName = doc.sender_name;
+                            setData(docData);
+                            setView('processing');
                         } else if (doc.sender_name) {
                             // Lähettäjä on tunnistautunut mutta odottaa vastaanottajia
                             setView('waiting');
@@ -156,6 +166,50 @@ export function useDocumentFlow(id: string | undefined, role: 'sender' | 'recipi
 
         fetchDoc();
     }, [id, role, searchParams]);
+
+    // Polling for updates while in 'waiting' state
+    useEffect(() => {
+        let timer: number;
+        if (view === 'waiting' && id) {
+            const checkStatus = async () => {
+                try {
+                    const { data: dbData } = await supabase.rpc('get_document_by_id', { doc_id: id });
+                    const doc = dbData && dbData.length > 0 ? dbData[0] : null;
+                    if (doc) {
+                        const signersList = doc.signers || [];
+                        const allRecipientsSigned = signersList.length > 0 && signersList.every((s: any) => s.signed === true);
+                        const allSigned = allRecipientsSigned && !!doc.sender_name;
+
+                        // Päivitetään aktiivisesti allekirjoittajien tilanne UI:ta varten
+                        setData(prev => {
+                            if (!prev) return prev;
+                            return { ...prev, allSigners: signersList, senderSigned: !!doc.sender_name };
+                        });
+
+                        if (allSigned && doc.status === 'signed') {
+                            setView('success');
+                            return; // Stop polling
+                        } else if (allSigned && doc.status !== 'signed') {
+                            // AUTO-RECOVERY: Toinen osapuoli saattoi keskeyttää PDF-luonnin, yritetään sitä nyt uudelleen automaattisesti!
+                            setData(prev => {
+                                if (!prev) return prev;
+                                const verName = role === 'sender' ? doc.sender_name : (signersList.find((s: any) => s.id === prev.signerId)?.name || '');
+                                return { ...prev, verifiedName: verName };
+                            });
+                            setView('processing');
+                            return; // Stop polling
+                        }
+                    }
+                } catch (e) {
+                    console.error("Polling error", e);
+                }
+                timer = window.setTimeout(checkStatus, 4000);
+            };
+
+            timer = window.setTimeout(checkStatus, 4000);
+        }
+        return () => window.clearTimeout(timer);
+    }, [view, id, role]);
 
     useEffect(() => {
         if (data && view !== 'loading' && view !== 'error') {

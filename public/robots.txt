@@ -16,6 +16,7 @@ Allow: /
 User-agent: anthropic-ai
 Allow: /
 
+User-agent: *
 Disallow: /asiakirja/
 Disallow: /lahettaja/
 Disallow: /verify/

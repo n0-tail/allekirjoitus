@@ -101,12 +101,20 @@ serve(async (req) => {
                 )
             }
 
-            // Send confirmation to sender
             const senderLink = `${baseUrl}/lahettaja/${doc.id}`
+            const hasRecipients = (doc.signers || []).length > 0;
+            const senderSubject = hasRecipients 
+              ? `Allekirjoituspyyntösi: ${doc.file_name}`
+              : `Asiakirjasi on ladattu: ${doc.file_name}`;
+            
+            const senderMessage = hasRecipients
+              ? `Olet luonut sähköisen allekirjoituspyynnön asiakirjalle <em>(${doc.file_name})</em>.`
+              : `Olet ladattu asiakirjan <em>(${doc.file_name})</em> sähköistä allekirjoitusta varten.`;
+
             const senderHtml = `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
-                <h2 style="color: #111827; margin-top: 0;">Allekirjoituspyyntösi on luotu!</h2>
+                <h2 style="color: #111827; margin-top: 0;">${hasRecipients ? 'Allekirjoituspyyntösi on luotu!' : 'Asiakirjasi on ladattu!'}</h2>
                 <p style="color: #374151; font-size: 16px; line-height: 1.5;">
-                  Olet luonut sähköisen allekirjoituspyynnön asiakirjalle <em>(${doc.file_name})</em>.
+                  ${senderMessage}
                 </p>
                 <p style="color: #374151; font-size: 16px; line-height: 1.5;">
                   Sinun tulee maksaa käsittelymaksu ja tunnistautua asettaaksesi oman allekirjoituksesi asiakirjaan. Voit palata maksamaan ja tunnistautumaan myöhemmin tästä linkistä:
@@ -128,7 +136,7 @@ serve(async (req) => {
                     body: JSON.stringify({
                         from: 'Helppo Allekirjoitus <noreply@helppoallekirjoitus.fi>',
                         to: [doc.sender_email],
-                        subject: `Allekirjoituspyyntösi: ${doc.file_name}`,
+                        subject: senderSubject,
                         html: senderHtml,
                     }),
                 })

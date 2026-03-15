@@ -65,8 +65,12 @@ export const UploadView: React.FC<UploadViewProps> = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const allEmailsFilled = recipients.every(r => r.email.trim() !== '');
-    if (file && sender && allEmailsFilled) {
+    const validRecipients = recipients.filter(r => r.email.trim() !== '');
+    
+    // Allow submission if all *added* recipient lines are valid, OR if the first (default) is just left empty
+    const canSubmit = file && sender && (recipients.length > 1 ? validRecipients.length === recipients.length : true);
+
+    if (canSubmit) {
       setIsUploading(true);
 
       try {
@@ -90,7 +94,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
           .insert({
             id: docId,
             sender_email: sender,
-            signers: recipients,
+            signers: validRecipients,
             file_name: file.name,
             status: 'pending'
           });
@@ -206,7 +210,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                         placeholder={index === 0 ? "esim. maija.meikalainen@email.com" : "esim. matti.virtanen@email.com"}
                         value={rec.email}
                         onChange={(e) => updateRecipient(rec.id, e.target.value)}
-                        required
+                        required={index > 0}
                       />
 
                       {index > 0 && (
@@ -274,9 +278,9 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                 type="submit"
                 className="btn btn-primary"
                 style={{ width: '100%', maxWidth: '400px', fontSize: '1.125rem', padding: '1rem' }}
-                disabled={!file || !sender || recipients.some(r => r.email.trim() === '') || isUploading}
+                disabled={!file || !sender || (recipients.length > 1 && recipients.some(r => r.email.trim() === '')) || isUploading}
               >
-                {isUploading ? 'Lähetetään turvallisesti...' : 'Jatka ja tunnistaudu →'}
+                {isUploading ? 'Ladataan turvallisesti...' : 'Jatka ja tunnistaudu →'}
               </button>
             </div>
           </div>

@@ -114,7 +114,7 @@ serve(async (req) => {
         updatedSigners = freshDoc.signers || [];
         const finalAuditTrail = freshDoc.audit_trail || [];
         const hasSenderName = !!freshDoc.sender_name;
-        const allRecipientsSigned = updatedSigners.length > 0 && updatedSigners.every((s: any) => s.signed === true);
+        const allRecipientsSigned = updatedSigners.length === 0 || updatedSigners.every((s: any) => s.signed === true);
 
         // If anyone is missing, early return with "waiting" status
         if (!hasSenderName || !allRecipientsSigned) {
@@ -429,11 +429,23 @@ serve(async (req) => {
                   </div>`
                 : `<p style="color: #6b7280; font-size: 14px;">Latauslinkki ei ole juuri nyt saatavilla. Voit ladata asiakirjan palvelussa.</p>`;
 
+            const emailSubject = updatedSigners.length === 0 
+                ? `Asiakirjasi on valmis: ${freshDoc.file_name || fileName || 'Asiakirja'}` 
+                : `Asiakirja valmis: Kaikki osapuolet ovat allekirjoittaneet`;
+
+            const emailTitle = updatedSigners.length === 0
+                ? `Asiakirjasi on nyt valmis`
+                : `Asiakirja on nyt valmis (Kaikkien suostumus)`;
+
+            const emailBody = updatedSigners.length === 0
+                ? `Olet sähköisesti allekirjoittanut asiakirjan.`
+                : `Kaikki osapuolet (<strong>${allNames}</strong>) ovat nyt sähköisesti allekirjoittaneet asiakirjan.`;
+
             const emailHtml = `
             <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #10b981; border-radius: 8px;">
-              <h2 style="color: #065f46; margin-top: 0;">Asiakirja on nyt valmis (Kaikkien suostumus)</h2>
+              <h2 style="color: #065f46; margin-top: 0;">${emailTitle}</h2>
               <p style="color: #374151; font-size: 16px; line-height: 1.5;">
-                Kaikki osapuolet (<strong>${allNames}</strong>) ovat nyt sähköisesti allekirjoittaneet asiakirjan.
+                ${emailBody}
               </p>
               ${downloadBlock}
             </div>`;
@@ -449,7 +461,7 @@ serve(async (req) => {
                         body: JSON.stringify({
                             from: 'Helppo Allekirjoitus <noreply@helppoallekirjoitus.fi>',
                             to: [emailTarget],
-                            subject: `Asiakirja valmis: Kaikki osapuolet ovat allekirjoittaneet`,
+                            subject: emailSubject,
                             html: emailHtml,
                             attachments: [{
                                 filename: freshDoc.file_name || fileName || 'asiakirja.pdf',

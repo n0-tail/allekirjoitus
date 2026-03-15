@@ -85,11 +85,16 @@ export function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
                             </div>
                         </div>
 
-                        <h2 style={{ marginBottom: '1rem' }}>Asiakirja on lähetetty!</h2>
+                        <h2 style={{ marginBottom: '1rem' }}>{data.allSigners && data.allSigners.length > 0 ? 'Asiakirja on lähetetty!' : 'Asiakirja on ladattu!'}</h2>
                         <p style={{ marginBottom: '2rem', color: 'var(--text-muted)' }}>
-                            Sähköinen allekirjoituskutsu on luotu henkilölle <strong>{data.recipient}</strong>. Sinun täytyy enää maksaa käsittelymaksu ja tunnistautua, jotta allekirjoituspyyntö on virallinen.
+                            {data.allSigners && data.allSigners.length > 0 ? (
+                                <>Sähköinen allekirjoituskutsu on luotu henkilölle <strong>{data.recipient}</strong>. Sinun täytyy enää maksaa käsittelymaksu ja tunnistautua, jotta allekirjoituspyyntö on virallinen.</>
+                            ) : (
+                                <>Olet asettanut itsesi ainoaksi allekirjoittajaksi. Täydennä prosessi maksamalla käsittelymaksu ja tunnistautumalla.</>
+                            )}
                         </p>
 
+                        {data.allSigners && data.allSigners.length > 0 && (
                         <div style={{ padding: '2rem', background: '#f8fafc', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border)', marginBottom: '2rem' }}>
                             <h3 style={{ fontSize: '1rem', marginBottom: '1.5rem', color: 'var(--text-main)' }}>Kutsu on lähetetty sähköpostitse</h3>
 
@@ -134,6 +139,7 @@ export function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
                                 )}
                             </div>
                         </div>
+                        )}
 
                         {!data.senderPaid ? (
                             <button
@@ -245,7 +251,7 @@ export function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
                                     <h2 style={{ marginBottom: '1rem', fontSize: '1.75rem' }}>Asiakirjaa viimeistellään</h2>
                                     <p style={{ fontSize: '1.125rem', color: 'var(--text-muted)' }}>
                                         Kaikki osapuolet ovat allekirjoittaneet asiakirjan. Järjestelmä luo parhaillaan lopullista PDF-tiedostoa. Tämä voi kestää hetken.<br /><br />
-                                        <strong style={{ color: 'var(--text-main)' }}>Valmiina: {signedCount} / {totalSigners}</strong>
+                                        {totalSigners > 1 && <strong style={{ color: 'var(--text-main)' }}>Valmiina: {signedCount} / {totalSigners}</strong>}
                                     </p>
                                 </>
                             ) : (

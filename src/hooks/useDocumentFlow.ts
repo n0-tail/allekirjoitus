@@ -94,6 +94,7 @@ export function useDocumentFlow(id: string | undefined, role: 'sender' | 'recipi
                         allSigners: signersList,
                         senderPaid: !!doc.sender_paid,
                         senderSigned: !!doc.sender_name,
+                        senderSigns: doc.sender_signs !== false,
                     };
 
                     if (role === 'recipient') {
@@ -140,7 +141,18 @@ export function useDocumentFlow(id: string | undefined, role: 'sender' | 'recipi
 
                         const allRecipientsSigned = signersList.length > 0 && signersList.every((s: any) => s.signed === true);
 
-                        if (doc.sender_name && allRecipientsSigned && doc.status === 'signed') {
+                        if (doc.sender_signs === false) {
+                            // OBSERVER: sender ei allekirjoita
+                            if (allRecipientsSigned && doc.status === 'signed') {
+                                setView('success');
+                            } else if (allRecipientsSigned && doc.status !== 'signed') {
+                                docData.verifiedName = '[Observer]';
+                                setData(docData);
+                                setView('processing');
+                            } else {
+                                setView('waiting');
+                            }
+                        } else if (doc.sender_name && allRecipientsSigned && doc.status === 'signed') {
                             // Kaikki on allekirjoittanut → näytä valmis-näkymä
                             setView('success');
                         } else if (doc.sender_name && allRecipientsSigned && doc.status !== 'signed') {
@@ -178,7 +190,8 @@ export function useDocumentFlow(id: string | undefined, role: 'sender' | 'recipi
                     if (doc) {
                         const signersList = doc.signers || [];
                         const allRecipientsSigned = signersList.length > 0 && signersList.every((s: any) => s.signed === true);
-                        const allSigned = allRecipientsSigned && !!doc.sender_name;
+                        const senderDone = doc.sender_signs === false ? true : !!doc.sender_name;
+                        const allSigned = allRecipientsSigned && senderDone;
 
                         // Päivitetään aktiivisesti allekirjoittajien tilanne UI:ta varten
                         setData(prev => {

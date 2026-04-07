@@ -78,11 +78,17 @@ serve(async (req: Request) => {
     const { plaintext } = await jose.compactDecrypt(tokenData.id_token, clientEncKey);
     const jwsIdToken = new TextDecoder().decode(plaintext);
 
-    // 4. Decode the decrypted JWS to read claims (we skip signature verification here as we got it via backchannel TLS and it's a mock/sandbox, though in prod we'd verify the IdP's signature)
-    const decodedJws = jose.decodeJwt(jwsIdToken);
+    // 4. Verify the JWS signature using the IdP's public JWKS
+    const JWKS = jose.createRemoteJWKSet(
+        new URL(`https://${domain}/.well-known/jwks.json`)
+    );
+    const { payload: verifiedClaims } = await jose.jwtVerify(jwsIdToken, JWKS, {
+        issuer: `https://${domain}`,
+        audience: clientId,
+    });
 
-    // In Criipto/Idura, the user's name is usually in the 'name' claim.
-    const fullName = decodedJws.name || "Tuntematon Allekirjoittaja";
+    // In Criipto/Idura, the user's name is in the 'name' claim.
+    const fullName = (verifiedClaims.name as string) || "Tuntematon Allekirjoittaja";
 
     return new Response(
       JSON.stringify({
@@ -96,7 +102,7 @@ serve(async (req: Request) => {
     console.error('Auth-callback error:', error);
     return new Response(
       JSON.stringify({ error: error instanceof Error ? error.message : "Tuntematon virhe." }),
-      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
 });

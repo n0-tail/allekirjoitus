@@ -13,7 +13,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
     document.title = "Helppo Allekirjoitus – Sähköinen allekirjoitus verkossa | eIDAS & FTN";
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
-      metaDescription.setAttribute('content', 'Allekirjoita sopimukset sähköisesti pankkitunnuksilla. Vahva FTN-tunnistautuminen, juridisesti sitova eIDAS-yhteensopiva palvelu. Helppo, turvallinen ja edullinen.');
+      metaDescription.setAttribute('content', 'Ei rekisteröintiä. Ei kuukausimaksua. 1,49 € / allekirjoitus. Suomalainen.');
     }
   }, []);
 
@@ -129,11 +129,11 @@ export const UploadView: React.FC<UploadViewProps> = () => {
       {/* HERO SECTION */}
       <section className="hero-section animate-fade-in" style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
         <h1 style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '1rem', lineHeight: 1.2 }}>
-          Sido sopimukset <span style={{ color: 'var(--primary)' }}>turvallisesti</span> verkossa.
+          Allekirjoita sopimukset <span style={{ color: 'var(--primary)' }}>turvallisesti</span> verkossa.
         </h1>
         <p style={{ fontSize: '1.125rem', color: 'var(--text-muted)', maxWidth: '600px', margin: '0 auto' }}>
           Lataa PDF luottamuksellisesti, tunnistaudu pankkitunnuksilla ja pyydä sitova sähköinen allekirjoitus toiselta osapuolelta.
-          Helppoa ja laillista.
+          Helppoa ja juridisesti sitovaa.
         </p>
       </section>
 
@@ -184,9 +184,11 @@ export const UploadView: React.FC<UploadViewProps> = () => {
               {/* LEFT COLUMN: Sender */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 <div className="form-group" style={{ marginBottom: 0 }}>
-                  <label className="form-label">Lähettäjän sähköposti (Sinun)</label>
+                  <label className="form-label">Allekirjoittaja 1</label>
                   <input
                     type="email"
+                    name="email"
+                    autoComplete="email"
                     className="form-input"
                     placeholder="esim. matti.meikalainen@email.com"
                     value={sender}
@@ -201,11 +203,13 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                 {recipients.map((rec, index) => (
                   <div key={rec.id} className="form-group animate-fade-in" style={{ marginBottom: 0 }}>
                     <label className="form-label">
-                      {index === 0 ? 'Vastaanottaja 1' : `Vastaanottaja ${index + 1}`}
+                      {`Allekirjoittaja ${index + 2}`}
                     </label>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                       <input
                         type="email"
+                        name="email"
+                        autoComplete="email"
                         className="form-input"
                         placeholder={index === 0 ? "esim. maija.meikalainen@email.com" : "esim. matti.virtanen@email.com"}
                         value={rec.email}
@@ -230,7 +234,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                             transition: 'background 0.2s',
                             flexShrink: 0
                           }}
-                          title="Poista vastaanottaja"
+                          title="Poista allekirjoittaja"
                         >
                           <svg style={{ width: '20px', height: '20px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
@@ -266,7 +270,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                     <svg style={{ width: '18px', height: '18px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                     </svg>
-                    <span>Lisää vastaanottaja</span>
+                    <span>Lisää allekirjoittaja</span>
                   </button>
                 </div>
               </div>
@@ -413,6 +417,20 @@ export const UploadView: React.FC<UploadViewProps> = () => {
             </p>
           </details>
 
+          <details style={{ background: '#f8fafc', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', padding: '1rem 1.5rem' }}>
+            <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: '1rem', color: 'var(--text-main)' }}>Miten saan valmiin asiakirjan itselleni?</summary>
+            <p style={{ marginTop: '0.75rem', color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
+              Kun kaikki osapuolet ovat allekirjoittaneet asiakirjan, se lähetetään automaattisesti kaikkien sähköpostiin PDF-liitteenä ja latauslinkkinä. Emme säilytä dokumentteja pysyvästi: tietoturvasyistä tiedostot poistetaan palvelimeltamme 24 tunnin kuluessa, jonka jälkeen ne säilyvät turvallisesti vain teidän omissa sähköposteissanne.
+            </p>
+          </details>
+
+          <details style={{ background: '#f8fafc', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', padding: '1rem 1.5rem' }}>
+            <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: '1rem', color: 'var(--text-main)' }}>Voinko seurata prosessin etenemistä?</summary>
+            <p style={{ marginTop: '0.75rem', color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
+              Kyllä voit! Lähetämme sinulle sähköpostitse turvallisen linkin, jonka kautta näet koko ajan reaaliaikaisesti, ketkä osapuolet ovat jo allekirjoittaneet asiakirjan ja ketkä vielä puuttuvat.
+            </p>
+          </details>
+
         </div>
       </section>
 
@@ -462,6 +480,22 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                 "acceptedAnswer": {
                   "@type": "Answer",
                   "text": "Palvelu tukee PDF-tiedostoja. Voit allekirjoittaa sähköisesti esimerkiksi vuokrasopimuksia, työsopimuksia, kauppasopimuksia, valtakirjoja ja muita sopimusasiakirjoja."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Miten saan valmiin asiakirjan itselleni?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Kun kaikki osapuolet ovat allekirjoittaneet asiakirjan, se lähetetään automaattisesti kaikkien sähköpostiin PDF-liitteenä ja latauslinkkinä. Emme säilytä dokumentteja pysyvästi: tietoturvasyistä tiedostot poistetaan palvelimeltamme 24 tunnin kuluessa, jonka jälkeen ne säilyvät turvallisesti vain teidän omissa sähköposteissanne."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Voinko seurata prosessin etenemistä?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Kyllä voit! Lähetämme sinulle sähköpostitse turvallisen linkin, jonka kautta näet koko ajan reaaliaikaisesti, ketkä osapuolet ovat jo allekirjoittaneet asiakirjan ja ketkä vielä puuttuvat."
                 }
               }
             ]

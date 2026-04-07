@@ -53,7 +53,7 @@ export const VerifyView = () => {
                 setDocData(data);
             } catch (err: any) {
                 setError(err.message || 'Tapahtui tuntematon virhe.');
-                reportError('Validointiportaali: Asiakirjan haku (VerifyView)', err);
+                reportError(`Validointiportaali: Asiakirjan haku (VerifyView) — Haettu ID: ${id}`, err);
             } finally {
                 setLoading(false);
             }

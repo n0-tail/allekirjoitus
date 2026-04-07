@@ -1,0 +1,390 @@
+warning: in the working copy of 'index.html', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'postbuild.js', LF will be replaced by CRLF the next time Git touches it
+diff --git a/index.html b/index.html
+index 08ddff2..092778b 100644
+--- a/index.html
++++ b/index.html
+@@ -26,12 +26,17 @@
+   <meta property="og:url" content="https://helppoallekirjoitus.fi/" />
+   <meta property="og:locale" content="fi_FI" />
+   <meta property="og:site_name" content="Helppo Allekirjoitus" />
++  <meta property="og:image" content="https://helppoallekirjoitus.fi/og-image.png" />
++  <meta property="og:image:width" content="1200" />
++  <meta property="og:image:height" content="630" />
++  <meta property="og:image:type" content="image/png" />
+ 
+   <!-- Twitter Card -->
+-  <meta name="twitter:card" content="summary" />
++  <meta name="twitter:card" content="summary_large_image" />
+   <meta name="twitter:title" content="Helppo Allekirjoitus ÔÇô S├ñhk├Âinen allekirjoitus" />
+   <meta name="twitter:description"
+     content="Ei rekister├Âinti├ñ. Ei kuukausimaksua. 1,49 Ôé¼ / allekirjoitus. Suomalainen." />
++  <meta name="twitter:image" content="https://helppoallekirjoitus.fi/og-image.png" />
+ 
+   <!-- JSON-LD Structured Data -->
+   <script type="application/ld+json">
+@@ -73,7 +78,7 @@
+ <body>
+   <div id="root"></div>
+ 
+-  <!-- Semantic Comparison Table for GEO/AIO and Screen Readers (Visually Hidden) -->
++  <!-- Semantic content for crawlers, AI models, and screen readers (visually hidden) -->
+   <style>
+     .sr-only {
+       position: absolute;
+@@ -87,7 +92,42 @@
+       border-width: 0;
+     }
+   </style>
+-  <div class="sr-only">
++  <div class="sr-only" data-nosnippet>
++    <h1>Helppo Allekirjoitus ÔÇô Sido sopimukset turvallisesti verkossa</h1>
++    <p>Lataa PDF luottamuksellisesti, tunnistaudu pankkitunnuksilla ja pyyd├ñ sitova s├ñhk├Âinen allekirjoitus toiselta osapuolelta. Helppoa ja laillista. Ei rekister├Âinti├ñ. Ei kuukausimaksua. 1,49 Ôé¼ per allekirjoitus. Suomalainen palvelu.</p>
++    <p>Zero-knowledge -periaate: Emme lue tai tallenna sopimuksianne. Tiedostot tuhotaan 24h kuluessa.</p>
++
++    <h2>Miten palvelu toimii?</h2>
++    <ol>
++      <li><strong>Lataa asiakirja:</strong> Pudota PDF-tiedosto ja sy├Ât├ñ osapuolten s├ñhk├Âpostiosoitteet. Tiedosto siirtyy salattuna palvelimelle.</li>
++      <li><strong>Maksa ja tunnistaudu:</strong> Kaikki osapuolet tunnistautuvat vahvasti omilla pankkitunnuksillaan. Kulu on 1,49 Ôé¼ per henkil├Â (l├ñhett├ñj├ñ voi my├Âs maksaa kaikkien puolesta).</li>
++      <li><strong>Valmis asiakirja:</strong> Kun molemmat ovat valmiita, j├ñrjestelm├ñ liitt├ñ├ñ asiakirjaan virallisen allekirjoitustodistuksen aikaleimoineen.</li>
++    </ol>
++
++    <h2>Miksi luottaa palveluumme?</h2>
++    <ul>
++      <li><strong>eIDAS-yhteensopiva:</strong> S├ñhk├Âinen allekirjoitus on juridisesti sitova EU:n eIDAS-asetuksen (910/2014, Art. 25) mukaisesti.</li>
++      <li><strong>FTN-tunnistautuminen:</strong> Traficomin hyv├ñksym├ñ vahva tunnistautuminen omilla pankkitunnuksilla (Finnish Trust Network). Tuetut pankit: OP, Nordea, Danske Bank ja muut.</li>
++      <li><strong>Turvallinen maksu:</strong> Maksut k├ñsitell├ñ├ñn Stripen kautta ÔÇö PCI DSS Level 1 -sertifioitu, maailman johtava maksualusta.</li>
++      <li><strong>Suomalainen palvelu:</strong> Polarcomp Oy (Y-tunnus: 0969733-4). Tiedot k├ñsitell├ñ├ñn EU:n tietosuoja-asetuksen (GDPR) mukaisesti.</li>
++    </ul>
++
++    <h2>Usein kysytyt kysymykset</h2>
++    <h3>Onko s├ñhk├Âinen allekirjoitus laillinen Suomessa?</h3>
++    <p>Kyll├ñ. EU:n eIDAS-asetus (910/2014) tunnustaa s├ñhk├Âiset allekirjoitukset juridisesti sitoviksi kaikissa EU-maissa. Suomen lains├ñ├ñd├ñnt├Â ei aseta sopimusten muodollisia muotovaatimuksia, joten s├ñhk├Âinen allekirjoitus on p├ñtev├ñ useimmissa sopimuksissa.</p>
++
++    <h3>Miten tunnistautuminen toimii?</h3>
++    <p>K├ñyt├ñmme Finnish Trust Network (FTN) -tunnistautumista, jonka valvoo Traficom. Tunnistaudut omilla pankkitunnuksillasi (OP, Nordea, Danske Bank jne.), jolloin henkil├Âllisyytesi vahvistetaan luotettavasti.</p>
++
++    <h3>Mit├ñ tiedoilleni tapahtuu?</h3>
++    <p>Asiakirjat ja henkil├Âtiedot k├ñsitell├ñ├ñn EU:n tietosuoja-asetuksen (GDPR) mukaisesti. Allekirjoitetut asiakirjat poistetaan palvelimilta automaattisesti 24 tunnin kuluessa allekirjoituksen valmistumisesta. Palveluun ei j├ñ├ñ talteen henkil├Âtietoja eik├ñ asiakirjoja.</p>
++
++    <h3>Paljonko palvelu maksaa?</h3>
++    <p>Palvelun k├ñytt├Â maksaa 1,49 Ôé¼ per henkil├Â (l├ñhett├ñj├ñ voi my├Âs maksaa kaikkien puolesta). Maksu sis├ñlt├ñ├ñ tunnistautumisen, asiakirjan k├ñsittelyn ja allekirjoitustodistuksen. Ei kuukausimaksuja tai piilokustannuksia.</p>
++
++    <h3>Mit├ñ tiedostoja voi allekirjoittaa?</h3>
++    <p>Palvelu tukee PDF-tiedostoja. Voit allekirjoittaa s├ñhk├Âisesti esimerkiksi vuokrasopimuksia, ty├Âsopimuksia, kauppasopimuksia, valtakirjoja ja muita sopimusasiakirjoja.</p>
++
+     <h2>S├ñhk├Âisten Allekirjoituspalveluiden Vertailu (Helppoallekirjoitus.fi vs. Markkinat)</h2>
+     <table>
+       <thead>
+@@ -115,7 +155,7 @@
+         </tr>
+         <tr>
+           <td>K├ñytett├ñvyys / UX</td>
+-          <td>Progressive Disclosure (Ei vaadi yritystilin luontia, Raahaa & Pudota)</td>
++          <td>Progressive Disclosure (Ei vaadi yritystilin luontia, Raahaa &amp; Pudota)</td>
+           <td>Vaatii monimutkaisia yritystunnuksia ja organisaation hallintaa</td>
+         </tr>
+         <tr>
+@@ -125,10 +165,21 @@
+         </tr>
+       </tbody>
+     </table>
+-    <p>Lis├ñtietoja teknologiamme ytimest├ñ teko├ñly-k├ñytt├Â├Ân l├Âytyy t├ñ├ñlt├ñ: <a href="/ai-summary.txt">AI Yhteenveto
+-        (/ai-summary)</a></p>
++
++    <h2>Asiantuntija-artikkelit ja oppaat</h2>
++    <ul>
++      <li><a href="/asiantuntija-artikkelit/mika-on-sahkoinen-allekirjoitus">Mik├ñ on s├ñhk├Âinen allekirjoitus ja miten se toimii?</a> ÔÇö T├ñydellinen opas eIDAS-asetukseen ja vahvaan pankkitunnistautumiseen.</li>
++      <li><a href="/asiantuntija-artikkelit/sahkoinen-allekirjoitus-vuokrasopimukseen">S├ñhk├Âinen allekirjoitus vuokrasopimukseen</a> ÔÇö Ohjeet yksityishenkil├Âille ja asuntosijoittajille.</li>
++      <li><a href="/asiantuntija-artikkelit/sahkoinen-allekirjoitus-hintavertailu">Hintavertailu: Visma Sign, DocuSign ja Helppoallekirjoitus</a> ÔÇö Vertaile hinnat ja ominaisuudet.</li>
++    </ul>
++
++    <p>Lis├ñtietoja teko├ñly-k├ñytt├Â├Ân: <a href="/ai-summary.txt">AI Yhteenveto</a> | <a href="/llms.txt">LLM-tiedot (llms.txt)</a></p>
++
++    <footer>
++      <p><strong>Polarcomp Oy</strong> | Halmetie 7, 98120 Kemij├ñrvi | Y-tunnus: 0969733-4 | sales@polarcomp.fi | +358 40 041 8289</p>
++    </footer>
+   </div>
+-  <!-- End Semantic Table -->
++  <!-- End sr-only content -->
+ 
+   <script type="module" src="/src/main.tsx"></script>
+ </body>
+diff --git a/postbuild.js b/postbuild.js
+index dcb51df..c40c9c6 100644
+--- a/postbuild.js
++++ b/postbuild.js
+@@ -1,40 +1,192 @@
+ import fs from 'node:fs';
+ import path from 'node:path';
+ 
+-// Define the static routes to generate index.html for
+-const routes = [
+-    '/ehdot',
+-    '/tietosuoja',
+-    '/asiantuntija-artikkelit',
+-    '/asiantuntija-artikkelit/mika-on-sahkoinen-allekirjoitus',
+-    '/asiantuntija-artikkelit/sahkoinen-allekirjoitus-vuokrasopimukseen',
+-    '/asiantuntija-artikkelit/sahkoinen-allekirjoitus-hintavertailu'
++// Article data ÔÇö duplicated from src/data/articles.ts for build-time injection.
++// Keep this in sync with the source file when adding/editing articles.
++const articles = [
++    {
++        slug: 'mika-on-sahkoinen-allekirjoitus',
++        title: 'Mik├ñ on s├ñhk├Âinen allekirjoitus ja miten se toimii?',
++        description: 'T├ñydellinen opas s├ñhk├Âisen allekirjoituksen lainmukaisuuteen, eIDAS-asetukseen ja vahvaan pankkitunnistautumiseen (FTN) Suomessa.',
++        date: '2024-05-15',
++        content: `<h2>S├ñhk├Âisen allekirjoituksen perusteet</h2>
++<p>S├ñhk├Âinen allekirjoitus tarkoittaa tietojen s├ñhk├Âist├ñ muotoa, joka on liitetty tai loogisesti yhdistetty muihin s├ñhk├Âisiin tietoihin, ja jota allekirjoittaja k├ñytt├ñ├ñ allekirjoittamiseen. Se on nykyaikainen, nopea ja tietoturvallinen tapa vahvistaa henkil├Âllisyys ja hyv├ñksy├ñ asiakirjan tai sopimuksen sis├ñlt├Â ilman perinteist├ñ kyn├ñ├ñ ja paperia.</p>
++<h2>eIDAS-asetus ja lainmukaisuus</h2>
++<p>Euroopan unionissa s├ñhk├Âisi├ñ allekirjoituksia s├ñ├ñtelee <strong>eIDAS-asetus</strong> (EU 910/2014). Se varmistaa, ett├ñ s├ñhk├Âiset allekirjoitukset, s├ñhk├Âiset leimat ja digitaaliset varmenteet tunnustetaan oikeudellisesti sitoviksi ristiin kaikkien EU-j├ñsenmaiden v├ñlill├ñ.</p>
++<p>Helppoallekirjoitus.fi hy├Âdynt├ñ├ñ eIDAS-asetuksen mukaista <em>edistynytt├ñ s├ñhk├Âist├ñ allekirjoitusta</em>, joka takaa korkean turvallisuustason. Oikeudessa oikein tehty s├ñhk├Âinen allekirjoitus vahvalla tunnistautumisella on todistusvoimaltaan perinteist├ñ k├ñsin tehty├ñ allekirjoitusta (ja skannattua PDF-dokumenttia) luotettavampi, koska siihen liittyy digitaalinen, muuttumaton j├ñlki alkuper├ñst├ñ.</p>
++<h2>Vahva pankkitunnistautuminen (FTN)</h2>
++<p>Suomessa s├ñhk├Âisen allekirjoituksen luotettavuuden ytimess├ñ on <strong>Finnish Trust Network (FTN)</strong>, eli vahva s├ñhk├Âinen tunnistaminen. FTN perustuu suomalaisten pankkien, mobiilivarmenteen ja v├ñest├Ârekisterikeskuksen (varmennekortit) rajapintoihin.</p>
++<p>Kun asiakirja allekirjoitetaan vahvaa tunnistautumista k├ñytt├ñen, allekirjoituksen v├ñ├ñrent├ñmisen riski on olematon. J├ñrjestelm├ñ hakee virallisen henkil├Âllisyyden Traficomin hyv├ñksym├ñn FTN-v├ñlitt├ñj├ñn kautta. T├ñm├ñ poistaa perinteisten PDF-allekirjoitusten "piirr├ñ nimesi hiirell├ñ" -tyylisten ratkaisujen valtavat juridiset ep├ñvarmuudet.</p>
++<h2>Miten prosessi etenee k├ñyt├ñnn├Âss├ñ?</h2>
++<ol>
++<li><strong>PDF:n lataus:</strong> L├ñhett├ñj├ñ pudottaa valmiin PDF-sopimuksen j├ñrjestelm├ñ├ñn selaimen kautta olemassaolevalta laitteeltaan.</li>
++<li><strong>Osapuolten m├ñ├ñritys:</strong> J├ñrjestelm├ñlle ilmoitetaan kenen (tai keiden) edellytet├ñ├ñn allekirjoittavan sopimus (esim. l├ñhett├ñj├ñ itse ja vuokralainen).</li>
++<li><strong>Tunnistautuminen ja leima:</strong> Osapuolet tunnistautuvat vuorollaan pankkitunnuksilla. J├ñrjestelm├ñ kirjoittaa PDF:n sis├ñ├ñn kryptografisen leiman ja varmenteen sis├ñlt├ñen henkil├Âiden todennetut nimet ja aikaleimat.</li>
++<li><strong>Automaattinen nollatieto -tuhoaminen:</strong> Valmis asiakirja l├ñhetet├ñ├ñn heti osapuolille, ja tietosuojavaatimusten mukaisesti koko PDF tuhotaan palvelimelta automaattisesti prosessin p├ñ├ñtytty├ñ (Zero-knowledge arkkitehtuuri).</li>
++</ol>
++<p>S├ñhk├Âisen allekirjoituksen helppous mahdollistaa sitovien sopimusten solmimisen minuuteissa ajasta tai paikasta riippumatta.</p>`
++    },
++    {
++        slug: 'sahkoinen-allekirjoitus-vuokrasopimukseen',
++        title: 'S├ñhk├Âinen allekirjoitus vuokrasopimukseen - Turvallisin tapa',
++        description: 'Miten allekirjoitat vuokrasopimuksen s├ñhk├Âisesti pankkitunnuksilla ilman kuukausimaksuja? Katso ohjeet yksityishenkil├Âille ja asuntosijoittajille.',
++        date: '2025-02-10',
++        content: `<h2>Vuokrasopimuksen digitalisointi</h2>
++<p>Asuinhuoneiston vuokrasopimus on yksi tyypillisimmist├ñ asiakirjoista, joka nykyp├ñiv├ñn├ñ allekirjoitetaan s├ñhk├Âisesti. Se s├ñ├ñst├ñ├ñ sek├ñ vuokranantajan ett├ñ vuokralaisen aikaa, sill├ñ tapaamista pelkk├ñ├ñ allekirjoitusta varten ei tarvitse erikseen sopia.</p>
++<h2>Miksi pankkitunnistautuminen (FTN) on kriittist├ñ vuokrasopimuksessa?</h2>
++<p>Vuokrasopimuksessa oikean henkil├Âllisyyden varmistaminen on kaiken a ja o. Pelkk├ñ s├ñhk├Âpostivahvistus tai "ruudulle piirrett├ñv├ñ" allekirjoitus ei takaa, ett├ñ ruudun takana on se henkil├Â, jonka nimell├ñ vuokra-asunto oletetaan hankittavan. T├ñm├ñ j├ñtt├ñ├ñ oven auki identiteettivarkauksille tai maksuh├ñiri├Âmerkint├Âjen kiert├ñmiselle keksityll├ñ nimell├ñ.</p>
++<p>Vahva pankkitunnistautuminen sitoo henkil├Ân oikean, virallisen identiteetin (nimi, henkil├Âtunnus) kryptografisesti vuokrasopimus-PDF:├ñ├ñn. T├ñm├ñ pit├ñ├ñ huolen siit├ñ, ett├ñ k├ñr├ñj├ñoikeudessa laadittu sopimus on vedenpit├ñv├ñ.</p>
++<h2>Asuntosijoittajan ja yksityisen vuokranantajan kulut</h2>
++<p>Useimmat markkinoilla olevat s├ñhk├Âiset allekirjoituspalvelut vaativat jatkuvan kuukausimaksun. Yksityiselle vuokranantajalle tai pienelle asuntosijoittajalle kiinte├ñ 15-30Ôé¼/kk voi olla turha kulu, jos vuokrasopimuksia tehd├ñ├ñn vain muutamia vuodessa ja vaihtuvuus on v├ñh├ñist├ñ.</p>
++<p>Helppoallekirjoitus.fi on suunniteltu nimenomaan poistamaan n├ñm├ñ kalliit kynnykset. Se toimii t├ñysin kertamaksulla (vain muutama euro), ilman k├ñytt├ñj├ñtunnusten luontia tai lukittautumista kalliisiin pitkiin ohjelmistolisensseihin.</p>
++<h2>Viisi askelta vuokrasopimuksen s├ñhk├Âiseen allekirjoittamiseen:</h2>
++<ol>
++<li>Tee vuokrasopimus haluamassasi muodossa ja tallenna se PDF-p├ñ├ñtekkeell├ñ.</li>
++<li>Raahaa ja pudota PDF Helppoallekirjoituksen etusivulle.</li>
++<li>Lis├ñ├ñ j├ñrjestelm├ñ├ñn itsesi l├ñhett├ñj├ñksi.</li>
++<li>Lis├ñ├ñ vuokralaisen s├ñhk├Âposti vastaanottajaksi ja suorita kertamaksu.</li>
++<li>Vuokralainen saa s├ñhk├Âpostilla suojatun linkin, k├ñy l├ñpi tunnistautumisen pankkitunnuksillaan ja j├ñrjestelm├ñ l├ñhett├ñ├ñ valmiin, molempien eIDAS-varmenteella varustetun sopimuksen kummankin s├ñhk├Âpostiin.</li>
++</ol>
++<p>Palvelusta ei j├ñ├ñ henkil├Âtietoj├ñlki├ñ pilveen tietosuojariskeiksi, vaan PDF:t tuhoutuvat automaattisesti allekirjoittamisen j├ñlkeen.</p>`
++    },
++    {
++        slug: 'sahkoinen-allekirjoitus-hintavertailu',
++        title: 'S├ñhk├Âisen allekirjoituksen hinta: Visma Sign, DocuSign ja Helppoallekirjoitus',
++        description: 'Maksa vain k├ñyt├Âst├ñ. Vertaile markkinoiden suosituimpien s├ñhk├Âisten allekirjoituspalveluiden hinnat, piilokulut ja ominaisuudet pk-yrityksille.',
++        date: '2025-11-20',
++        content: `<h2>S├ñhk├Âisten allekirjoituspalveluiden hinnoittelumallit (B2B ja B2C)</h2>
++<p>Markkinoilla on t├ñll├ñ hetkell├ñ lukuisia s├ñhk├Âisen allekirjoituksen (eSign) tarjoajia. Haasteena varsinkin pienyritt├ñjill├ñ (PK-sektori) sek├ñ yksityishenkil├Âill├ñ on usein ohjelmistojen hinnoitteluarkkitehtuuri, joka on raskaasti painottunut suurten Enterprise-yritysten jatkuvan laskutuksen jatkuviin sopimuksiin.</p>
++<h3>Miksi hinnoissa on niin isoja eroja?</h3>
++<p>Hintaerot selittyv├ñt ominaisuuksien m├ñ├ñr├ñll├ñ, joita et aina tarvitse. Isot ohjelmistotalot paketoivat mukaan ominaisuuksia kuten pitk├ñaikaisen oikeudellisen arkistoinnin, asiakirjamallien laajan dokumentinhallintaj├ñrjestelm├ñn (DMS), erilliset monihyv├ñksynt├ñketjut ristiin isoissa organisaatioissa sek├ñ API-integraatiot CRM-j├ñrjestelmiin (kuten Salesforce).</p>
++<h2>Katsaus markkinoiden tyypillisiin tarjoajiin</h2>
++<h3>1. Isot globaalit toimijat (Esim. DocuSign, Adobe Sign)</h3>
++<p>Haasteena Suomen markkinoilla on vahvan pankkitunnistautumisen (FTN) puute tai sen lis├ñmaksullisuus erillisten lis├ñosien kautta.</p>
++<ul>
++<li><strong>Aloitushinta:</strong> Tyypillisesti 10ÔÇô25 EUR / kuukausi (sitova).</li>
++<li><strong>Tunnistautuminen:</strong> Oletuksena pelkk├ñ vahvistamaton s├ñhk├Âpostiallekirjoitus, FTN usein Premium-tasojen erillislis├ñosa.</li>
++</ul>
++<h3>2. Pohjoismaiset yritysratkaisut (Esim. Visma Sign, Scrive)</h3>
++<p>Tarjoavat Suomessa t├ñrke├ñn pankkitunnistautumisen (FTN) natiivina. Sopivat yritysten p├ñivitt├ñiseen, jatkuvaan ty├Ânkulkuun.</p>
++<ul>
++<li><strong>Aloitushinta:</strong> Kuukausimaksullisia alkaen usein n. 15 EUR/kk ja sen p├ñ├ñlle transaktiokohtainen maksu.</li>
++</ul>
++<h3>3. Kertamaksulliset ratkaisut (Helppoallekirjoitus.fi)</h3>
++<p>Tarkoitettu nimenomaan yksitt├ñisten tai satunnaisten allekirjoitusten tarpeeseen (Pay-as-you-go -malli).</p>
++<ul>
++<li><strong>Hinta:</strong> Ainoastaan pieni kertamaksu per allekirjoituspyynt├Â (1,49 Ôé¼/kpl).</li>
++<li><strong>Ei erillist├ñ kuukausimaksua.</strong></li>
++<li><strong>Zero-Knowledge &amp; Tietoturva:</strong> Dokumentteja ei tallenneta pysyv├ñsti. Allekirjoitetut versiot h├ñvitet├ñ├ñn 24 tunnin kuluessa GDPR-dataminimaatioperiaatteita noudattaen.</li>
++<li><strong>Tunnistautuminen:</strong> Suomalainen pankkitunnistautuminen FTN sis├ñ├ñnrakennettuna kertamaksuhintaan.</li>
++</ul>
++<h2>Yhteenveto hintaansa katsovalle</h2>
++<p>Jos allekirjoituksia tarvitaan vain silloin t├ñll├Âin (esim. yksityinen vuokranantaja tai toiminimiyritt├ñj├ñ), jatkuvasti tililt├ñ veloitettava 15Ôé¼/kk tekee allekirjoitusten todelliseksi kappalehinnaksi herk├ñsti satoja euroja vuositasolla. N├ñiss├ñ tapauksissa Helppoallekirjoitus ja 1,49Ôé¼ sitoukseton paketti voi tuoda merkitt├ñv├ñt s├ñ├ñst├Ât palvelun lakis├ñ├ñteisen eIDAS-laadun pysyess├ñ enterprise-asteella.</p>`
++    }
++];
++
++// Non-article static routes
++const staticRoutes = [
++    { route: '/ehdot', title: 'K├ñytt├Âehdot | Helppo Allekirjoitus', description: 'Helppoallekirjoitus.fi -palvelun k├ñytt├Âehdot.' },
++    { route: '/tietosuoja', title: 'Tietosuojaseloste | Helppo Allekirjoitus', description: 'Polarcomp Oy:n tietosuojaseloste ja GDPR-informaatio.' },
++    { route: '/asiantuntija-artikkelit', title: 'Asiantuntija-artikkelit | Helppo Allekirjoitus', description: 'Oppaat ja artikkelit s├ñhk├Âisest├ñ allekirjoituksesta, eIDAS-asetuksesta ja FTN-tunnistautumisesta.' }
+ ];
+ 
+ const distDir = path.join(process.cwd(), 'dist');
+ const indexFile = path.join(distDir, 'index.html');
+ 
+-console.log('Running postbuild script to generate static HTML fallbacks...');
++console.log('Running postbuild script...');
+ 
+ if (!fs.existsSync(indexFile)) {
+     console.error(`Error: index.html not found in ${distDir}`);
+     process.exit(1);
+ }
+ 
++const baseHtml = fs.readFileSync(indexFile, 'utf-8');
++
+ // Ensure the 404.html is built as well
+ fs.copyFileSync(indexFile, path.join(distDir, '404.html'));
+ console.log('Ô£ö Copied index.html to 404.html');
+ 
+-routes.forEach(route => {
++// Helper function to update SEO tags
++function updateSeoTags(html, { route, title, description }) {
++    let out = html;
++    
++    // Update Title
++    if (title) {
++        out = out.replace(/<title>.*?<\/title>/, `<title>${title}</title>`);
++        out = out.replace(/<meta name="twitter:title" content="[^"]+"\s*\/>/, `<meta name="twitter:title" content="${title}" />`);
++        out = out.replace(/<meta property="og:title" content="[^"]+"\s*\/>/, `<meta property="og:title" content="${title}" />`);
++    }
++
++    // Update Description
++    if (description) {
++        out = out.replace(/<meta name="description"\s*\n?\s*content="[^"]+"\s*\/>/, `<meta name="description" content="${description}" />`);
++        out = out.replace(/<meta name="twitter:description"\s*\n?\s*content="[^"]+"\s*\/>/, `<meta name="twitter:description" content="${description}" />`);
++        out = out.replace(/<meta property="og:description"\s*\n?\s*content="[^"]+"\s*\/>/, `<meta property="og:description" content="${description}" />`);
++    }
++
++    // Update URLs (Canonical, Alternate, OG) - using trailing slash for canonicalization parity
++    const fullUrl = "https://helppoallekirjoitus.fi" + route + "/";
++    out = out.replace(/<link rel="canonical" href="[^"]+"\s*\/>/, '<link rel="canonical" href="' + fullUrl + '" />');
++    out = out.replace(/<link rel="alternate" hreflang="fi" href="[^"]+"\s*\/>/, '<link rel="alternate" hreflang="fi" href="' + fullUrl + '" />');
++    out = out.replace(/<meta property="og:url" content="[^"]+"\s*\/>/, '<meta property="og:url" content="' + fullUrl + '" />');
++    
++    return out;
++}
++
++// Copy index.html to static routes and update SEO tags
++staticRoutes.forEach(config => {
++    const routeDir = path.join(distDir, config.route);
++    if (!fs.existsSync(routeDir)) {
++        fs.mkdirSync(routeDir, { recursive: true });
++    }
++    
++    const modifiedHtml = updateSeoTags(baseHtml, config);
++    const destFile = path.join(routeDir, 'index.html');
++    fs.writeFileSync(destFile, modifiedHtml, 'utf-8');
++    console.log(`Ô£ö Injected SEO metadata into ${config.route}/index.html`);
++});
++
++// For article routes: inject article content as sr-only HTML into each copy AND update SEO tags
++const SR_ONLY_MARKER = '<!-- End sr-only content -->';
++
++articles.forEach(article => {
++    const route = `/asiantuntija-artikkelit/${article.slug}`;
+     const routeDir = path.join(distDir, route);
+ 
+     if (!fs.existsSync(routeDir)) {
+         fs.mkdirSync(routeDir, { recursive: true });
+     }
+ 
++    // Update the SEO tags (Canonical, Title, Description)
++    let modifiedHtml = updateSeoTags(baseHtml, {
++        route,
++        title: `${article.title} | Helppo Allekirjoitus`,
++        description: article.description
++    });
++
++    // Build article-specific sr-only content block
++    const articleSrOnly = `
++    <!-- Article sr-only content injected by postbuild -->
++    <div class="sr-only" data-nosnippet>
++      <article>
++        <h1>${article.title}</h1>
++        <p><em>${article.description}</em></p>
++        <p>Julkaistu: ${article.date} | Polarcomp Oy</p>
++        ${article.content}
++        <p><a href="https://helppoallekirjoitus.fi/">Allekirjoita sopimus heti (1,49Ôé¼) ÔåÆ</a></p>
++      </article>
++    </div>
++    <!-- End article sr-only content -->`;
++
++    // Inject the article content just before the sr-only closing marker
++    modifiedHtml = modifiedHtml.replace(
++        SR_ONLY_MARKER,
++        SR_ONLY_MARKER + articleSrOnly
++    );
++
+     const destFile = path.join(routeDir, 'index.html');
+-    fs.copyFileSync(indexFile, destFile);
+-    console.log(`Ô£ö Copied index.html to ${route}/index.html`);
++    fs.writeFileSync(destFile, modifiedHtml, 'utf-8');
++    console.log(`Ô£ö Injected article content & SEO metadata into ${route}/index.html`);
+ });
+ 
+ console.log('Postbuild script completed successfully.');
+diff --git a/public/sitemap.xml b/public/sitemap.xml
+index 1d8d825..15d940f 100644
+--- a/public/sitemap.xml
++++ b/public/sitemap.xml
+@@ -6,32 +6,32 @@
+     <priority>1.0</priority>
+   </url>
+   <url>
+-    <loc>https://helppoallekirjoitus.fi/ehdot</loc>
++    <loc>https://helppoallekirjoitus.fi/ehdot/</loc>
+     <changefreq>monthly</changefreq>
+     <priority>0.5</priority>
+   </url>
+   <url>
+-    <loc>https://helppoallekirjoitus.fi/tietosuoja</loc>
++    <loc>https://helppoallekirjoitus.fi/tietosuoja/</loc>
+     <changefreq>monthly</changefreq>
+     <priority>0.5</priority>
+   </url>
+   <url>
+-    <loc>https://helppoallekirjoitus.fi/asiantuntija-artikkelit</loc>
++    <loc>https://helppoallekirjoitus.fi/asiantuntija-artikkelit/</loc>
+     <changefreq>weekly</changefreq>
+     <priority>0.8</priority>
+   </url>
+   <url>
+-    <loc>https://helppoallekirjoitus.fi/asiantuntija-artikkelit/mika-on-sahkoinen-allekirjoitus</loc>
++    <loc>https://helppoallekirjoitus.fi/asiantuntija-artikkelit/mika-on-sahkoinen-allekirjoitus/</loc>
+     <changefreq>monthly</changefreq>
+     <priority>0.7</priority>
+   </url>
+   <url>
+-    <loc>https://helppoallekirjoitus.fi/asiantuntija-artikkelit/sahkoinen-allekirjoitus-vuokrasopimukseen</loc>
++    <loc>https://helppoallekirjoitus.fi/asiantuntija-artikkelit/sahkoinen-allekirjoitus-vuokrasopimukseen/</loc>
+     <changefreq>monthly</changefreq>
+     <priority>0.7</priority>
+   </url>
+   <url>
+-    <loc>https://helppoallekirjoitus.fi/asiantuntija-artikkelit/sahkoinen-allekirjoitus-hintavertailu</loc>
++    <loc>https://helppoallekirjoitus.fi/asiantuntija-artikkelit/sahkoinen-allekirjoitus-hintavertailu/</loc>
+     <changefreq>monthly</changefreq>
+     <priority>0.7</priority>
+   </url>
+diff --git a/src/UploadView.tsx b/src/UploadView.tsx
+index 6b679fc..e1979ae 100644
+--- a/src/UploadView.tsx
++++ b/src/UploadView.tsx
+@@ -13,7 +13,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
+     document.title = "Helppo Allekirjoitus ÔÇô S├ñhk├Âinen allekirjoitus verkossa | eIDAS & FTN";
+     const metaDescription = document.querySelector('meta[name="description"]');
+     if (metaDescription) {
+-      metaDescription.setAttribute('content', 'Allekirjoita sopimukset s├ñhk├Âisesti pankkitunnuksilla. Vahva FTN-tunnistautuminen, juridisesti sitova eIDAS-yhteensopiva palvelu. Helppo, turvallinen ja edullinen.');
++      metaDescription.setAttribute('content', 'Ei rekister├Âinti├ñ. Ei kuukausimaksua. 1,49 Ôé¼ / allekirjoitus. Suomalainen.');
+     }
+   }, []);
+ 
+diff --git a/src/VerifyView.tsx b/src/VerifyView.tsx
+index a6c5b4e..cf3e1c7 100644
+--- a/src/VerifyView.tsx
++++ b/src/VerifyView.tsx
+@@ -53,7 +53,7 @@ export const VerifyView = () => {
+                 setDocData(data);
+             } catch (err: any) {
+                 setError(err.message || 'Tapahtui tuntematon virhe.');
+-                reportError('Validointiportaali: Asiakirjan haku (VerifyView)', err);
++                reportError(`Validointiportaali: Asiakirjan haku (VerifyView) ÔÇö Haettu ID: ${id}`, err);
+             } finally {
+                 setLoading(false);
+             }

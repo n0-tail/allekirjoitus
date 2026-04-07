@@ -142,13 +142,34 @@ export function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
                         )}
 
                         {!data.senderPaid ? (
-                            <button
-                                className="btn btn-primary"
-                                style={{ width: '100%', marginBottom: '1rem', padding: '1rem', fontSize: '1.125rem' }}
-                                onClick={() => setView('payment')}
-                            >
-                                Siirry maksamaan ja tunnistautumaan &rarr;
-                            </button>
+                            <>
+                                <button
+                                    className="btn btn-primary"
+                                    style={{ width: '100%', marginBottom: '0.75rem', padding: '1rem', fontSize: '1.125rem' }}
+                                    onClick={() => setView('payment')}
+                                >
+                                    Siirry maksamaan ja tunnistautumaan &rarr;
+                                </button>
+
+                                {data.allSigners && data.allSigners.length > 0 && (
+                                    <button
+                                        className="btn btn-secondary"
+                                        style={{ width: '100%', fontSize: '0.875rem', padding: '0.75rem', opacity: 0.85 }}
+                                        onClick={async () => {
+                                            try {
+                                                const { error } = await supabase.rpc('set_sender_observer', { doc_id: data.documentId });
+                                                if (error) throw error;
+                                                toast.success('Sopimus lähetetty vastaanottajille.');
+                                                setView('waiting');
+                                            } catch (err: any) {
+                                                toast.error('Virhe: ' + (err.message || 'Tuntematon virhe'));
+                                            }
+                                        }}
+                                    >
+                                        Lähetä pelkästään vastaanottajille (et allekirjoita itse)
+                                    </button>
+                                )}
+                            </>
                         ) : (
                             <button
                                 className="btn btn-primary"
@@ -227,8 +248,9 @@ export function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
             )}
 
             {view === 'waiting' && (() => {
-                const totalSigners = (data.allSigners?.length || 0) + 1;
-                const signedCount = (data.allSigners?.filter(s => s.signed).length || 0) + (data.senderSigned ? 1 : 0);
+                const senderCounts = data.senderSigns !== false;
+                const totalSigners = (data.allSigners?.length || 0) + (senderCounts ? 1 : 0);
+                const signedCount = (data.allSigners?.filter(s => s.signed).length || 0) + (senderCounts && data.senderSigned ? 1 : 0);
                 const allSigned = signedCount === totalSigners;
 
                 return (

@@ -106,7 +106,7 @@ serve(async (req: Request) => {
         console.error('Init-auth error:', error);
         return new Response(
             JSON.stringify({ error: error instanceof Error ? error.message : "Tuntematon virhe." }),
-            { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+            { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
     }
 });

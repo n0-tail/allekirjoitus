@@ -37,35 +37,17 @@ serve(async (req) => {
                 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
                 if (role === 'sender') {
-
                     if (paymentIntent.metadata.payForAll === 'true') {
-
-                        // Fetch doc to get the current signers array
-                        const { data: doc, error: fetchError } = await supabase
-                            .from('documents')
-                            .select('signers')
-                            .eq('id', documentId)
-                            .single();
-
-                        if (fetchError || !doc) {
-                            console.error(`[WEBHOOK] CRITICAL: Failed to fetch doc ${documentId}:`, fetchError?.message);
-                        } else {
-                            const updatedSigners = (doc.signers || []).map((s: any) => ({ ...s, paid: true }));
-
-                            const { error } = await supabase
-                                .from('documents')
-                                .update({ sender_paid: true, signers: updatedSigners })
-                                .eq('id', documentId);
-
-                            if (error) {
-                                console.error(`[WEBHOOK] CRITICAL: DB update failed for ${documentId}:`, error.message);
-                                return new Response(JSON.stringify({ error: error.message }), { status: 500 });
-                            } else {
-
-                            }
+                        // Atomic: mark sender + all signers as paid in one SQL operation
+                        const { error } = await supabase.rpc('update_all_signers_paid', {
+                            doc_id: documentId
+                        });
+                        if (error) {
+                            console.error(`[WEBHOOK] CRITICAL: RPC update_all_signers_paid failed for ${documentId}:`, error.message);
+                            return new Response(JSON.stringify({ error: error.message }), { status: 500 });
                         }
                     } else {
-                        // Standard single payment
+                        // Standard single sender payment
                         const { error } = await supabase
                             .from('documents')
                             .update({ sender_paid: true })
@@ -74,38 +56,17 @@ serve(async (req) => {
                         if (error) {
                             console.error(`Failed to update DB for ${documentId}:`, error.message);
                             return new Response(JSON.stringify({ error: error.message }), { status: 500 });
-                        } else {
-
                         }
                     }
                 } else if (role === 'recipient' && signerId) {
-                    // Fetch existing signers
-                    const { data: doc, error: fetchError } = await supabase
-                        .from('documents')
-                        .select('signers')
-                        .eq('id', documentId)
-                        .single();
-
-                    if (fetchError || !doc) {
-                        console.error(`Failed to fetch doc for signer update ${documentId}:`, fetchError?.message);
-                        return new Response('Error fetching document', { status: 500 });
-                    }
-
-                    // Mutate array
-                    const updatedSigners = doc.signers.map((s: any) =>
-                        s.id === signerId ? { ...s, paid: true } : s
-                    );
-
-                    const { error } = await supabase
-                        .from('documents')
-                        .update({ signers: updatedSigners })
-                        .eq('id', documentId);
-
+                    // Atomic: mark single signer as paid without read-modify-write
+                    const { error } = await supabase.rpc('update_signer_paid', {
+                        doc_id: documentId,
+                        target_signer_id: signerId
+                    });
                     if (error) {
-                        console.error(`Failed to update DB for signer ${signerId}:`, error.message);
+                        console.error(`Failed RPC update_signer_paid for signer ${signerId}:`, error.message);
                         return new Response(JSON.stringify({ error: error.message }), { status: 500 });
-                    } else {
-
                     }
                 }
             }

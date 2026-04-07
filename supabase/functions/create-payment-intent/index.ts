@@ -48,9 +48,17 @@ serve(async (req) => {
       }
     }
 
+    const numParties = payForAll && role === 'sender' ? Math.round(finalAmount / 149) : 1;
+    const netAmount = (finalAmount / 1.255).toFixed(2).replace('.', ',');
+    const vatAmount = (finalAmount - finalAmount / 1.255).toFixed(0);
+    const description = numParties > 1
+      ? `Sähköinen allekirjoitus – käsittelymaksu ${numParties} osapuolelle (sis. ALV 25,5 %)`
+      : `Sähköinen allekirjoitus – käsittelymaksu (sis. ALV 25,5 %)`;
+
     const paymentIntent = await stripe.paymentIntents.create({
       amount: finalAmount,
       currency: 'eur',
+      description,
       receipt_email: email || undefined,
       automatic_payment_methods: {
         enabled: true,
@@ -59,7 +67,9 @@ serve(async (req) => {
         documentId: documentId || 'unknown',
         role: role || 'unknown',
         ...(signerId ? { signerId } : {}),
-        payForAll: payForAll ? 'true' : 'false'
+        payForAll: payForAll ? 'true' : 'false',
+        vat_rate: '25.5',
+        vat_included: 'true',
       }
     })
 

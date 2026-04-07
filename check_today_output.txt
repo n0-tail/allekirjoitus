@@ -1,0 +1,664 @@
+[dotenv@17.3.1] injecting env (10) from .env.local -- tip: ÔÜÖ´©Å  write to custom object with { processEnv: myObject }
+L├Âydetty 50 asiakirja-ID:t├ñ.
+
+
+=== T├ñn├ñ├ñn aktiiviset asiakirjat (2 kpl) ===
+
+ID: 0e2ba4b2-9967-43bf-8001-b67eb8812cdf
+  Tiedosto: Kelo Capital Oy_2.pdf
+  L├ñhett├ñj├ñ: matti.uurtamo@gmail.com
+  L├ñhett├ñj├ñn nimi: MATTI SAKARI UURTAMO
+  L├ñhett├ñj├ñ maksanut: Kyll├ñ
+  Status: pending
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 0)
+    - ari.posio@gmail.com | paid: true | signed: false | name: (ei tunnistautunut)
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-30T09:20:18.949222+00:00
+  P├ñivitetty: 2026-03-30T09:20:18.949222+00:00
+
+ID: 436370cd-9958-48cc-936c-53bc4a8e9016
+  Tiedosto: Vuokrasopimus ÔÇô Rouhe Ravintolat Oy.pdf
+  L├ñhett├ñj├ñ: matti.uurtamo@polarica.com
+  L├ñhett├ñj├ñn nimi: MATTI SAKARI UURTAMO
+  L├ñhett├ñj├ñ maksanut: Kyll├ñ
+  Status: signed
+  Purged: false
+  Vastaanottajat: 2 kpl (allekirjoittanut: 2)
+    - joonas.kristo@polarica.fi | paid: true | signed: true | name: JOONAS MATIAS KRISTO
+    - leena.nuolioja@ravintolarouhe.fi | paid: true | signed: true | name: LEENA MARJATTA NUOLIOJA
+  Hash: cf8d50ba77259cf0867d8f0610730ecab2f8a0dbb01e2b07e5d7b96640d24cd2
+  Luotu: 2026-03-30T07:34:00.692207+00:00
+  P├ñivitetty: 2026-03-30T07:34:00.692207+00:00
+
+
+=== Vanhemmat asiakirjat (48 kpl) ===
+
+ID: 46341de5-0437-47ef-a99f-dfa557872df8
+  Tiedosto: Perustamissopimus.pdf
+  L├ñhett├ñj├ñ: max.lindroos@outlook.com
+  L├ñhett├ñj├ñn nimi: (ei tunnistautunut)
+  L├ñhett├ñj├ñ maksanut: Ei
+  Status: pending
+  Purged: false
+  Vastaanottajat: 2 kpl (allekirjoittanut: 2)
+    - info@rakevaoy.fi | paid: true | signed: true | name: Miikka Antero Korhonen
+    - juhamattirautajoki@gmail.com | paid: true | signed: true | name: Max Antton Lindroos
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-26T08:48:26.711516+00:00
+  P├ñivitetty: 2026-03-26T08:48:26.711516+00:00
+
+ID: 33a7b5a5-22a3-4828-be0b-7356400e7512
+  Tiedosto: Tuotekorttipohja.pdf
+  L├ñhett├ñj├ñ: mirva.harjukari@gmail.com
+  L├ñhett├ñj├ñn nimi: (ei tunnistautunut)
+  L├ñhett├ñj├ñ maksanut: Ei
+  Status: pending
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 0)
+    - harjukari.viihteella@gmail.com | paid: false | signed: false | name: (ei tunnistautunut)
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-19T08:54:41.938164+00:00
+  P├ñivitetty: 2026-03-19T08:54:41.938164+00:00
+
+ID: 05930025-0646-43be-9bb5-f6117ca0a67a
+  Tiedosto: ty├Âsopimus 2026 Joni Piippo 17.3.2026.pdf
+  L├ñhett├ñj├ñ: matti.uurtamo@masser.fi
+  L├ñhett├ñj├ñn nimi: MATTI SAKARI UURTAMO
+  L├ñhett├ñj├ñ maksanut: Kyll├ñ
+  Status: signed
+  Purged: false
+  Vastaanottajat: 2 kpl (allekirjoittanut: 2)
+    - antti.uurtamo@masser.fi | paid: true | signed: true | name: ANTTI SAMULI UURTAMO
+    - joni.piippo@meili.fi | paid: true | signed: true | name: JONI MIKAEL PIIPPO
+  Hash: 29af7f30a37cc783bf9797843cc95956dfca7be5d5ff38df0dd0d58826a06f6b
+  Luotu: 2026-03-18T08:20:48.480453+00:00
+  P├ñivitetty: 2026-03-18T08:20:48.480453+00:00
+
+ID: 82591ff0-8628-4e0c-a729-7d5dcb7ba102
+  Tiedosto: Valtakirja irtisanominen.pdf
+  L├ñhett├ñj├ñ: matti.uurtamo@lapinliha.fi
+  L├ñhett├ñj├ñn nimi: MATTI SAKARI UURTAMO
+  L├ñhett├ñj├ñ maksanut: Kyll├ñ
+  Status: signed
+  Purged: false
+  Vastaanottajat: 0 kpl (allekirjoittanut: 0)
+  Hash: 9adf1d3bcd757dd25706938545f476e4dad56700c40500dcd4f42499918a92bb
+  Luotu: 2026-03-18T08:15:59.485178+00:00
+  P├ñivitetty: 2026-03-18T08:15:59.485178+00:00
+
+ID: 2d96db62-b1cc-40f5-b6d9-3d4fae72020e
+  Tiedosto: Forest Trading (4) (1).pdf
+  L├ñhett├ñj├ñ: antti.nikkanen@gmail.com
+  L├ñhett├ñj├ñn nimi: Antti Olavi Nikkanen
+  L├ñhett├ñj├ñ maksanut: Kyll├ñ
+  Status: signed
+  Purged: false
+  Vastaanottajat: 0 kpl (allekirjoittanut: 0)
+  Hash: 0be664150b0b1333b974b36fbd1c4dd4604f379c8dcbaea93c3e376dc8256208
+  Luotu: 2026-03-15T06:00:36.414695+00:00
+  P├ñivitetty: 2026-03-15T06:00:36.414695+00:00
+
+ID: 818c717f-5f00-4d41-bc28-855f79836aeb
+  Tiedosto: Forest Trading (4) (1).pdf
+  L├ñhett├ñj├ñ: antti.nikkanen@gmail.com
+  L├ñhett├ñj├ñn nimi: Antti Olavi Nikkanen
+  L├ñhett├ñj├ñ maksanut: Kyll├ñ
+  Status: pending
+  Purged: false
+  Vastaanottajat: 0 kpl (allekirjoittanut: 0)
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-15T05:56:39.946241+00:00
+  P├ñivitetty: 2026-03-15T05:56:39.946241+00:00
+
+ID: 5ce68896-17f6-4850-b9d4-69be6e19d739
+  Tiedosto: 2026_1_Hallituksen_kokous_Anma TP.pdf
+  L├ñhett├ñj├ñ: matti.uurtamo@masser.fi
+  L├ñhett├ñj├ñn nimi: MATTI SAKARI UURTAMO
+  L├ñhett├ñj├ñ maksanut: Kyll├ñ
+  Status: signed
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 1)
+    - antti.uurtamo@masser.fi | paid: true | signed: true | name: ANTTI SAMULI UURTAMO
+  Hash: 3f0c957cf2961cfc56e53ab295321272d2c976e9e62afc9ba9ad13d4e2b59580
+  Luotu: 2026-03-14T18:57:52.404653+00:00
+  P├ñivitetty: 2026-03-14T18:57:52.404653+00:00
+
+ID: d08cda28-410c-484d-9d87-3f7e8f2ca964
+  Tiedosto: 1_2026 TP Vahvistaminen.pdf
+  L├ñhett├ñj├ñ: matti.uurtamo@masser.fi
+  L├ñhett├ñj├ñn nimi: MATTI SAKARI UURTAMO
+  L├ñhett├ñj├ñ maksanut: Kyll├ñ
+  Status: signed
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 1)
+    - antti.uurtamo@masser.fi | paid: true | signed: true | name: ANTTI SAMULI UURTAMO
+  Hash: aacbdddcc46b1fe8f963197fa1e96e43d53b7d70bf7814b44be76a184833ff19
+  Luotu: 2026-03-14T18:53:55.346263+00:00
+  P├ñivitetty: 2026-03-14T18:53:55.346263+00:00
+
+ID: cb23451a-530c-40ee-8fa8-dcf07e814d24
+  Tiedosto: 1_2026 Tilinp├ñ├ñt├Âksen vahvistaminen.pdf
+  L├ñhett├ñj├ñ: matti.uurtamo@gmail.com
+  L├ñhett├ñj├ñn nimi: MATTI SAKARI UURTAMO
+  L├ñhett├ñj├ñ maksanut: Kyll├ñ
+  Status: signed
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 1)
+    - antti.nikkanen@gmail.com | paid: true | signed: true | name: Antti Olavi Nikkanen
+  Hash: 2f668b17beaa5721b74db9c201443e095a8aed0a8384b8ae6b7e7b74358af160
+  Luotu: 2026-03-14T06:56:27.139915+00:00
+  P├ñivitetty: 2026-03-14T06:56:27.139915+00:00
+
+ID: 0ee003cd-6e15-42ef-9c7f-a65beb722b03
+  Tiedosto: Forest RWA FAQ (3) (2).pdf
+  L├ñhett├ñj├ñ: antti.nikkanen@gmail.com
+  L├ñhett├ñj├ñn nimi: (ei tunnistautunut)
+  L├ñhett├ñj├ñ maksanut: Ei
+  Status: pending
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 0)
+    - antti.nikkanen@polarcomp.fi | paid: false | signed: false | name: (ei tunnistautunut)
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-14T06:56:02.9224+00:00
+  P├ñivitetty: 2026-03-14T06:56:02.9224+00:00
+
+ID: cbcc6ccc-b6ee-49fe-acd2-299b1c7d17c4
+  Tiedosto: Forest Trading (4) (1).pdf
+  L├ñhett├ñj├ñ: antti.nikkanen@gmail.com
+  L├ñhett├ñj├ñn nimi: (ei tunnistautunut)
+  L├ñhett├ñj├ñ maksanut: Ei
+  Status: pending
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 0)
+    - antti.nikkanen@polarcomp.fi | paid: false | signed: false | name: (ei tunnistautunut)
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-14T06:48:17.247023+00:00
+  P├ñivitetty: 2026-03-14T06:48:17.247023+00:00
+
+ID: 7b50e73b-b7ca-48a4-8c8b-75755d1ecb74
+  Tiedosto: Valtakirja.pdf
+  L├ñhett├ñj├ñ: matti.uurtamo@gmail.com
+  L├ñhett├ñj├ñn nimi: (ei tunnistautunut)
+  L├ñhett├ñj├ñ maksanut: Ei
+  Status: pending
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 0)
+    - noora.uurtamo@gmail.com | paid: false | signed: false | name: (ei tunnistautunut)
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-14T06:24:39.113875+00:00
+  P├ñivitetty: 2026-03-14T06:24:39.113875+00:00
+
+ID: 8bc4238a-893e-4bb2-850b-7f86354d41d2
+  Tiedosto: 1_2026 TP Vahvistaminen_.pdf
+  L├ñhett├ñj├ñ: matti.uurtamo@masser.fi
+  L├ñhett├ñj├ñn nimi: (ei tunnistautunut)
+  L├ñhett├ñj├ñ maksanut: Ei
+  Status: pending
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 0)
+    - antti.uurtamo@masser.fi | paid: false | signed: false | name: (ei tunnistautunut)
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-14T05:28:51.431091+00:00
+  P├ñivitetty: 2026-03-14T05:28:51.431091+00:00
+
+ID: 5d1f30d7-8c0c-4333-b7de-69a55ea74eb3
+  Tiedosto: 1_2026 TP Vahvistaminen.pdf
+  L├ñhett├ñj├ñ: matti.uurtamo@masser.fi
+  L├ñhett├ñj├ñn nimi: (ei tunnistautunut)
+  L├ñhett├ñj├ñ maksanut: Ei
+  Status: pending
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 0)
+    - antti.uurtamo@masser.fi | paid: false | signed: false | name: (ei tunnistautunut)
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-14T05:27:46.084289+00:00
+  P├ñivitetty: 2026-03-14T05:27:46.084289+00:00
+
+ID: 052150f9-d58c-43c2-8f2f-d701cca08fe9
+  Tiedosto: 1_2026 TP Vahvistaminen.pdf
+  L├ñhett├ñj├ñ: matti.uurtamo@masser.fi
+  L├ñhett├ñj├ñn nimi: (ei tunnistautunut)
+  L├ñhett├ñj├ñ maksanut: Ei
+  Status: pending
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 0)
+    - antti.uurtamo@masser.fi | paid: false | signed: false | name: (ei tunnistautunut)
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-14T05:27:11.783352+00:00
+  P├ñivitetty: 2026-03-14T05:27:11.783352+00:00
+
+ID: f9b47290-313c-4d0f-984b-7ad3e670ce0d
+  Tiedosto: 1_2026 TP Vahvistaminen.pdf
+  L├ñhett├ñj├ñ: matti.uurtamo@masser.fi
+  L├ñhett├ñj├ñn nimi: (ei tunnistautunut)
+  L├ñhett├ñj├ñ maksanut: Ei
+  Status: pending
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 0)
+    - antti.uurtamo@masser.fi | paid: false | signed: false | name: (ei tunnistautunut)
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-14T05:26:39.919875+00:00
+  P├ñivitetty: 2026-03-14T05:26:39.919875+00:00
+
+ID: e100702f-4bb2-4a8a-8494-b9c60f605f25
+  Tiedosto: P__kirja_skt.pdf
+  L├ñhett├ñj├ñ: antti.nikkanen@gmail.com
+  L├ñhett├ñj├ñn nimi: (ei tunnistautunut)
+  L├ñhett├ñj├ñ maksanut: Ei
+  Status: pending
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 0)
+    - antti.nikkanen@polarcomp.fi | paid: false | signed: false | name: (ei tunnistautunut)
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-12T08:18:36.921778+00:00
+  P├ñivitetty: 2026-03-12T08:18:36.921778+00:00
+
+ID: 924fa07c-95ea-4284-9212-908e19e0f262
+  Tiedosto: P__kirja_skt.pdf
+  L├ñhett├ñj├ñ: antti.nikkanen@gmail.com
+  L├ñhett├ñj├ñn nimi: (ei tunnistautunut)
+  L├ñhett├ñj├ñ maksanut: Ei
+  Status: pending
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 0)
+    - antti.nikkanen@polarcomp.fi | paid: false | signed: false | name: (ei tunnistautunut)
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-12T08:14:23.629807+00:00
+  P├ñivitetty: 2026-03-12T08:14:23.629807+00:00
+
+ID: 9757093a-bfc5-4689-a43f-1900f8e20128
+  Tiedosto: P__kirja_skt.pdf
+  L├ñhett├ñj├ñ: antti.nikkanen@gmail.com
+  L├ñhett├ñj├ñn nimi: (ei tunnistautunut)
+  L├ñhett├ñj├ñ maksanut: Ei
+  Status: pending
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 0)
+    - antti.nikkanen@polarcomp.fi | paid: false | signed: false | name: (ei tunnistautunut)
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-12T08:04:35.321259+00:00
+  P├ñivitetty: 2026-03-12T08:04:35.321259+00:00
+
+ID: 3d5fd58d-914d-415e-96ef-33931f10cf74
+  Tiedosto: P__kirja_skt.pdf
+  L├ñhett├ñj├ñ: antti.nikkanen@gmail.com
+  L├ñhett├ñj├ñn nimi: (ei tunnistautunut)
+  L├ñhett├ñj├ñ maksanut: Ei
+  Status: pending
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 0)
+    - antti.nikkanen@polarcomp.fi | paid: false | signed: false | name: (ei tunnistautunut)
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-12T06:59:27.352346+00:00
+  P├ñivitetty: 2026-03-12T06:59:27.352346+00:00
+
+ID: 49daeb04-59ae-4b96-86bf-082b550f0ea8
+  Tiedosto: Myyntitilaus SO1770031584008 (1).pdf
+  L├ñhett├ñj├ñ: antti.nikkanen@gmail.com
+  L├ñhett├ñj├ñn nimi: (ei tunnistautunut)
+  L├ñhett├ñj├ñ maksanut: Ei
+  Status: pending
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 0)
+    - antti.nikkanen@polarcomp.fi | paid: false | signed: false | name: (ei tunnistautunut)
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-12T06:47:11.026441+00:00
+  P├ñivitetty: 2026-03-12T06:47:11.026441+00:00
+
+ID: 647de638-2075-4dea-933a-1bbc751271ae
+  Tiedosto: Forest Trading (4) (1).pdf
+  L├ñhett├ñj├ñ: antti.nikkanen@gmail.com
+  L├ñhett├ñj├ñn nimi: (ei tunnistautunut)
+  L├ñhett├ñj├ñ maksanut: Ei
+  Status: pending
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 0)
+    - antti.nikkanen@polarcomp.fi | paid: false | signed: false | name: (ei tunnistautunut)
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-12T06:40:20.116825+00:00
+  P├ñivitetty: 2026-03-12T06:40:20.116825+00:00
+
+ID: 76a7c66d-3f6e-4c4c-94e6-d1afa822b0be
+  Tiedosto: Forest Trading (4) (1).pdf
+  L├ñhett├ñj├ñ: antti.nikkanen@gmail.com
+  L├ñhett├ñj├ñn nimi: (ei tunnistautunut)
+  L├ñhett├ñj├ñ maksanut: Ei
+  Status: pending
+  Purged: false
+  Vastaanottajat: 2 kpl (allekirjoittanut: 0)
+    - antti.nikkanen@polarcomp.fi | paid: false | signed: false | name: (ei tunnistautunut)
+    - antti.nikkanen@gmail.com | paid: false | signed: false | name: (ei tunnistautunut)
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-12T06:38:48.662809+00:00
+  P├ñivitetty: 2026-03-12T06:38:48.662809+00:00
+
+ID: bb65d9cd-4293-4007-833e-b0e9afd30cbf
+  Tiedosto: Myyntitilaus SO1770031584008.pdf
+  L├ñhett├ñj├ñ: antti.nikkanen@gmail.com
+  L├ñhett├ñj├ñn nimi: Antti Olavi Nikkanen
+  L├ñhett├ñj├ñ maksanut: Kyll├ñ
+  Status: signed
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 1)
+    - antti.nikkanen@polarcomp.fi | paid: true | signed: true | name: Antti Olavi Nikkanen
+  Hash: 32617dfa3e6cbee1fe3e7ca4598dcdbb01a073289518afec2bfa1ee5921123e3
+  Luotu: 2026-03-09T14:01:35.285477+00:00
+  P├ñivitetty: 2026-03-09T14:01:35.285477+00:00
+
+ID: 864aa9c0-d38a-43af-9b97-897787169421
+  Tiedosto: Forest Trading (4) (1).pdf
+  L├ñhett├ñj├ñ: antti.nikkanen@gmail.com
+  L├ñhett├ñj├ñn nimi: (ei tunnistautunut)
+  L├ñhett├ñj├ñ maksanut: Kyll├ñ
+  Status: pending
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 0)
+    - antti.nikkanen@polarcomp.fi | paid: true | signed: false | name: (ei tunnistautunut)
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-09T13:39:02.760229+00:00
+  P├ñivitetty: 2026-03-09T13:39:02.760229+00:00
+
+ID: 9141a010-be77-47f0-a919-01e0fbd22a7f
+  Tiedosto: Forest Trading (4).pdf
+  L├ñhett├ñj├ñ: antti.nikkanen@gmail.com
+  L├ñhett├ñj├ñn nimi: Antti Nikkanen
+  L├ñhett├ñj├ñ maksanut: Kyll├ñ
+  Status: signed
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 1)
+    - antti.nikkanen@polarcomp.fi | paid: true | signed: true | name: Teppo Testaaja
+  Hash: fda5f7d73243bc0e671f23589be1cd2c89e61c92efe726d3c6ac9bef5b8b3ef3
+  Luotu: 2026-03-09T13:22:37.327936+00:00
+  P├ñivitetty: 2026-03-09T13:22:37.327936+00:00
+
+ID: f679382e-cc27-4c5a-a801-3142631ec078
+  Tiedosto: Forest RWA FAQ (3) (2).pdf
+  L├ñhett├ñj├ñ: antti.nikkanen@gmail.com
+  L├ñhett├ñj├ñn nimi: (ei tunnistautunut)
+  L├ñhett├ñj├ñ maksanut: Kyll├ñ
+  Status: pending
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 0)
+    - antti.nikkanen@polarcomp.fi | paid: true | signed: false | name: (ei tunnistautunut)
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-09T13:16:21.019185+00:00
+  P├ñivitetty: 2026-03-09T13:16:21.019185+00:00
+
+ID: bb00a9b8-ce2d-4ce3-b1da-5f8489e49d76
+  Tiedosto: Tuloslaskelma 12.2025 (1).pdf
+  L├ñhett├ñj├ñ: antti.nikkanen@gmail.com
+  L├ñhett├ñj├ñn nimi: Antti Nikkanen
+  L├ñhett├ñj├ñ maksanut: Kyll├ñ
+  Status: signed
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 1)
+    - antti.nikkanen@polarcomp.fi | paid: true | signed: true | name: Teppo Testaaja
+  Hash: c3708b8fcdc1c2236a0faa7feb3007ad7cffeec9e510b5b882052a4b11e81e93
+  Luotu: 2026-03-09T13:06:03.120128+00:00
+  P├ñivitetty: 2026-03-09T13:06:03.120128+00:00
+
+ID: d785340a-fce5-4fa9-b7f5-a4ea78d017a0
+  Tiedosto: Koivuniemi_Toimitusehdot 2.8.24.pdf
+  L├ñhett├ñj├ñ: antti.nikkanen@gmail.com
+  L├ñhett├ñj├ñn nimi: (ei tunnistautunut)
+  L├ñhett├ñj├ñ maksanut: Kyll├ñ
+  Status: pending
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 0)
+    - antti.nikkanen@polarcomp.fi | paid: true | signed: false | name: (ei tunnistautunut)
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-09T13:03:21.511835+00:00
+  P├ñivitetty: 2026-03-09T13:03:21.511835+00:00
+
+ID: 924f8675-97fa-4320-88ea-77917b5b5e93
+  Tiedosto: PolarcompOy_Hanketuki_tarjous_27.2.2026.pdf
+  L├ñhett├ñj├ñ: antti.nikkanen@gmail.com
+  L├ñhett├ñj├ñn nimi: (ei tunnistautunut)
+  L├ñhett├ñj├ñ maksanut: Ei
+  Status: pending
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 0)
+    - antti.nikkanen@polarcomp.fi | paid: false | signed: false | name: (ei tunnistautunut)
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-09T12:56:24.243115+00:00
+  P├ñivitetty: 2026-03-09T12:56:24.243115+00:00
+
+ID: 9086a12b-17b2-4cf8-9e1f-c8bf1dabbbb2
+  Tiedosto: Forest RWA FAQ (3) (2).pdf
+  L├ñhett├ñj├ñ: antti.nikkanen@gmail.com
+  L├ñhett├ñj├ñn nimi: (ei tunnistautunut)
+  L├ñhett├ñj├ñ maksanut: Ei
+  Status: pending
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 0)
+    - antti.nikkanen@polarcomp.fi | paid: false | signed: false | name: (ei tunnistautunut)
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-09T12:20:37.875642+00:00
+  P├ñivitetty: 2026-03-09T12:20:37.875642+00:00
+
+ID: 1ba4c66d-8a09-4377-8bf2-470969c57865
+  Tiedosto: Koivuniemi_Toimitusehdot 2.8.24.pdf
+  L├ñhett├ñj├ñ: antti.nikkanen@gmail.com
+  L├ñhett├ñj├ñn nimi: (ei tunnistautunut)
+  L├ñhett├ñj├ñ maksanut: Ei
+  Status: pending
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 0)
+    - antti.nikkanen@polarcomp.fi | paid: false | signed: false | name: (ei tunnistautunut)
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-09T12:06:54.259034+00:00
+  P├ñivitetty: 2026-03-09T12:06:54.259034+00:00
+
+ID: 3b227b02-36f0-4e66-ae1d-b6faee0950d2
+  Tiedosto: googlekuitti.pdf
+  L├ñhett├ñj├ñ: antti.nikkanen@gmail.com
+  L├ñhett├ñj├ñn nimi: (ei tunnistautunut)
+  L├ñhett├ñj├ñ maksanut: Ei
+  Status: pending
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 0)
+    - antti.nikkanen@polarcomp.fi | paid: false | signed: false | name: (ei tunnistautunut)
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-09T11:55:17.882884+00:00
+  P├ñivitetty: 2026-03-09T11:55:17.882884+00:00
+
+ID: 5588496e-b2ae-464a-b291-7efcd3068ec6
+  Tiedosto: Forest RWA FAQ (3).pdf
+  L├ñhett├ñj├ñ: antti.nikkanen@gmail.com
+  L├ñhett├ñj├ñn nimi: Antti Olavi Nikkanen
+  L├ñhett├ñj├ñ maksanut: Kyll├ñ
+  Status: signed
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 1)
+    - antti.nikkanen@polarcomp.fi | paid: true | signed: true | name: Antti Olavi Nikkanen
+  Hash: 0b9b9b54a4cb78017c419337f1084dd5f42219a81870ab37111d4f1ca144ffee
+  Luotu: 2026-03-09T11:04:47.796391+00:00
+  P├ñivitetty: 2026-03-09T11:04:47.796391+00:00
+
+ID: 48579b51-7002-4558-88c0-a89a6c43920c
+  Tiedosto: Lomautusilmoitus Emil.pdf
+  L├ñhett├ñj├ñ: matti.uurtamo@lapinliha.fi
+  L├ñhett├ñj├ñn nimi: MATTI SAKARI UURTAMO
+  L├ñhett├ñj├ñ maksanut: Kyll├ñ
+  Status: signed
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 1)
+    - emil.lundvall@lapinliha.fi | paid: true | signed: true | name: JAN LUNDVALL
+  Hash: 83b87b4c615cf519f894e489ddb46120f50072946d716ec2d45ddae692aac28c
+  Luotu: 2026-03-09T07:31:57.932809+00:00
+  P├ñivitetty: 2026-03-09T07:31:57.932809+00:00
+
+ID: 3dd69584-7747-40e7-8029-dbb8e0b8ef47
+  Tiedosto: Lomautusilmoitus TV.pdf
+  L├ñhett├ñj├ñ: matti.uurtamo@lapinliha.fi
+  L├ñhett├ñj├ñn nimi: MATTI SAKARI UURTAMO
+  L├ñhett├ñj├ñ maksanut: Kyll├ñ
+  Status: signed
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 1)
+    - tarja.vartiala@lapinliha.fi | paid: true | signed: true | name: TARJA MARITA VARTIALA
+  Hash: 9e75a7a3f5a445959b4f657e46ecfa0f7dddd7964fae6377a0eb30a28b95b6c2
+  Luotu: 2026-03-09T07:05:50.676084+00:00
+  P├ñivitetty: 2026-03-09T07:05:50.676084+00:00
+
+ID: 047b4822-75db-4b41-babb-65a0d070ff1e
+  Tiedosto: Forest Trading (4).pdf
+  L├ñhett├ñj├ñ: antti.nikkanen@gmail.com
+  L├ñhett├ñj├ñn nimi: (ei tunnistautunut)
+  L├ñhett├ñj├ñ maksanut: Ei
+  Status: pending
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 0)
+    - antti.nikkanen@gmail.com | paid: false | signed: false | name: (ei tunnistautunut)
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-07T05:53:54.17532+00:00
+  P├ñivitetty: 2026-03-07T05:53:54.17532+00:00
+
+ID: 62024c6e-17d0-4d1a-9afa-ee6fc1faad5c
+  Tiedosto: invoice 109786.pdf
+  L├ñhett├ñj├ñ: matti.uurtamo@gmail.com
+  L├ñhett├ñj├ñn nimi: MATTI SAKARI UURTAMO
+  L├ñhett├ñj├ñ maksanut: Kyll├ñ
+  Status: signed
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 1)
+    - matti.uurtamo@salvar.fi | paid: true | signed: true | name: MATTI SAKARI UURTAMO
+  Hash: 348d3dfe70038f0b6e1c3b2306f4e425c6cee39c83f60414d4651e22b70f1b94
+  Luotu: 2026-03-06T17:45:57.881622+00:00
+  P├ñivitetty: 2026-03-06T17:45:57.881622+00:00
+
+ID: 152de14c-7cc1-43dd-9a7e-90c36e49e15d
+  Tiedosto: Bill_SE903B0013538.pdf
+  L├ñhett├ñj├ñ: matti.heikkonen@gmail.com
+  L├ñhett├ñj├ñn nimi: (ei tunnistautunut)
+  L├ñhett├ñj├ñ maksanut: Ei
+  Status: pending
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 1)
+    - matti.heikkonen@identia.fi | paid: true | signed: true | name: MATTI TAPANI HEIKKONEN
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-06T06:52:30.02129+00:00
+  P├ñivitetty: 2026-03-06T06:52:30.02129+00:00
+
+ID: d3215206-ab29-44cb-9af4-669a22a2cf6b
+  Tiedosto: Forest RWA FAQ (3).pdf
+  L├ñhett├ñj├ñ: antti.nikkanen@gmail.com
+  L├ñhett├ñj├ñn nimi: Antti Olavi Nikkanen
+  L├ñhett├ñj├ñ maksanut: Kyll├ñ
+  Status: signed
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 1)
+    - antti.nikkanen@polarcomp.fi | paid: true | signed: true | name: Antti Olavi Nikkanen
+  Hash: 0b9b9b54a4cb78017c419337f1084dd5f42219a81870ab37111d4f1ca144ffee
+  Luotu: 2026-03-06T06:35:18.149564+00:00
+  P├ñivitetty: 2026-03-06T06:35:18.149564+00:00
+
+ID: 4d1233f9-929a-45d9-8def-ff48daf4f36d
+  Tiedosto: markkinointistrategia.pdf
+  L├ñhett├ñj├ñ: antti.nikkanen@gmail.com
+  L├ñhett├ñj├ñn nimi: (ei tunnistautunut)
+  L├ñhett├ñj├ñ maksanut: Kyll├ñ
+  Status: pending
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 1)
+    - antti.nikkanen@polarcomp.fi | paid: true | signed: true | name: Antti Olavi Nikkanen
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-06T05:33:24.056444+00:00
+  P├ñivitetty: 2026-03-06T05:33:24.056444+00:00
+
+ID: 3bd17c78-28f3-4b71-a87a-0ebbf6fe1345
+  Tiedosto: invoice 109786.pdf
+  L├ñhett├ñj├ñ: matti.uurtamo@gmail.com
+  L├ñhett├ñj├ñn nimi: MATTI SAKARI UURTAMO
+  L├ñhett├ñj├ñ maksanut: Kyll├ñ
+  Status: signed
+  Purged: false
+  Vastaanottajat: 2 kpl (allekirjoittanut: 2)
+    - matti.uurtamo@salvar.fi | paid: true | signed: true | name: MATTI SAKARI UURTAMO
+    - matti.uurtamo@polarica.com | paid: true | signed: true | name: MATTI SAKARI UURTAMO
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-05T18:42:19.226068+00:00
+  P├ñivitetty: 2026-03-05T18:42:19.226068+00:00
+
+ID: 2e33d400-9da0-4560-817a-6c13ca541111
+  Tiedosto: Forest Trading (4).pdf
+  L├ñhett├ñj├ñ: antti.nikkanen@gmail.com
+  L├ñhett├ñj├ñn nimi: (ei tunnistautunut)
+  L├ñhett├ñj├ñ maksanut: Ei
+  Status: pending
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 0)
+    - antti.nikkanen@polarcomp.fi | paid: false | signed: false | name: (ei tunnistautunut)
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-05T12:10:08.739057+00:00
+  P├ñivitetty: 2026-03-05T12:10:08.739057+00:00
+
+ID: 196c0bea-bb70-491d-b0a7-cd671f2dbab0
+  Tiedosto: Forest Trading (4).pdf
+  L├ñhett├ñj├ñ: antti.nikkanen@gmail.com
+  L├ñhett├ñj├ñn nimi: (ei tunnistautunut)
+  L├ñhett├ñj├ñ maksanut: Ei
+  Status: pending
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 0)
+    - antti.nikkanen@polarcomp.fi | paid: false | signed: false | name: (ei tunnistautunut)
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-05T12:00:40.557963+00:00
+  P├ñivitetty: 2026-03-05T12:00:40.557963+00:00
+
+ID: 1e79ea07-245a-4fe8-92e0-4dc0c2c8b37b
+  Tiedosto: Forest Trading (4).pdf
+  L├ñhett├ñj├ñ: antti.nikkanen@gmail.com
+  L├ñhett├ñj├ñn nimi: Antti Olavi Nikkanen
+  L├ñhett├ñj├ñ maksanut: Kyll├ñ
+  Status: signed
+  Purged: false
+  Vastaanottajat: 2 kpl (allekirjoittanut: 2)
+    - matti.uurtamo@salvar.fi | paid: true | signed: true | name: MATTI SAKARI UURTAMO
+    - antti.nikkanen@polarcomp.fi | paid: true | signed: true | name: Antti Olavi Nikkanen
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-05T07:37:03.558909+00:00
+  P├ñivitetty: 2026-03-05T07:37:03.558909+00:00
+
+ID: 3213a1f2-a9b1-4cf5-8774-c5f2d5b8d91a
+  Tiedosto: Forest RWA FAQ (3).pdf
+  L├ñhett├ñj├ñ: antti.nikkanen@gmail.com
+  L├ñhett├ñj├ñn nimi: Antti Olavi Nikkanen
+  L├ñhett├ñj├ñ maksanut: Ei
+  Status: pending
+  Purged: false
+  Vastaanottajat: 2 kpl (allekirjoittanut: 0)
+    - matti.uurtamo@salvar.fi | paid: false | signed: false | name: (ei tunnistautunut)
+    - antti.nikkanen@polarcomp.fi | paid: false | signed: false | name: (ei tunnistautunut)
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-05T07:26:22.622604+00:00
+  P├ñivitetty: 2026-03-05T07:26:22.622604+00:00
+
+ID: e6d29ec1-fa35-4383-aac0-93b06f795dc4
+  Tiedosto: Forest Trading (4).pdf
+  L├ñhett├ñj├ñ: antti.nikkanen@gmail.com
+  L├ñhett├ñj├ñn nimi: (ei tunnistautunut)
+  L├ñhett├ñj├ñ maksanut: Ei
+  Status: pending
+  Purged: false
+  Vastaanottajat: 1 kpl (allekirjoittanut: 0)
+    - antti.nikkanen@polarcomp.fi | paid: false | signed: false | name: (ei tunnistautunut)
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-05T07:21:36.218533+00:00
+  P├ñivitetty: 2026-03-05T07:21:36.218533+00:00
+
+ID: dd194e3a-4baa-433c-8bb2-33e4ee7413e7
+  Tiedosto: Forest Trading (4).pdf
+  L├ñhett├ñj├ñ: antti.nikkanen@gmail.com
+  L├ñhett├ñj├ñn nimi: Antti Olavi Nikkanen
+  L├ñhett├ñj├ñ maksanut: Ei
+  Status: pending
+  Purged: false
+  Vastaanottajat: 2 kpl (allekirjoittanut: 0)
+    - antti.nikkanen@polarcomp.fi | paid: false | signed: false | name: (ei tunnistautunut)
+    - matti.uurtamo@salvar.fi | paid: false | signed: false | name: (ei tunnistautunut)
+  Hash: (ei viel├ñ)
+  Luotu: 2026-03-05T07:17:59.341606+00:00
+  P├ñivitetty: 2026-03-05T07:17:59.341606+00:00
+

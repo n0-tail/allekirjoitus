@@ -1,0 +1,13 @@
+diff --git a/src/UploadView.tsx b/src/UploadView.tsx
+index 6b679fc..e1979ae 100644
+--- a/src/UploadView.tsx
++++ b/src/UploadView.tsx
+@@ -13,7 +13,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
+     document.title = "Helppo Allekirjoitus ÔÇô S├ñhk├Âinen allekirjoitus verkossa | eIDAS & FTN";
+     const metaDescription = document.querySelector('meta[name="description"]');
+     if (metaDescription) {
+-      metaDescription.setAttribute('content', 'Allekirjoita sopimukset s├ñhk├Âisesti pankkitunnuksilla. Vahva FTN-tunnistautuminen, juridisesti sitova eIDAS-yhteensopiva palvelu. Helppo, turvallinen ja edullinen.');
++      metaDescription.setAttribute('content', 'Ei rekister├Âinti├ñ. Ei kuukausimaksua. 1,49 Ôé¼ / allekirjoitus. Suomalainen.');
+     }
+   }, []);
+ 

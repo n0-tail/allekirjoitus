@@ -10,4 +10,5 @@ export interface SignatureData {
     allSigners?: any[];
     senderPaid?: boolean;
     senderSigned?: boolean;
+    senderSigns?: boolean;
 }

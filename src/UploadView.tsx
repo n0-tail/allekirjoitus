@@ -104,6 +104,12 @@ export const UploadView: React.FC<UploadViewProps> = () => {
         // TÄSTÄ POISTETTU: Sähköposteja ei enää lähetetä UploadView-vaiheessa, vaan vasta DocumentFlow-vaiheessa
         // kun olemme selvittäneet haluaako "Allekirjoittaja 1" nimensä mukaan asiakirjaan.
 
+        // NOLLAA VÄLIMUISTI UUTTA ASIAKIRJAA VARTEN:
+        sessionStorage.removeItem('observerPays');
+        sessionStorage.removeItem('payForAll');
+        sessionStorage.removeItem('appState_data');
+        sessionStorage.removeItem('appState_view');
+
         // 5. Proceed to next view via React Router
         navigate(`/lahettaja/${docId}`);
       } catch (err: unknown) {

@@ -314,7 +314,7 @@ export function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
                     role={role}
                     email={role === 'sender' ? data.sender : data.recipient}
                     signerId={data.signerId}
-                    totalSigningParties={(data.allSigners?.length || 0) + (data.senderSigns === false ? 0 : 1)}
+                    totalSigningParties={(data.allSigners?.length || 0) + (observerPays || data.senderSigns === false ? 0 : 1)}
                     senderSigns={observerPays ? false : data.senderSigns}
                 />
             )}

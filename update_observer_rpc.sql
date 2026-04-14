@@ -1,5 +1,5 @@
 -- ============================================================
--- SQL: set_sender_observer_with_email - UPDATE (DELETE SENDER)
+-- SQL: set_sender_observer_with_email - UPDATE (TRUE LOGIC)
 -- ============================================================
 
 SET search_path TO public;
@@ -17,12 +17,26 @@ RETURNS void
 LANGUAGE plpgsql
 SECURITY DEFINER
 AS $$
+DECLARE
+    v_old_sender text;
+    v_new_signer jsonb;
 BEGIN
-  -- Antti haluaa tässä nimenomaan poistaa alkuperäisen "Allekirjoittaja 1" osapuolen, koska jos lähettäjä laittaa
-  -- itsensä tähän ja painaa "En allekirjoita itse", hänen tulee poistua rosterista täysin eikä maksaa itsestään vahingossa.
+  -- 1. Etsitään etusivulla syötetty "Allekirjoittaja 1" (joka pitää edelleen saada allekirjoittaa!)
+  SELECT sender_email INTO v_old_sender FROM documents WHERE id = doc_id;
+
+  -- 2. Koska hallinnoija ottaa nyt "sender" -roolin, pakkaamme Allekirjoittaja 1:n muiden vastaanottajien joukkoon!
+  v_new_signer := jsonb_build_object(
+      'id', new_signer_id,
+      'email', v_old_sender,
+      'name', '',
+      'signed', false,
+      'paid', false
+  );
   
+  -- 3. Päivitetään kanta
   UPDATE documents
-  SET sender_email = actual_sender_email,
+  SET signers = COALESCE(signers, '[]'::jsonb) || v_new_signer,
+      sender_email = actual_sender_email,
       sender_signs = false,
       sender_paid = NOT will_pay,
       sender_name = '[Ei allekirjoita]'

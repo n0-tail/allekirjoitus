@@ -59,7 +59,7 @@ serve(async (req) => {
             // Fetch document from database – only trusted data is used for email content
             const { data: doc, error: dbError } = await supabase
                 .from('documents')
-                .select('id, sender_email, signers, file_name')
+                .select('id, sender_email, signers, file_name, sender_signs')
                 .eq('id', documentId)
                 .single()
 
@@ -111,19 +111,26 @@ serve(async (req) => {
               ? `Olet luonut sähköisen allekirjoituspyynnön asiakirjalle <em>(${doc.file_name})</em>.`
               : `Olet ladattu asiakirjan <em>(${doc.file_name})</em> sähköistä allekirjoitusta varten.`;
 
+            const observerTextPart = doc.sender_signs === false 
+              ? `<p style="color: #374151; font-size: 16px; line-height: 1.5;">Vastaanottajille on lähetetty allekirjoituspyynnöt. Voit seurata asiakirjan valmistumista ja ladata lopullisen kappaleen alla olevasta linkistä:</p>
+                 <div style="margin: 30px 0;">
+                   <a href="${senderLink}" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500; display: inline-block;">
+                     Seuraa asiakirjan tilaa
+                   </a>
+                 </div>`
+              : `<p style="color: #374151; font-size: 16px; line-height: 1.5;">Sinun tulee maksaa käsittelymaksu ja tunnistautua asettaaksesi oman allekirjoituksesi asiakirjaan. Voit palata maksamaan ja tunnistautumaan myöhemmin tästä linkistä:</p>
+                 <div style="margin: 30px 0;">
+                   <a href="${senderLink}" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500; display: inline-block;">
+                     Jatka maksulinkkiin
+                   </a>
+                 </div>`;
+
             const senderHtml = `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
                 <h2 style="color: #111827; margin-top: 0;">${hasRecipients ? 'Allekirjoituspyyntösi on luotu!' : 'Asiakirjasi on ladattu!'}</h2>
                 <p style="color: #374151; font-size: 16px; line-height: 1.5;">
                   ${senderMessage}
                 </p>
-                <p style="color: #374151; font-size: 16px; line-height: 1.5;">
-                  Sinun tulee maksaa käsittelymaksu ja tunnistautua asettaaksesi oman allekirjoituksesi asiakirjaan. Voit palata maksamaan ja tunnistautumaan myöhemmin tästä linkistä:
-                </p>
-                <div style="margin: 30px 0;">
-                  <a href="${senderLink}" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500; display: inline-block;">
-                    Jatka maksulinkkiin
-                  </a>
-                </div>
+                ${observerTextPart}
                 <p style="color: #6b7280; font-size: 14px; margin-bottom: 0;">
                   Ystävällisin terveisin,<br>Allekirjoitus
                 </p>

@@ -101,12 +101,8 @@ export const UploadView: React.FC<UploadViewProps> = () => {
 
         if (dbError) throw new Error(`Virhe tietokantaan tallennettaessa: ${dbError.message}`);
 
-        // We fire and forget the email sending to prevent blocking the UI for several seconds
-        supabase.functions.invoke('send-email', {
-          body: { documentId: docId, emailType: 'invitation' }
-        }).catch(err => {
-          console.warn("Sähköpostin lähetys epäonnistui (reunafunktiota ei ehkä ole vielä julkaistu):", err);
-        });
+        // TÄSTÄ POISTETTU: Sähköposteja ei enää lähetetä UploadView-vaiheessa, vaan vasta DocumentFlow-vaiheessa
+        // kun olemme selvittäneet haluaako "Allekirjoittaja 1" nimensä mukaan asiakirjaan.
 
         // 5. Proceed to next view via React Router
         navigate(`/lahettaja/${docId}`);

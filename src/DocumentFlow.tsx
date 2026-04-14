@@ -62,6 +62,24 @@ export function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
     const navigate = useNavigate();
     const { data, view, setView } = useDocumentFlow(id, role);
     const [copiedId, setCopiedId] = useState<string | null>(null);
+    const [showObserverInput, setShowObserverInput] = useState(false);
+    const [observerEmail, setObserverEmail] = useState('');
+    const [observerPays, setObserverPays] = useState(false);
+
+    const sendEmailsOnce = async () => {
+        if (!data?.documentId) return;
+        const key = `emails_sent_${data.documentId}`;
+        if (sessionStorage.getItem(key)) return;
+        
+        try {
+            await supabase.functions.invoke('send-email', {
+                body: { documentId: data.documentId, emailType: 'invitation' }
+            });
+            sessionStorage.setItem(key, 'true');
+        } catch (e) {
+            console.warn("Failed sending emails", e);
+        }
+    };
 
     if (view === 'loading') return <div style={{ textAlign: 'center', padding: '4rem' }}>Ladataan asiakirjaa...</div>;
     if (view === 'error' || !data) return <div style={{ textAlign: 'center', padding: '4rem', color: 'red' }}>Asiakirjan lataaminen epäonnistui. Se on joko vanhentunut tai sitä ei ole olemassa.</div>;
@@ -85,10 +103,10 @@ export function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
                             </div>
                         </div>
 
-                        <h2 style={{ marginBottom: '1rem' }}>{data.allSigners && data.allSigners.length > 0 ? 'Asiakirja on lähetetty!' : 'Asiakirja on ladattu!'}</h2>
+                        <h2 style={{ marginBottom: '1rem' }}>{data.allSigners && data.allSigners.length > 0 ? 'Melkein valmista!' : 'Asiakirja on ladattu!'}</h2>
                         <p style={{ marginBottom: '2rem', color: 'var(--text-muted)' }}>
                             {data.allSigners && data.allSigners.length > 0 ? (
-                                <>Sähköinen allekirjoituskutsu on luotu henkilölle <strong>{data.recipient}</strong>. Sinun täytyy enää maksaa käsittelymaksu ja tunnistautua, jotta allekirjoituspyyntö on virallinen.</>
+                                <>Sähköinen allekirjoituskutsu on luotu henkilölle <strong>{data.recipient}</strong>. Viimeistele lähetys valitsemalla alta haluamasi toimintatapa.</>
                             ) : (
                                 <>Olet asettanut itsesi ainoaksi allekirjoittajaksi. Täydennä prosessi maksamalla käsittelymaksu ja tunnistautumalla.</>
                             )}
@@ -96,7 +114,7 @@ export function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
 
                         {data.allSigners && data.allSigners.length > 0 && (
                         <div style={{ padding: '2rem', background: '#f8fafc', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border)', marginBottom: '2rem' }}>
-                            <h3 style={{ fontSize: '1rem', marginBottom: '1.5rem', color: 'var(--text-main)' }}>Kutsu on lähetetty sähköpostitse</h3>
+                            <h3 style={{ fontSize: '1rem', marginBottom: '1.5rem', color: 'var(--text-main)' }}>Kutsut lähetetään automaattisesti vahvistuksen jälkeen</h3>
 
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                                 {data.allSigners && data.allSigners.length > 0 && (
@@ -146,28 +164,96 @@ export function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
                                 <button
                                     className="btn btn-primary"
                                     style={{ width: '100%', marginBottom: '0.75rem', padding: '1rem', fontSize: '1.125rem' }}
-                                    onClick={() => setView('payment')}
+                                    onClick={() => {
+                                        sendEmailsOnce();
+                                        setView('payment');
+                                    }}
                                 >
                                     Siirry maksamaan ja tunnistautumaan &rarr;
                                 </button>
 
                                 {data.allSigners && data.allSigners.length > 0 && (
-                                    <button
-                                        className="btn btn-secondary"
-                                        style={{ width: '100%', fontSize: '0.875rem', padding: '0.75rem', opacity: 0.85 }}
-                                        onClick={async () => {
-                                            try {
-                                                const { error } = await supabase.rpc('set_sender_observer', { doc_id: data.documentId });
-                                                if (error) throw error;
-                                                toast.success('Sopimus lähetetty vastaanottajille.');
-                                                setView('waiting');
-                                            } catch (err: any) {
-                                                toast.error('Virhe: ' + (err.message || 'Tuntematon virhe'));
-                                            }
-                                        }}
-                                    >
-                                        Lähetä pelkästään vastaanottajille (et allekirjoita itse)
-                                    </button>
+                                    <>
+                                        {!showObserverInput ? (
+                                            <button
+                                                className="btn btn-secondary"
+                                                style={{ width: '100%', fontSize: '0.875rem', padding: '0.75rem', opacity: 0.85 }}
+                                                onClick={() => setShowObserverInput(true)}
+                                            >
+                                                Lähetä pelkästään vastaanottajille (et allekirjoita itse)
+                                            </button>
+                                        ) : (
+                                            <div style={{ marginTop: '1rem', padding: '1rem', background: 'var(--surface-hover)', borderRadius: 'var(--radius)', border: '1px solid var(--border)' }}>
+                                                <label className="form-label">Sähköpostisi hallintaa varten</label>
+                                                <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
+                                                  Lopullinen sopimus ja kuitit toimitetaan tähän antamaasi osoitteeseen. Et aseta asiakirjaan omaa allekirjoitusta.
+                                                </p>
+                                                <input
+                                                    type="email"
+                                                    autoComplete="email"
+                                                    className="form-input"
+                                                    style={{ marginBottom: '0.75rem' }}
+                                                    placeholder="toimisto@yritys.fi"
+                                                    value={observerEmail}
+                                                    onChange={e => setObserverEmail(e.target.value)}
+                                                />
+
+                                                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', cursor: 'pointer', textAlign: 'left' }}>
+                                                    <input 
+                                                        type="checkbox" 
+                                                        checked={observerPays} 
+                                                        onChange={e => setObserverPays(e.target.checked)} 
+                                                        style={{ width: '1.2rem', height: '1.2rem' }}
+                                                    />
+                                                    <span style={{ fontSize: '0.85rem', color: 'var(--text-main)', fontWeight: 500 }}>
+                                                        Haluan maksaa asiakirjan kaikki kulut vastaanottajien puolesta
+                                                    </span>
+                                                </label>
+
+                                                <button
+                                                    className="btn btn-primary"
+                                                    style={{ width: '100%', fontSize: '0.875rem', padding: '0.75rem' }}
+                                                    onClick={async () => {
+                                                        if (!observerEmail || !observerEmail.includes('@')) {
+                                                            toast.error('Syötä ensin kelvollinen sähköpostiosoite.');
+                                                            return;
+                                                        }
+                                                        try {
+                                                            const newSignerId = crypto.randomUUID();
+                                                            const { error } = await supabase.rpc('set_sender_observer_with_email', { 
+                                                                doc_id: data.documentId, 
+                                                                new_signer_id: newSignerId,
+                                                                actual_sender_email: observerEmail,
+                                                                will_pay: observerPays
+                                                            });
+                                                            if (error) throw error;
+
+                                                            if (observerPays) {
+                                                                sessionStorage.setItem('payForAll', 'true');
+                                                                sessionStorage.setItem('observerPays', 'true');
+                                                                setView('payment');
+                                                            } else {
+                                                                await sendEmailsOnce();
+                                                                toast.success('Sopimus lähetetty vastaanottajille.');
+                                                                setView('waiting');
+                                                            }
+                                                        } catch (err: any) {
+                                                            toast.error('Virhe: ' + (err.message || 'Tuntematon virhe'));
+                                                        }
+                                                    }}
+                                                >
+                                                    Vahvista ja lähetä
+                                                </button>
+                                                <button
+                                                    className="btn btn-secondary"
+                                                    style={{ width: '100%', fontSize: '0.875rem', padding: '0.5rem', marginTop: '0.5rem', background: 'transparent', boxShadow: 'none' }}
+                                                    onClick={() => setShowObserverInput(false)}
+                                                >
+                                                    Peruuta
+                                                </button>
+                                            </div>
+                                        )}
+                                    </>
                                 )}
                             </>
                         ) : (
@@ -208,20 +294,28 @@ export function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
 
             {view === 'payment' && (
                 <PaymentView
-                    reason={role === 'sender' ? "Lähettäjän käsittely- ja tunnistautumismaksu" : "Allekirjoittajan käsittely- ja tunnistautumismaksu"}
+                    reason={role === 'sender' ? (data.senderSigns === false || observerPays ? "Asiakirjan kaikki käsittelykulut" : "Lähettäjän käsittely- ja tunnistautumismaksu") : "Allekirjoittajan käsittely- ja tunnistautumismaksu"}
                     onPaymentSuccess={async () => {
-                        toast.success("Maksu vahvistettu! Siirrytään tunnistautumiseen...");
-                        setView('loading');
-                        const success = await initiateAuth(data, role);
-                        if (!success) {
-                            setView('start');
+                        if (data.senderSigns === false || sessionStorage.getItem('observerPays') === 'true') {
+                            await sendEmailsOnce();
+                            toast.success("Maksu vahvistettu! Asiakirja on lähetetty vastaanottajille.");
+                            sessionStorage.removeItem('observerPays');
+                            setView('waiting');
+                        } else {
+                            toast.success("Maksu vahvistettu! Siirrytään tunnistautumiseen...");
+                            setView('loading');
+                            const success = await initiateAuth(data, role);
+                            if (!success) {
+                                setView('start');
+                            }
                         }
                     }}
                     documentId={data.documentId!}
                     role={role}
                     email={role === 'sender' ? data.sender : data.recipient}
                     signerId={data.signerId}
-                    numSigners={data.allSigners?.length || 0}
+                    totalSigningParties={(data.allSigners?.length || 0) + (data.senderSigns === false ? 0 : 1)}
+                    senderSigns={observerPays ? false : data.senderSigns}
                 />
             )}
 

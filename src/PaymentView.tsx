@@ -14,11 +14,11 @@ interface CheckoutFormProps {
     totalAmount: number;
     payForAll: boolean;
     setPayForAll?: (val: boolean) => void;
-    numSigners: number;
+    totalSigningParties: number;
     showPayForAllToggle: boolean;
 }
 
-const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSuccess, reason, totalAmount, payForAll, setPayForAll, numSigners, showPayForAllToggle }) => {
+const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSuccess, reason, totalAmount, payForAll, setPayForAll, totalSigningParties, showPayForAllToggle }) => {
     const stripe = useStripe();
     const elements = useElements();
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -74,7 +74,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSuccess, reason, totalAmo
                     {reason}
                 </p>
 
-                {showPayForAllToggle && numSigners > 0 && setPayForAll && (
+                {showPayForAllToggle && totalSigningParties > 1 && setPayForAll && (
                     <label style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem', cursor: 'pointer', background: '#e0f2fe', padding: '1rem', borderRadius: 'var(--radius-md)', border: '1px solid #bae6fd' }}>
                         <input
                             type="checkbox"
@@ -135,10 +135,11 @@ interface PaymentViewProps {
     role: 'sender' | 'recipient';
     email: string;
     signerId?: string;
-    numSigners: number;
+    totalSigningParties: number;
+    senderSigns?: boolean;
 }
 
-export const PaymentView: React.FC<PaymentViewProps> = ({ onPaymentSuccess, reason, documentId, role, email, signerId, numSigners }) => {
+export const PaymentView: React.FC<PaymentViewProps> = ({ onPaymentSuccess, reason, documentId, role, email, signerId, totalSigningParties, senderSigns }) => {
     const [clientSecret, setClientSecret] = useState('');
     const [error, setError] = useState<string | null>(null);
     const [payForAll, setPayForAll] = useState(() => {
@@ -205,7 +206,9 @@ export const PaymentView: React.FC<PaymentViewProps> = ({ onPaymentSuccess, reas
     // Calculate total purely for UI consistency (real math is in backend)
     // Actually, in test mode the edge function returns 149 cents, but we display 1.49 for real feel
     const FEE_CENTS = 149; // 1.49 EUR
-    const totalAmount = (payForAll && role === 'sender') ? (1 + numSigners) * FEE_CENTS : FEE_CENTS;
+    const totalAmount = (payForAll && role === 'sender') 
+        ? totalSigningParties * FEE_CENTS 
+        : FEE_CENTS;
 
     if (error) {
         return (
@@ -278,8 +281,8 @@ export const PaymentView: React.FC<PaymentViewProps> = ({ onPaymentSuccess, reas
                         totalAmount={totalAmount}
                         payForAll={payForAll}
                         setPayForAll={role === 'sender' ? setPayForAll : undefined}
-                        numSigners={numSigners}
-                        showPayForAllToggle={role === 'sender'}
+                        totalSigningParties={totalSigningParties}
+                        showPayForAllToggle={role === 'sender' && senderSigns !== false}
                     />
                 </Elements>
             </div>

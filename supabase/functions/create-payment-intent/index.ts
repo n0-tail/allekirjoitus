@@ -27,7 +27,7 @@ serve(async (req) => {
       const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
       const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-      const { data: doc, error } = await supabase.from('documents').select('sender_paid, signers').eq('id', documentId).single();
+      const { data: doc, error } = await supabase.from('documents').select('sender_paid, signers, sender_signs').eq('id', documentId).single();
 
       if (!error && doc) {
         // Double-check if already paid to prevent race conditions or double billing
@@ -42,8 +42,12 @@ serve(async (req) => {
         }
 
         if (payForAll && role === 'sender' && doc.signers) {
-          // Sender + all signers
-          finalAmount = (1 + doc.signers.length) * 149;
+          if (doc.sender_signs === false) {
+             finalAmount = doc.signers.length * 149;
+          } else {
+             // Sender + all signers
+             finalAmount = (1 + doc.signers.length) * 149;
+          }
         }
       }
     }
@@ -59,7 +63,6 @@ serve(async (req) => {
       amount: finalAmount,
       currency: 'eur',
       description,
-      receipt_email: email || undefined,
       automatic_payment_methods: {
         enabled: true,
       },
@@ -70,6 +73,7 @@ serve(async (req) => {
         payForAll: payForAll ? 'true' : 'false',
         vat_rate: '25.5',
         vat_included: 'true',
+        payerEmail: email || '',
       }
     })
 

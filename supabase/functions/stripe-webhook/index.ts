@@ -69,6 +69,68 @@ serve(async (req) => {
                         return new Response(JSON.stringify({ error: error.message }), { status: 500 });
                     }
                 }
+
+                // --- OMAN KUITIN LÄHETYS (Korvaa Stripen vakion) --- //
+                const payerEmail = paymentIntent.metadata.payerEmail;
+                const resendApiKey = Deno.env.get('RESEND_API_KEY');
+                
+                if (payerEmail && resendApiKey) {
+                    const totalEur = paymentIntent.amount / 100;
+                    const vatRate = 0.255;
+                    const vatAmount = (totalEur - (totalEur / (1 + vatRate))).toFixed(2);
+                    const netAmount = (totalEur - parseFloat(vatAmount)).toFixed(2);
+                    
+                    const receiptHtml = `
+                    <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
+                        <h2 style="color: #111827; margin-top: 0;">Maksukuitti - Helppo Allekirjoitus</h2>
+                        <p style="color: #374151; font-size: 16px; margin-bottom: 25px;">Kiitos maksustasi! Tunnistautumisesi ja maksusi on nyt vahvistettu onnistuneesti.</p>
+                        
+                        <div style="background: #f8fafc; padding: 20px; border-radius: 6px; border: 1px solid #e2e8f0; margin: 20px 0;">
+                            <h3 style="margin-top: 0; font-size: 13px; text-transform: uppercase; color: #64748b; letter-spacing: 0.5px;">Maksun ALV-erittely</h3>
+                            <table style="width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 15px;">
+                                <tr>
+                                    <td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0; color: #475569;">Veroton hinta</td>
+                                    <td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0; text-align: right; color: #475569;">${netAmount} €</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0; color: #475569;">ALV (25,5 %)</td>
+                                    <td style="padding: 8px 0; border-bottom: 1px solid #e2e8f0; text-align: right; color: #475569;">${vatAmount} €</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 16px 0 4px 0; font-weight: bold; color: #0f172a; font-size: 16px;">Yhteensä maksettu</td>
+                                    <td style="padding: 16px 0 4px 0; font-weight: bold; text-align: right; color: #0f172a; font-size: 16px;">${totalEur.toFixed(2).replace('.', ',')} €</td>
+                                </tr>
+                            </table>
+                        </div>
+                        
+                        <div style="font-size: 13px; line-height: 1.6; color: #64748b; margin-top: 35px; border-top: 1px solid #e2e8f0; padding-top: 20px;">
+                            <strong>Myyjä (Asiakirjan ylläpito):</strong><br/>
+                            Polarcomp Oy<br/>
+                            Y-tunnus: 3381665-9<br/><br/>
+                            <em>Tämä on automaattisesti generoitu alv-kuitti sähköisen allekirjoituksen käsittelymaksusta. Säilytä tämä tosite mahdollista yrityksesi kirjanpitoa varten.</em>
+                        </div>
+                    </div>`;
+
+                    try {
+                        const emailRes = await fetch('https://api.resend.com/emails', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${resendApiKey}` },
+                            body: JSON.stringify({
+                                from: 'Helppo Allekirjoitus <noreply@helppoallekirjoitus.fi>',
+                                to: [payerEmail],
+                                subject: 'Kuitti: Sähköisen allekirjoituksen käsittelymaksu',
+                                html: receiptHtml,
+                            }),
+                        });
+                        if (!emailRes.ok) {
+                            console.error('[WEBHOOK] Failed to send custom receipt:', await emailRes.text());
+                        } else {
+                            console.log('[WEBHOOK] Custom receipt sent to:', payerEmail);
+                        }
+                    } catch (err) {
+                        console.error('[WEBHOOK] Exception sending receipt:', err);
+                    }
+                }
             }
         }
 

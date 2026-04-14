@@ -35,12 +35,20 @@ export function useDocumentFlow(id: string | undefined, role: 'sender' | 'recipi
                             const isPaid = doc ? (isSender ? doc.sender_paid : doc.signers?.find((s: any) => s.id === stashedTargetId)?.paid) : false;
 
                             if (isPaid) {
-                                toast.success("Maksu vahvistettu! Siirrytään tunnistautumiseen...");
-                                import('../DocumentFlow').then(({ initiateAuth }) => {
-                                    initiateAuth(JSON.parse(stashedData), role).then((success) => {
-                                        if (!success) setView('start');
+                                const parsedData = JSON.parse(stashedData);
+                                if (parsedData.senderSigns === false) {
+                                    toast.success("Maksu vahvistettu! Asiakirja on lähetetty vastaanottajille.");
+                                    const newUrl = window.location.pathname;
+                                    window.history.replaceState({}, '', newUrl); // Puhdista osoiterivi redirect-parametreista
+                                    setView('waiting');
+                                } else {
+                                    toast.success("Maksu vahvistettu! Siirrytään tunnistautumiseen...");
+                                    import('../DocumentFlow').then(({ initiateAuth }) => {
+                                        initiateAuth(parsedData, role).then((success) => {
+                                            if (!success) setView('start');
+                                        });
                                     });
-                                });
+                                }
                             } else if (attempts < maxAttempts) {
                                 setTimeout(checkPaymentStatus, 1500);
                             } else {

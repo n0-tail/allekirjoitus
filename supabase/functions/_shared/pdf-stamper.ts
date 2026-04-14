@@ -138,6 +138,7 @@ export async function stampPdf(params: StampParams): Promise<Uint8Array> {
 
     // Draw Signers Table
     let currentY = height - 290;
+    let partNumber = 1;
 
     const getAuditData = (r: string, identifier: string) => {
         if (r === 'recipient') {
@@ -155,28 +156,30 @@ export async function stampPdf(params: StampParams): Promise<Uint8Array> {
     };
 
     // Sender
-    checkPagination();
-    const senderAudit = getAuditData('sender', senderEmail);
-    auditPage.drawLine({ start: { x: 50, y: currentY }, end: { x: width - 50, y: currentY }, thickness: 1, color: rgb(0.9, 0.9, 0.9) });
-    currentY -= 25;
-    auditPage.drawText('OSAPUOLI 1: LÄHETTÄJÄ', { x: 50, y: currentY, size: 10, font: helveticaBold, color: rgb(0.5, 0.5, 0.5) });
-    currentY -= 18;
-    auditPage.drawText(`${senderName}`, { x: 50, y: currentY, size: 14, font: helveticaBold, color: rgb(0.1, 0.1, 0.1) });
-    currentY -= 15;
-    auditPage.drawText(`${senderEmail}`, { x: 50, y: currentY, size: 10, font: helveticaFont, color: rgb(0.3, 0.3, 0.3) });
-    currentY -= 15;
-    auditPage.drawText(`Tunnistus: ${senderAudit.auth_method}`, { x: 50, y: currentY, size: 10, font: helveticaFont, color: rgb(0.3, 0.3, 0.3) });
-    currentY -= 15;
-    auditPage.drawText(`IP-osoite: ${senderAudit.ip}`, { x: 50, y: currentY, size: 10, font: helveticaFont, color: rgb(0.3, 0.3, 0.3) });
-    currentY -= 20;
+    if (senderName !== '[Ei allekirjoita]') {
+        checkPagination();
+        const senderAudit = getAuditData('sender', senderEmail);
+        auditPage.drawLine({ start: { x: 50, y: currentY }, end: { x: width - 50, y: currentY }, thickness: 1, color: rgb(0.9, 0.9, 0.9) });
+        currentY -= 25;
+        auditPage.drawText(`OSAPUOLI ${partNumber++}: LÄHETTÄJÄ`, { x: 50, y: currentY, size: 10, font: helveticaBold, color: rgb(0.5, 0.5, 0.5) });
+        currentY -= 18;
+        auditPage.drawText(`${senderName}`, { x: 50, y: currentY, size: 14, font: helveticaBold, color: rgb(0.1, 0.1, 0.1) });
+        currentY -= 15;
+        auditPage.drawText(`${senderEmail}`, { x: 50, y: currentY, size: 10, font: helveticaFont, color: rgb(0.3, 0.3, 0.3) });
+        currentY -= 15;
+        auditPage.drawText(`Tunnistus: ${senderAudit.auth_method}`, { x: 50, y: currentY, size: 10, font: helveticaFont, color: rgb(0.3, 0.3, 0.3) });
+        currentY -= 15;
+        auditPage.drawText(`IP-osoite: ${senderAudit.ip}`, { x: 50, y: currentY, size: 10, font: helveticaFont, color: rgb(0.3, 0.3, 0.3) });
+        currentY -= 20;
+    }
 
     // Recipients
-    signers.forEach((s: any, index: number) => {
+    signers.forEach((s: any) => {
         checkPagination();
         const recAudit = getAuditData('recipient', s.id);
         auditPage.drawLine({ start: { x: 50, y: currentY }, end: { x: width - 50, y: currentY }, thickness: 1, color: rgb(0.9, 0.9, 0.9) });
         currentY -= 25;
-        auditPage.drawText(`OSAPUOLI ${index + 2}: VASTAANOTTAJA`, { x: 50, y: currentY, size: 10, font: helveticaBold, color: rgb(0.5, 0.5, 0.5) });
+        auditPage.drawText(`OSAPUOLI ${partNumber++}: VASTAANOTTAJA`, { x: 50, y: currentY, size: 10, font: helveticaBold, color: rgb(0.5, 0.5, 0.5) });
         currentY -= 18;
         auditPage.drawText(`${s.name}`, { x: 50, y: currentY, size: 14, font: helveticaBold, color: rgb(0.1, 0.1, 0.1) });
         currentY -= 15;

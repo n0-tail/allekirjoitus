@@ -13,7 +13,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
     document.title = "Helppo Allekirjoitus – Sähköinen allekirjoitus verkossa | eIDAS & FTN";
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
-      metaDescription.setAttribute('content', 'Ei rekisteröintiä. Ei kuukausimaksua. 1,49 € / allekirjoitus. Suomalainen.');
+      metaDescription.setAttribute('content', 'Helppo ja kotimainen sähköinen allekirjoitus ilman rekisteröintiä tai kuukausimaksuja, vain 1,49 € per allekirjoitus.');
     }
   }, []);
 

@@ -1,0 +1,16 @@
+{
+  "name": "Helppo Allekirjoitus",
+  "short_name": "Helppo Allekirjoitus",
+  "description": "Helppo ja kotimainen sähköinen allekirjoitus ilman rekisteröintiä tai kuukausimaksuja, vain 1,49 € per allekirjoitus.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#2563eb",
+  "icons": [
+    {
+      "src": "/favicon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

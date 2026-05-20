@@ -80,14 +80,25 @@ export function useDocumentFlow(id: string | undefined, role: 'sender' | 'recipi
                     const stashedData = sessionStorage.getItem('appState_data');
 
                     if (stashedSession === 'processing' && stashedData) {
-                        setData(JSON.parse(stashedData));
-                        setView('processing');
+                        const parsed = JSON.parse(stashedData);
+                        if (parsed.documentId === id) {
+                            setData(parsed);
+                            setView('processing');
+                            sessionStorage.removeItem('appState_view');
+                            return;
+                        }
+                        // Stale data from a different document — discard
                         sessionStorage.removeItem('appState_view');
-                        return;
+                        sessionStorage.removeItem('appState_data');
                     } else if (stashedSession === 'authenticating' && stashedData) {
-                        setData(JSON.parse(stashedData));
-                        setView('authenticating');
-                        return;
+                        const parsed = JSON.parse(stashedData);
+                        if (parsed.documentId === id) {
+                            setData(parsed);
+                            setView('authenticating');
+                            return;
+                        }
+                        sessionStorage.removeItem('appState_view');
+                        sessionStorage.removeItem('appState_data');
                     }
 
                     const signersList = doc.signers || [];

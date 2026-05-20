@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { supabase } from './lib/supabase';
 import { reportError } from './lib/errorReporter';
 import toast from 'react-hot-toast';
@@ -16,6 +16,18 @@ interface SuccessViewProps {
 
 export const SuccessView: React.FC<SuccessViewProps> = ({ data, onReset }) => {
     const [isDownloading, setIsDownloading] = useState(false);
+
+    useEffect(() => {
+        // Report Google Ads Conversion for successful completion
+        try {
+            if (typeof window !== 'undefined' && 'gtag' in window) {
+                // @ts-ignore
+                window.gtag('event', 'conversion', { 'send_to': 'AW-18003487273/KysACNSbsp4cEKnU3YhD' });
+            }
+        } catch (err) {
+            console.error('Sisäinen virhe konversiotapahtuman lähetyksessä:', err);
+        }
+    }, []);
     const displayFileName = data.file?.name || data.fileName || 'Asiakirja.pdf';
 
     const handleDownload = async () => {

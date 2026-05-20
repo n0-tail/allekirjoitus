@@ -1,6 +1,17 @@
 import { PDFDocument, rgb, StandardFonts } from "npm:pdf-lib";
 import QRCode from "npm:qrcode";
 
+/**
+ * Sanitizes text to be drawn with pdf-lib standard fonts (WinAnsiEncoding).
+ * WinAnsi only supports characters up to 255 (plus a few special ones).
+ * 1. Normalizes NFD (Mac) characters (e.g., o + ¨ -> ö)
+ * 2. Replaces unsupported characters with '?'
+ */
+const sanitizeText = (str: string): string => {
+    if (!str) return '';
+    return str.normalize('NFC').replace(/[^\x00-\xFF]/g, '?');
+};
+
 interface StampParams {
     pdfArrayBuffer: ArrayBuffer;
     documentId: string;
@@ -133,7 +144,7 @@ export async function stampPdf(params: StampParams): Promise<Uint8Array> {
     auditPage.drawText(`Tunnus (ID):`, { x: 70, y: height - 205, size: 10, font: helveticaBold, color: rgb(0.2, 0.2, 0.2) });
     auditPage.drawText(`${documentId}`, { x: 140, y: height - 205, size: 10, font: helveticaFont, color: rgb(0.2, 0.2, 0.2) });
     auditPage.drawText(`Tiedosto:`, { x: 70, y: height - 220, size: 10, font: helveticaBold, color: rgb(0.2, 0.2, 0.2) });
-    auditPage.drawText(`${fileName}`, { x: 140, y: height - 220, size: 10, font: helveticaFont, color: rgb(0.2, 0.2, 0.2) });
+    auditPage.drawText(sanitizeText(fileName), { x: 140, y: height - 220, size: 10, font: helveticaFont, color: rgb(0.2, 0.2, 0.2) });
     auditPage.drawText(`Tarkista aitous: helppoallekirjoitus.fi/verify/${documentId}`, { x: 70, y: height - 235, size: 8, font: helveticaFont, color: rgb(0.5, 0.5, 0.5) });
 
     // Draw Signers Table
@@ -142,9 +153,9 @@ export async function stampPdf(params: StampParams): Promise<Uint8Array> {
 
     const getAuditData = (r: string, identifier: string) => {
         if (r === 'recipient') {
-            return auditTrail.slice().reverse().find((a: any) => a.role === r && (a.signerId === identifier || a.email === identifier)) || { ip: 'Ei tallennettu', auth_method: 'FTN' };
+            return auditTrail.slice().reverse().find((a: any) => a.role === r && (a.signerId === identifier || a.email === identifier)) || { ip: 'Ei tallennettu', auth_method: 'FTN', name: 'Tuntematon', email: identifier };
         }
-        return auditTrail.slice().reverse().find((a: any) => a.role === r && a.email === identifier) || { ip: 'Ei tallennettu', auth_method: 'FTN' };
+        return auditTrail.slice().reverse().find((a: any) => a.role === r && a.email === identifier) || { ip: 'Ei tallennettu', auth_method: 'FTN', name: 'Tuntematon', email: identifier };
     };
 
     const checkPagination = () => {
@@ -162,32 +173,35 @@ export async function stampPdf(params: StampParams): Promise<Uint8Array> {
         auditPage.drawLine({ start: { x: 50, y: currentY }, end: { x: width - 50, y: currentY }, thickness: 1, color: rgb(0.9, 0.9, 0.9) });
         currentY -= 25;
         auditPage.drawText(`OSAPUOLI ${partNumber++}: LÄHETTÄJÄ`, { x: 50, y: currentY, size: 10, font: helveticaBold, color: rgb(0.5, 0.5, 0.5) });
-        currentY -= 18;
-        auditPage.drawText(`${senderName}`, { x: 50, y: currentY, size: 14, font: helveticaBold, color: rgb(0.1, 0.1, 0.1) });
+        currentY -= 20;
+        auditPage.drawText(sanitizeText(senderEmail), { x: 50, y: currentY, size: 12, font: helveticaBold, color: rgb(0.2, 0.2, 0.2) });
+        currentY -= 20;
+
+        auditPage.drawText(`IP-osoite:`, { x: 50, y: currentY, size: 8, font: helveticaBold, color: rgb(0.4, 0.4, 0.4) });
+        auditPage.drawText(`${senderAudit.ip || 'Ei saatavilla'}`, { x: 140, y: currentY, size: 8, font: helveticaFont, color: rgb(0.4, 0.4, 0.4) });
         currentY -= 15;
-        auditPage.drawText(`${senderEmail}`, { x: 50, y: currentY, size: 10, font: helveticaFont, color: rgb(0.3, 0.3, 0.3) });
-        currentY -= 15;
-        auditPage.drawText(`Tunnistus: ${senderAudit.auth_method}`, { x: 50, y: currentY, size: 10, font: helveticaFont, color: rgb(0.3, 0.3, 0.3) });
-        currentY -= 15;
-        auditPage.drawText(`IP-osoite: ${senderAudit.ip}`, { x: 50, y: currentY, size: 10, font: helveticaFont, color: rgb(0.3, 0.3, 0.3) });
+
+        auditPage.drawText(`Nimi ja väline:`, { x: 50, y: currentY, size: 8, font: helveticaBold, color: rgb(0.4, 0.4, 0.4) });
+        auditPage.drawText(`${sanitizeText(senderName)} (${senderAudit.auth_method || 'FTN'})`, { x: 140, y: currentY, size: 8, font: helveticaFont, color: rgb(0.4, 0.4, 0.4) });
         currentY -= 20;
     }
 
     // Recipients
     signers.forEach((s: any) => {
+        const audit = getAuditData('recipient', s.id);
         checkPagination();
-        const recAudit = getAuditData('recipient', s.id);
+        
         auditPage.drawLine({ start: { x: 50, y: currentY }, end: { x: width - 50, y: currentY }, thickness: 1, color: rgb(0.9, 0.9, 0.9) });
         currentY -= 25;
         auditPage.drawText(`OSAPUOLI ${partNumber++}: VASTAANOTTAJA`, { x: 50, y: currentY, size: 10, font: helveticaBold, color: rgb(0.5, 0.5, 0.5) });
         currentY -= 18;
-        auditPage.drawText(`${s.name}`, { x: 50, y: currentY, size: 14, font: helveticaBold, color: rgb(0.1, 0.1, 0.1) });
-        currentY -= 15;
-        auditPage.drawText(`${s.email}`, { x: 50, y: currentY, size: 10, font: helveticaFont, color: rgb(0.3, 0.3, 0.3) });
-        currentY -= 15;
-        auditPage.drawText(`Tunnistus: ${recAudit.auth_method}`, { x: 50, y: currentY, size: 10, font: helveticaFont, color: rgb(0.3, 0.3, 0.3) });
-        currentY -= 15;
-        auditPage.drawText(`IP-osoite: ${recAudit.ip}`, { x: 50, y: currentY, size: 10, font: helveticaFont, color: rgb(0.3, 0.3, 0.3) });
+
+        auditPage.drawText(sanitizeText(audit.name), { x: 50, y: currentY, size: 12, font: helveticaBold, color: rgb(0.2, 0.2, 0.2) });
+        auditPage.drawText(`(${sanitizeText(audit.email)})`, { x: 50 + helveticaBold.widthOfTextAtSize(sanitizeText(audit.name), 12) + 10, y: currentY, size: 10, font: helveticaFont, color: rgb(0.5, 0.5, 0.5) });
+        currentY -= 20;
+
+        auditPage.drawText(`IP-osoite:`, { x: 50, y: currentY, size: 8, font: helveticaBold, color: rgb(0.4, 0.4, 0.4) });
+        auditPage.drawText(`${audit.ip || 'Ei saatavilla'}`, { x: 140, y: currentY, size: 8, font: helveticaFont, color: rgb(0.4, 0.4, 0.4) });
         currentY -= 20;
     });
 

@@ -36,20 +36,44 @@ export const ProcessingView: React.FC<ProcessingViewProps> = ({ data, onSuccess,
                 }
 
                 setStatus('Tallennetaan allekirjoitusta palvelimelle...');
-                const { data: resData, error: invokeError } = await supabase.functions.invoke('record-action', {
-                    body: {
-                        documentId: data.documentId,
-                        fileName: data.fileName,
-                        role: data.role,
-                        verifiedName: data.verifiedName,
-                        sender: data.sender,
-                        recipient: data.recipient,
-                        signerId: data.signerId
-                    }
-                });
 
-                if (invokeError) {
-                    throw new Error(`Palvelinvirhe viimeistelyssä: ${invokeError.message}`);
+                let resData: any = null;
+                let lastError: any = null;
+                const maxAttempts = 3;
+
+                for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+                    try {
+                        const { data: response, error: invokeError } = await supabase.functions.invoke('record-action', {
+                            body: {
+                                documentId: data.documentId,
+                                fileName: data.fileName,
+                                role: data.role,
+                                verifiedName: data.verifiedName,
+                                sender: data.sender,
+                                recipient: data.recipient,
+                                signerId: data.signerId
+                            }
+                        });
+
+                        if (invokeError) {
+                            throw new Error(`Palvelinvirhe viimeistelyssä: ${invokeError.message}`);
+                        }
+
+                        resData = response;
+                        lastError = null;
+                        break;
+                    } catch (err) {
+                        lastError = err;
+                        if (attempt < maxAttempts) {
+                            console.warn(`[ProcessingView] Yritys ${attempt}/${maxAttempts} epäonnistui, yritetään uudelleen 2s kuluttua...`, err);
+                            setStatus(`Tallennetaan allekirjoitusta (yritys ${attempt + 1}/${maxAttempts})...`);
+                            await new Promise((resolve) => setTimeout(resolve, 2000));
+                        }
+                    }
+                }
+
+                if (lastError) {
+                    throw lastError;
                 }
 
                 if (resData?.status === 'waiting') {

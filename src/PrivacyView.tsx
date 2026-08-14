@@ -55,7 +55,6 @@ const PrivacyView: React.FC = () => {
                         <section>
                             <h2 className="text-xl font-bold text-gray-900 mt-8 mb-4">6. Tietojen säilytysaika ja suojaus</h2>
                             <p>Asiakirjoja (PDF) ja niiden liitännäistietoja säilytetään tietokannassamme vain teknisen prosessin vaatiman ajan. Kun allekirjoitus on suoritettu ja asiakirjat on toimitettu osapuolille sähköpostitse, järjestelmämme on suunniteltu poistamaan tai anonymisoimaan niihin liittyvä data säännöllisesti.</p>
-                            <p className="mt-2 text-sm text-gray-500 italic">*Tämä on esimerkkiluonnos, varmista sisällön paikkansapitävyys juristin kanssa ennen tuotantoa.*</p>
                         </section>
                     </div>
                 </div>

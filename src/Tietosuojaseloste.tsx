@@ -17,7 +17,7 @@ export const Tietosuojaseloste: React.FC<TietosuojaselosteProps> = ({ onBack }) 
 
                 <div style={{ lineHeight: '1.6', color: 'var(--text-main)' }}>
                     <h2 style={{ fontSize: '1.25rem', marginTop: '1.5rem', marginBottom: '0.75rem' }}>1. Rekisterinpitäjä</h2>
-                    <p>Polarcomp Oy (Y-tunnus: 1234567-8)<br />Sähköposti: tietosuoja@polarcomp.fi<br />Verkkosivusto: polarcomp.fi</p>
+                    <p>Polarcomp Oy (Y-tunnus: 0969733-4)<br />Sähköposti: tietosuoja@polarcomp.fi<br />Verkkosivusto: polarcomp.fi</p>
 
                     <h2 style={{ fontSize: '1.25rem', marginTop: '1.5rem', marginBottom: '0.75rem' }}>2. Rekisterin nimi ja henkilötietojen käsittelyn tarkoitus</h2>
                     <p>Rekisterin nimi: Allekirjoitus-palvelun käyttäjärekisteri.</p>

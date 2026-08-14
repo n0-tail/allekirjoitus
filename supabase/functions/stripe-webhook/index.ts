@@ -106,7 +106,7 @@ serve(async (req) => {
                         <div style="font-size: 13px; line-height: 1.6; color: #64748b; margin-top: 35px; border-top: 1px solid #e2e8f0; padding-top: 20px;">
                             <strong>Myyjä (Asiakirjan ylläpito):</strong><br/>
                             Polarcomp Oy<br/>
-                            Y-tunnus: 3381665-9<br/><br/>
+                            Y-tunnus: 0969733-4<br/><br/>
                             <em>Tämä on automaattisesti generoitu alv-kuitti sähköisen allekirjoituksen käsittelymaksusta. Säilytä tämä tosite mahdollista yrityksesi kirjanpitoa varten.</em>
                         </div>
                     </div>`;

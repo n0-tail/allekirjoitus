@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { supabase } from '../lib/supabase';
 import { reportError } from '../lib/errorReporter';
+import { initiateAuth } from '../lib/auth';
 import type { SignatureData } from '../types';
 
 export type ViewState = 'loading' | 'start' | 'payment' | 'authenticating' | 'processing' | 'waiting' | 'success' | 'error';
@@ -43,10 +44,8 @@ export function useDocumentFlow(id: string | undefined, role: 'sender' | 'recipi
                                     setView('waiting');
                                 } else {
                                     toast.success("Maksu vahvistettu! Siirrytään tunnistautumiseen...");
-                                    import('../DocumentFlow').then(({ initiateAuth }) => {
-                                        initiateAuth(parsedData, role).then((success) => {
-                                            if (!success) setView('start');
-                                        });
+                                    initiateAuth(parsedData, role).then((success) => {
+                                        if (!success) setView('start');
                                     });
                                 }
                             } else if (attempts < maxAttempts) {

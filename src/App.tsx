@@ -1,13 +1,15 @@
+import { Suspense, lazy } from 'react';
 import { Routes, Route, useNavigate, Link } from 'react-router-dom';
 import { UploadView } from './UploadView';
-import PrivacyView from './PrivacyView';
-import TermsView from './TermsView';
-import { ArticleIndexView } from './views/ArticleIndexView';
-import { ArticlePostView } from './views/ArticlePostView';
 import { DocumentFlow } from './DocumentFlow';
 import { AuthCallbackRoute } from './AuthCallbackRoute';
-import { VerifyView } from './VerifyView';
 import './index.css';
+
+const PrivacyView = lazy(() => import('./PrivacyView'));
+const TermsView = lazy(() => import('./TermsView'));
+const ArticleIndexView = lazy(() => import('./views/ArticleIndexView').then(m => ({ default: m.ArticleIndexView })));
+const ArticlePostView = lazy(() => import('./views/ArticlePostView').then(m => ({ default: m.ArticlePostView })));
+const VerifyView = lazy(() => import('./VerifyView').then(m => ({ default: m.VerifyView })));
 
 function App() {
   const navigate = useNavigate();
@@ -21,17 +23,19 @@ function App() {
       </header>
 
       <main style={{ padding: '2rem 1rem' }}>
-        <Routes>
-          <Route path="/" element={<UploadView />} />
-          <Route path="/asiakirja/:id" element={<DocumentFlow role="recipient" />} />
-          <Route path="/lahettaja/:id" element={<DocumentFlow role="sender" />} />
-          <Route path="/verify/:id" element={<VerifyView />} />
-          <Route path="/auth/callback" element={<AuthCallbackRoute />} />
-          <Route path="/ehdot" element={<TermsView />} />
-          <Route path="/tietosuoja" element={<PrivacyView />} />
-          <Route path="/asiantuntija-artikkelit" element={<ArticleIndexView />} />
-          <Route path="/asiantuntija-artikkelit/:slug" element={<ArticlePostView />} />
-        </Routes>
+        <Suspense fallback={<div style={{ textAlign: 'center', padding: '4rem 1rem', color: 'var(--text-muted)' }}>Ladataan sivua...</div>}>
+          <Routes>
+            <Route path="/" element={<UploadView />} />
+            <Route path="/asiakirja/:id" element={<DocumentFlow role="recipient" />} />
+            <Route path="/lahettaja/:id" element={<DocumentFlow role="sender" />} />
+            <Route path="/verify/:id" element={<VerifyView />} />
+            <Route path="/auth/callback" element={<AuthCallbackRoute />} />
+            <Route path="/ehdot" element={<TermsView />} />
+            <Route path="/tietosuoja" element={<PrivacyView />} />
+            <Route path="/asiantuntija-artikkelit" element={<ArticleIndexView />} />
+            <Route path="/asiantuntija-artikkelit/:slug" element={<ArticlePostView />} />
+          </Routes>
+        </Suspense>
       </main>
 
       <footer style={{ marginTop: 'auto', padding: '2rem', textAlign: 'center', fontSize: '0.875rem', color: 'var(--text-muted)' }}>

@@ -50,7 +50,6 @@ const TermsView: React.FC = () => {
                         <section>
                             <h2 className="text-xl font-bold text-gray-900 mt-8 mb-4">6. Ehtojen muutokset</h2>
                             <p>Palveluntarjoaja pidättää oikeuden muuttaa näitä ehtoja milloin tahansa. Uudet ehdot astuvat voimaan, kun ne julkaistaan palvelussa.</p>
-                            <p className="mt-2 text-sm text-gray-500 italic">*Tämä on esimerkkiluonnos, varmista sisällön paikkansapitävyys juristin kanssa ennen tuotantoa.*</p>
                         </section>
                     </div>
                 </div>

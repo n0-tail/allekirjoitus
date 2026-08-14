@@ -44,7 +44,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ onSuccess, reason, totalAmo
             });
 
             const timeoutPromise = new Promise<never>((_, reject) =>
-                setTimeout(() => reject(new Error('Maksu aikakatkaistiin. Yritä uudelleen.')), 30000)
+                setTimeout(() => reject(new Error('Maksu aikakatkaistiin. Yritä uudelleen.')), 60000)
             );
 
             const { error } = await Promise.race([confirmPromise, timeoutPromise]);

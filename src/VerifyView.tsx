@@ -43,7 +43,43 @@ export const VerifyView = () => {
             try {
                 if (!id) throw new Error('Virheellinen linkki.');
 
-                const { data: docArray, error: dbError } = await supabase.rpc('get_document_by_id', { doc_id: id });
+                let docUuid = id;
+                const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+                if (!uuidRegex.test(id)) {
+                    // Try decoding short ID
+                    let base64 = id.replace(/-/g, '+').replace(/_/g, '/');
+                    while (base64.length % 4) {
+                        base64 += '=';
+                    }
+                    let decodedHex = '';
+                    try {
+                        decodedHex = atob(base64).toLowerCase();
+                    } catch (decodeErr) {
+                        throw new Error('Asiakirjaa ei löytynyt tai tarkistuslinkki on vanhentunut.');
+                    }
+
+                    if (!/^[0-9a-f]{1,8}$/i.test(decodedHex)) {
+                        throw new Error('Asiakirjaa ei löytynyt tai tarkistuslinkki on vanhentunut.');
+                    }
+
+                    const startUuid = decodedHex.padEnd(8, '0') + '-0000-0000-0000-000000000000';
+                    const endUuid = decodedHex.padEnd(8, 'f') + '-ffff-ffff-ffff-ffffffffffff';
+
+                    const { data: rangeData, error: rangeError } = await supabase
+                        .from('documents')
+                        .select('id')
+                        .gte('id', startUuid)
+                        .lte('id', endUuid)
+                        .limit(1);
+
+                    if (rangeError || !rangeData || rangeData.length === 0) {
+                        throw new Error('Asiakirjaa ei löytynyt tai tarkistuslinkki on vanhentunut.');
+                    }
+                    docUuid = rangeData[0].id;
+                }
+
+                const { data: docArray, error: dbError } = await supabase.rpc('get_document_by_id', { doc_id: docUuid });
                 const data = docArray?.[0] || null;
 
                 if (dbError || !data) {

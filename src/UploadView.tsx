@@ -165,43 +165,40 @@ export const UploadView: React.FC<UploadViewProps> = () => {
     <div>
       {/* FULL-WIDTH NORDIC NAVY HERO BAND */}
       <section className="hero-band">
-        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center', alignItems: 'center', marginBottom: '1.1rem' }}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem', background: 'rgba(255, 255, 255, 0.14)', border: '1px solid rgba(255, 255, 255, 0.28)', color: '#ffffff', fontSize: '0.775rem', fontWeight: 600, padding: '0.3rem 0.75rem', borderRadius: '9999px' }}>
-              <svg width="16" height="11" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ borderRadius: '2px', flexShrink: 0 }} aria-hidden="true">
+        <div style={{ maxWidth: '920px', margin: '0 auto' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center', alignItems: 'center', marginBottom: '0.9rem' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: 'rgba(255, 255, 255, 0.12)', border: '1px solid rgba(255, 255, 255, 0.24)', color: '#ffffff', fontSize: '0.775rem', fontWeight: 600, padding: '0.25rem 0.7rem', borderRadius: '9999px' }}>
+              <svg width="15" height="10" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ borderRadius: '2px', flexShrink: 0 }} aria-hidden="true">
                 <rect width="18" height="12" fill="#FFFFFF" />
                 <rect x="5" width="3" height="12" fill="#002F6C" />
                 <rect y="4.5" width="18" height="3" fill="#002F6C" />
               </svg>
-              Aidosti suomalainen palvelu
+              Suomalainen FTN-tunnistautuminen
             </span>
-            <span style={{ background: 'rgba(255, 255, 255, 0.1)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#f8fafc', fontSize: '0.775rem', fontWeight: 600, padding: '0.3rem 0.75rem', borderRadius: '9999px' }}>
-              ✓ Traficomin valvoma FTN-tunnistautuminen
-            </span>
-            <span style={{ background: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255, 255, 255, 0.18)', color: '#e2e8f0', fontSize: '0.775rem', fontWeight: 500, padding: '0.3rem 0.75rem', borderRadius: '9999px' }}>
+            <span style={{ background: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255, 255, 255, 0.18)', color: '#e2e8f0', fontSize: '0.775rem', fontWeight: 500, padding: '0.25rem 0.7rem', borderRadius: '9999px' }}>
               ✓ EU eIDAS (910/2014)
             </span>
-            <span style={{ background: 'rgba(16, 185, 129, 0.18)', border: '1px solid rgba(52, 211, 153, 0.4)', color: '#a7f3d0', fontSize: '0.775rem', fontWeight: 600, padding: '0.3rem 0.75rem', borderRadius: '9999px' }}>
+            <span style={{ background: 'rgba(16, 185, 129, 0.18)', border: '1px solid rgba(52, 211, 153, 0.4)', color: '#a7f3d0', fontSize: '0.775rem', fontWeight: 600, padding: '0.25rem 0.7rem', borderRadius: '9999px' }}>
               Kertamaksu 1,49 € • Ei tilausta
             </span>
           </div>
 
-          <h1 style={{ fontSize: '2.35rem', fontWeight: 800, color: '#ffffff', marginBottom: '0.75rem', lineHeight: 1.18, letterSpacing: '-0.025em' }}>
+          <h1 style={{ fontSize: '2.1rem', fontWeight: 800, color: '#ffffff', marginBottom: '0.6rem', lineHeight: 1.2, letterSpacing: '-0.025em' }}>
             Sähköinen allekirjoitus suomalaisilla pankkitunnuksilla
           </h1>
-          <p style={{ fontSize: '1.05rem', color: '#cbd5e1', maxWidth: '660px', margin: '0 auto', lineHeight: 1.6 }}>
-            Allekirjoita vuokrasopimus, kauppakirja, valtakirja tai muu PDF-asiakirja juridisesti sitovasti ilman tunnusten luomista tai kuukausimaksuja. Valmis sopimus ja virallinen allekirjoitustodistus toimitetaan suoraan sähköpostiin.
+          <p style={{ fontSize: '1rem', color: '#cbd5e1', maxWidth: '720px', margin: '0 auto', lineHeight: 1.55 }}>
+            Allekirjoita vuokrasopimus, kauppakirja, valtakirja tai muu PDF-asiakirja juridisesti sitovasti ilman tunnusten luomista tai kuukausimaksuja. Valmis sopimus ja allekirjoitustodistus toimitetaan suoraan sähköpostiin.
           </p>
         </div>
       </section>
 
-      <div style={{ maxWidth: '860px', margin: '0 auto', padding: '0 1rem' }}>
+      <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 1rem' }}>
         {/* OVERLAPPING MAIN UPLOAD CARD */}
         <div className="upload-hero-card animate-fade-in">
           <form onSubmit={handleSubmit}>
             {/* STEP 1: PDF FILE */}
-            <div className="form-group" style={{ marginBottom: '1.75rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.6rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+            <div className="form-group" style={{ marginBottom: '1.35rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem', flexWrap: 'wrap', gap: '0.5rem' }}>
                 <label className="form-label" style={{ margin: 0, fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-main)' }}>
                   1. Valitse allekirjoitettava PDF-asiakirja
                 </label>
@@ -214,7 +211,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={handleDrop}
                 onClick={() => document.getElementById('file-upload')?.click()}
-                style={{ padding: '1.75rem 1.5rem', gap: '0.75rem' }}
+                style={{ padding: '1.35rem 1.5rem', gap: '0.6rem' }}
               >
                 <input
                   id="file-upload"
@@ -223,24 +220,24 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                   style={{ display: 'none' }}
                   onChange={handleFileChange}
                 />
-                <div style={{ width: '46px', height: '46px', borderRadius: '10px', background: '#eff6ff', border: '1px solid #bfdbfe', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)' }}>
-                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ width: '24px', height: '24px' }}>
+                <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: '#eff6ff', border: '1px solid #bfdbfe', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)' }}>
+                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ width: '22px', height: '22px' }}>
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                   </svg>
                 </div>
                 {file ? (
                   <div>
-                    <strong style={{ color: 'var(--text-main)', fontSize: '1.025rem', display: 'block' }}>{file.name}</strong>
-                    <span style={{ fontSize: '0.85rem', marginTop: '0.25rem', color: 'var(--primary)', fontWeight: 600, display: 'inline-block' }}>
+                    <strong style={{ color: 'var(--text-main)', fontSize: '1rem', display: 'block' }}>{file.name}</strong>
+                    <span style={{ fontSize: '0.85rem', marginTop: '0.2rem', color: 'var(--primary)', fontWeight: 600, display: 'inline-block' }}>
                       ✓ PDF-tiedosto valittu • Klikkaa vaihtaaksesi tiedoston
                     </span>
                   </div>
                 ) : (
                   <div>
-                    <div style={{ fontWeight: 600, fontSize: '1rem', color: 'var(--text-main)', marginBottom: '0.25rem' }}>
+                    <div style={{ fontWeight: 600, fontSize: '0.975rem', color: 'var(--text-main)', marginBottom: '0.15rem' }}>
                       Valitse PDF-tiedosto laitteeltasi tai pudota se tähän
                     </div>
-                    <div style={{ fontSize: '0.825rem', color: 'var(--text-muted)' }}>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
                       Salattu TLS-yhteys • Asiakirja poistetaan palvelimelta automaattisesti 24 h kuluessa valmistumisesta
                     </div>
                   </div>
@@ -250,7 +247,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
 
             {/* STEP 2: SIGNERS (100% VERTICALLY ALIGNED INPUTS) */}
             <div>
-              <div style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '0.75rem' }}>
+              <div style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '0.65rem' }}>
                 2. Syötä osapuolten sähköpostiosoitteet
               </div>
 
@@ -271,13 +268,13 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                     onChange={(e) => setSender(e.target.value)}
                     required
                   />
-                  <span style={{ display: 'block', fontSize: '0.775rem', color: 'var(--text-muted)', marginTop: '0.45rem', lineHeight: 1.45 }}>
+                  <span style={{ display: 'block', fontSize: '0.775rem', color: 'var(--text-muted)', marginTop: '0.4rem', lineHeight: 1.4 }}>
                     Voit seuraavassa vaiheessa myös lähettää asiakirjan vain muille allekirjoitettavaksi.
                   </span>
                 </div>
 
                 {/* RIGHT COLUMN: All Recipients + Add Button */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
                   {recipients.map((rec, index) => (
                     <div key={rec.id} className="animate-fade-in">
                       <label className="form-label" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
@@ -349,11 +346,11 @@ export const UploadView: React.FC<UploadViewProps> = () => {
 
               </div>
 
-              {/* BOTTOM ACTION BAR */}
-              <div style={{ marginTop: '1.75rem', paddingTop: '1.25rem', borderTop: '1px solid var(--border)', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
+              {/* BOTTOM ACTION BAR — SIDE BY SIDE ON DESKTOP */}
+              <div style={{ marginTop: '1.35rem', paddingTop: '1.1rem', borderTop: '1px solid var(--border)', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
                 <div>
                   <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>
-                    Hinta: <strong style={{ color: 'var(--text-main)' }}>1,49 € / allekirjoittaja</strong> (sis. ALV 25,5 %, pankkitunnistautumisen ja todistuksen)
+                    Hinta: <strong style={{ color: 'var(--text-main)' }}>1,49 € / allekirjoittaja</strong> (sis. ALV 25,5 % ja FTN-tunnistuksen)
                   </div>
                   <button
                     type="button"
@@ -367,7 +364,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                       cursor: 'pointer',
                       textDecoration: 'underline',
                       padding: 0,
-                      marginTop: '0.25rem'
+                      marginTop: '0.2rem'
                     }}
                   >
                     Katso miltä valmis allekirjoitustodistus näyttää →
@@ -377,7 +374,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                 <button
                   type="submit"
                   className="btn btn-primary"
-                  style={{ minWidth: '260px', fontSize: '1rem', padding: '0.9rem 1.75rem', boxShadow: '0 2px 4px rgba(29, 78, 216, 0.2)' }}
+                  style={{ minWidth: '240px', fontSize: '1rem', padding: '0.85rem 1.6rem', boxShadow: '0 2px 4px rgba(29, 78, 216, 0.2)', whiteSpace: 'nowrap' }}
                   disabled={isUploading}
                 >
                   {isUploading ? 'Siirretään asiakirjaa...' : 'Jatka ja tunnistaudu →'}

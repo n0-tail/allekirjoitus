@@ -16,7 +16,7 @@ export const ArticleIndexView: React.FC = () => {
     }, []);
 
     return (
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '1rem' }}>
+        <div style={{ maxWidth: '820px', margin: '0 auto', padding: '2rem 1rem' }}>
             <button
                 onClick={() => navigate(-1)}
                 style={{
@@ -60,7 +60,7 @@ export const ArticleIndexView: React.FC = () => {
                                         {article.description}
                                     </p>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.875rem' }}>
-                                        <span style={{ color: 'var(--text-muted)', opacity: 0.8 }}>Julkaistu: {article.date}</span>
+                                        <span style={{ color: 'var(--text-muted)', opacity: 0.8 }}>Julkaistu {article.displayDate}</span>
                                         <span style={{ color: 'var(--primary)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                                             Lue artikkeli
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>

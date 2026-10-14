@@ -52,7 +52,7 @@ export const ArticlePostView: React.FC = () => {
     };
 
     return (
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '1rem' }}>
+        <div style={{ maxWidth: '820px', margin: '0 auto', padding: '2rem 1rem' }}>
 
             {/* RAG-optimoitu piilotettu Schema.org JSON Data */}
             <script
@@ -86,7 +86,7 @@ export const ArticlePostView: React.FC = () => {
                         {article.title}
                     </h1>
                     <div style={{ display: 'flex', gap: '1rem', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-                        <span>Julkaistu: {article.date}</span>
+                        <span>Julkaistu {article.displayDate}</span>
                         <span>|</span>
                         <span>Polarcomp Oy</span>
                     </div>

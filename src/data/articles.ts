@@ -3,6 +3,7 @@ export interface Article {
   title: string;
   description: string;
   date: string;
+  displayDate: string;
   content: string; // Markdown / HTML content
 }
 
@@ -11,7 +12,8 @@ export const articles: Article[] = [
     slug: 'mika-on-sahkoinen-allekirjoitus',
     title: 'Mikä on sähköinen allekirjoitus ja miten se toimii?',
     description: 'Opas sähköisen allekirjoituksen lainmukaisuuteen, EU:n eIDAS-asetukseen ja vahvaan pankkitunnistautumiseen (FTN) Suomessa.',
-    date: '2026-08-17',
+    date: '2026-04-28',
+    displayDate: '28.4.2026',
     content: `
       <h2>Sähköisen allekirjoituksen perusteet</h2>
       <p>Sähköinen allekirjoitus on juridisesti pätevä tapa vahvistaa sopimus tai asiakirja verkossa ilman tulostamista, kynää tai skannausta. Suomessa luotettavin ja yleisimmin käytetty tapa on vahvaan sähköiseen tunnistamiseen perustuva allekirjoitus, jossa allekirjoittajan henkilöllisyys varmistetaan pankkitunnuksilla tai mobiilivarmenteella.</p>
@@ -37,7 +39,8 @@ export const articles: Article[] = [
     slug: 'sahkoinen-allekirjoitus-vuokrasopimukseen',
     title: 'Sähköinen allekirjoitus vuokrasopimukseen – Ohje vuokranantajalle',
     description: 'Miten allekirjoitat vuokrasopimuksen sähköisesti pankkitunnuksilla ilman kuukausimaksuja? Käytännön ohje yksityisille vuokranantajille ja asuntosijoittajille.',
-    date: '2026-08-17',
+    date: '2026-06-16',
+    displayDate: '16.6.2026',
     content: `
       <h2>Vuokrasopimuksen tekeminen sähköisesti</h2>
       <p>Asuinhuoneiston vuokrasopimus (laki asuinhuoneiston vuokrauksesta 481/1995) on yksi yleisimmistä sopimuksista, joka allekirjoitetaan verkossa. Sähköinen allekirjoitus säästää sekä vuokranantajan että vuokralaisen aikaa, kun sopimuksen voi vahvistaa etänä heti vuokralaisvalinnan jälkeen.</p>
@@ -64,7 +67,8 @@ export const articles: Article[] = [
     slug: 'sahkoinen-allekirjoitus-hintavertailu',
     title: 'Sähköisen allekirjoituksen hinta: Kuukausitilaus vai kertamaksu?',
     description: 'Vertailussa sähköisten allekirjoituspalveluiden hinnoittelumallit Suomessa (Visma Sign, DocuSign ja Helppo Allekirjoitus). Milloin kertamaksu kannattaa?',
-    date: '2026-08-17',
+    date: '2026-08-19',
+    displayDate: '19.8.2026',
     content: `
       <h2>Sähköisten allekirjoituspalveluiden hinnoittelumallit Suomessa</h2>
       <p>Sähköisen allekirjoituksen markkina jakautuu kahteen selkeästi erilaiseen tarpeeseen: suuren volyymin yritysratkaisuihin (joissa sopimuksia hallinnoidaan ja arkistoidaan satoja vuodessa) sekä satunnaiseen käyttöön, jossa yksityishenkilö, yhdistys tai pienyritys tarvitsee virallisen pankkitunnistautumisen yksittäiseen PDF-sopimukseen.</p>

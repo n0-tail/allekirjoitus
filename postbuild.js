@@ -163,7 +163,7 @@ articles.forEach(article => {
       <article>
         <h1>${article.title}</h1>
         <p><em>${article.description}</em></p>
-        <p>Julkaistu: ${article.date} | Polarcomp Oy</p>
+        <p>Julkaistu ${article.displayDate || article.date} | Polarcomp Oy</p>
         ${article.content}
         <p><a href="https://helppoallekirjoitus.fi/">Allekirjoita sopimus heti (1,49 €) →</a></p>
       </article>

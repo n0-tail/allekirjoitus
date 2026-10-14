@@ -18,21 +18,19 @@ function App() {
 
   return (
     <>
-      <div style={{ background: '#0f172a', color: '#cbd5e1', fontSize: '0.775rem', padding: '0.4rem 1rem', borderBottom: '1px solid #1e293b' }}>
-        <div style={{ maxWidth: '900px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
-          <span>Suomalainen sähköinen allekirjoituspalvelu • Vahva pankkitunnistautuminen (FTN)</span>
-          <span style={{ color: '#94a3b8' }}>Polarcomp Oy (Y-tunnus 0969733-4)</span>
-        </div>
-      </div>
-
       <header className="app-header">
-        <div style={{ maxWidth: '900px', width: '100%', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
-          <div className="app-logo" onClick={() => navigate('/')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <img src={`${import.meta.env.BASE_URL}logo.jpg`} alt="Helppo Allekirjoitus" width={161} height={36} style={{ height: '36px', width: '161px', borderRadius: '4px' }} />
+        <div style={{ maxWidth: '960px', width: '100%', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+            <div className="app-logo" onClick={() => navigate('/')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+              <img src={`${import.meta.env.BASE_URL}logo.jpg`} alt="Helppo Allekirjoitus" width={161} height={36} style={{ height: '36px', width: '161px', borderRadius: '4px' }} />
+            </div>
+            <span className="header-tagline" style={{ fontSize: '0.8rem', color: 'var(--text-muted)', paddingLeft: '0.85rem', borderLeft: '1px solid var(--border)' }}>
+              Vahva pankkitunnistautuminen (FTN)
+            </span>
           </div>
 
-          <nav style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', flexWrap: 'wrap', fontSize: '0.9rem' }}>
-            <Link to="/" style={{ color: 'var(--text-main)', textDecoration: 'none', fontWeight: 500 }}>
+          <nav style={{ display: 'flex', alignItems: 'center', gap: '1.35rem', flexWrap: 'wrap', fontSize: '0.9rem' }}>
+            <Link to="/" style={{ color: 'var(--text-main)', textDecoration: 'none', fontWeight: 600 }}>
               Allekirjoita PDF
             </Link>
             <Link to="/sopimuspohjat" style={{ color: 'var(--text-main)', textDecoration: 'none', fontWeight: 500 }}>
@@ -41,14 +39,14 @@ function App() {
             <Link to="/asiantuntija-artikkelit" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontWeight: 500 }}>
               Oppaat
             </Link>
-            <span style={{ background: '#eff6ff', color: 'var(--primary)', border: '1px solid #bfdbfe', padding: '0.25rem 0.65rem', borderRadius: '6px', fontSize: '0.8rem', fontWeight: 600 }}>
+            <span style={{ background: '#f1f5f9', color: '#0f172a', border: '1px solid #cbd5e1', padding: '0.3rem 0.7rem', borderRadius: '6px', fontSize: '0.8rem', fontWeight: 600 }}>
               1,49 € / allekirjoitus
             </span>
           </nav>
         </div>
       </header>
 
-      <main style={{ padding: '1.75rem 1rem' }}>
+      <main style={{ paddingBottom: '3rem' }}>
         <Suspense fallback={<div style={{ textAlign: 'center', padding: '4rem 1rem', color: 'var(--text-muted)' }}>Ladataan sivua...</div>}>
           <Routes>
             <Route path="/" element={<UploadView />} />

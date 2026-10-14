@@ -1,19 +1,19 @@
 :root {
-  --primary: #2563eb;
-  --primary-hover: #1d4ed8;
+  --primary: #1d4ed8;
+  --primary-hover: #1e40af;
   --bg-color: #f8fafc;
   --surface: #ffffff;
   --text-main: #0f172a;
-  --text-muted: #64748b;
-  --border: #e2e8f0;
-  --success: #10b981;
-  --radius-lg: 16px;
-  --radius-md: 12px;
-  --radius-sm: 8px;
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --text-muted: #475569;
+  --border: #dbe2ea;
+  --success: #059669;
+  --radius-lg: 10px;
+  --radius-md: 8px;
+  --radius-sm: 6px;
+  --shadow-sm: 0 1px 2px 0 rgb(15 23 42 / 0.04);
+  --shadow-md: 0 2px 6px -1px rgb(15 23 42 / 0.06), 0 1px 3px -1px rgb(15 23 42 / 0.04);
+  --shadow-lg: 0 8px 20px -4px rgb(15 23 42 / 0.08), 0 2px 6px -2px rgb(15 23 42 / 0.04);
+  --transition: all 0.15s ease;
 }
 
 * {
@@ -23,66 +23,30 @@
 }
 
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background-color: var(--bg-color);
   color: var(--text-main);
-  line-height: 1.5;
+  line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-/* Hero gradient background with orbs */
+/* Clean institutional hero section */
 .hero-section {
   position: relative;
-  background: linear-gradient(135deg, #eff6ff 0%, #f8fafc 50%, #eef2ff 100%);
-  padding: 2.5rem 1rem 2rem;
-  margin: -2rem -1rem 1.5rem;
-  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-  overflow: hidden;
-  z-index: 1;
-}
-
-.hero-section::before,
-.hero-section::after {
-  content: '';
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  z-index: -1;
-  opacity: 0.5;
-}
-
-.hero-section::before {
-  top: -50px;
-  left: -50px;
-  width: 300px;
-  height: 300px;
-  background: rgba(147, 197, 253, 0.4);
-}
-
-.hero-section::after {
-  bottom: -50px;
-  right: -50px;
-  width: 250px;
-  height: 250px;
-  background: rgba(196, 181, 253, 0.3);
+  padding: 1.25rem 0 1rem;
+  margin-bottom: 1.25rem;
 }
 
 /* Step cards */
 .step-card {
-  text-align: center;
-  padding: 1.5rem 1rem;
+  text-align: left;
+  padding: 1.35rem;
   border-radius: var(--radius-md);
-  transition: var(--transition);
-  background: transparent;
-}
-
-.step-card:hover {
-  background: white;
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
+  border: 1px solid var(--border);
+  background: var(--surface);
 }
 
 /* FAQ styling */
@@ -91,7 +55,7 @@ details {
 }
 
 details:hover {
-  border-color: var(--primary) !important;
+  border-color: #94a3b8 !important;
 }
 
 details[open] {
@@ -109,7 +73,7 @@ details summary {
 details summary::after {
   content: '+';
   font-size: 1.25rem;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--text-muted);
   transition: var(--transition);
 }
@@ -128,20 +92,21 @@ details[open] summary::after {
 h1,
 h2,
 h3 {
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: -0.02em;
+  color: var(--text-main);
 }
 
 h1 {
-  font-size: 2.25rem;
+  font-size: 2.15rem;
 }
 
 h2 {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
 }
 
 h3 {
-  font-size: 1.25rem;
+  font-size: 1.125rem;
 }
 
 p {
@@ -150,47 +115,34 @@ p {
 
 /* Layout Containers */
 .container {
-  max-width: 800px;
+  max-width: 820px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1.5rem 1rem;
   width: 100%;
 }
 
 .card {
   background: var(--surface);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-sm);
   border: 1px solid var(--border);
   padding: 2rem;
-  transition: var(--transition);
-}
-
-.card:hover {
-  box-shadow: var(--shadow-lg);
 }
 
 .glass-panel {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.05), inset 0 0 0 1px rgba(255, 255, 255, 1);
-}
-
-/* Glass Card specific for Upload form */
-.glass-card {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: var(--surface);
   border-radius: var(--radius-lg);
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08), inset 0 0 0 1px rgba(255, 255, 255, 0.9);
-  padding: 2rem;
-  transition: var(--transition);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
 }
 
-.glass-card:hover {
-  box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 1);
+/* Main Form Card */
+.glass-card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid #cbd5e1;
+  box-shadow: var(--shadow-md);
+  padding: 2rem;
 }
 
 /* Buttons */
@@ -198,35 +150,34 @@ p {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.75rem 1.5rem;
-  font-weight: 500;
+  padding: 0.75rem 1.35rem;
+  font-weight: 600;
   border-radius: var(--radius-md);
   border: none;
   cursor: pointer;
   transition: var(--transition);
-  font-size: 1rem;
+  font-size: 0.975rem;
 }
 
 .btn-primary {
   background: var(--primary);
   color: white;
-  box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.39);
+  border: 1px solid #1e40af;
 }
 
 .btn-primary:hover {
   background: var(--primary-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px 0 rgba(37, 99, 235, 0.39);
 }
 
 .btn-secondary {
   background: white;
   color: var(--text-main);
-  border: 1px solid var(--border);
+  border: 1px solid #cbd5e1;
 }
 
 .btn-secondary:hover {
   background: #f1f5f9;
+  border-color: #94a3b8;
 }
 
 .btn:disabled {
@@ -458,8 +409,8 @@ p {
   }
 
   .hero-section {
-    padding: 3rem 1rem 2rem;
-    margin: -1rem -1rem 1.5rem;
+    padding: 0.75rem 0 0.75rem;
+    margin-bottom: 1rem;
   }
 
   .bank-grid {
@@ -468,14 +419,14 @@ p {
 
   .trust-grid {
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: 1rem;
   }
 
   .dropzone {
-    padding: 2rem 1rem;
+    padding: 1.5rem 1rem;
   }
 
   .app-header {
-    padding: 1rem;
+    padding: 0.85rem 1rem;
   }
 }

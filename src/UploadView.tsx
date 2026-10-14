@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from './lib/supabase';
 import { reportError } from './lib/errorReporter';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { contractTemplates } from './data/contractTemplates';
+import { articles } from './data/articles';
 
 interface UploadViewProps { }
 
 export const UploadView: React.FC<UploadViewProps> = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     document.title = "Helppo Allekirjoitus – Sähköinen allekirjoitus verkossa | eIDAS & FTN";
@@ -19,6 +22,8 @@ export const UploadView: React.FC<UploadViewProps> = () => {
 
   const [file, setFile] = useState<File | null>(null);
   const [sender, setSender] = useState('');
+  const [showCertPreview, setShowCertPreview] = useState(false);
+
   interface Recipient {
     id: string;
     email: string;
@@ -31,6 +36,26 @@ export const UploadView: React.FC<UploadViewProps> = () => {
     { id: crypto.randomUUID(), email: '' }
   ]);
   const [isUploading, setIsUploading] = useState(false);
+
+  // Pick up generated contract PDF if navigated from /sopimuspohjat/:slug
+  useEffect(() => {
+    const state = location.state as {
+      generatedFile?: File;
+      senderEmail?: string;
+      recipientEmail?: string;
+    } | null;
+
+    if (state?.generatedFile) {
+      setFile(state.generatedFile);
+      if (state.senderEmail) {
+        setSender(state.senderEmail);
+      }
+      if (state.recipientEmail) {
+        setRecipients([{ id: crypto.randomUUID(), email: state.recipientEmail }]);
+      }
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
   const addRecipient = () => {
     if (recipients.length >= 20) {
@@ -101,9 +126,6 @@ export const UploadView: React.FC<UploadViewProps> = () => {
 
         if (dbError) throw new Error(`Virhe tietokantaan tallennettaessa: ${dbError.message}`);
 
-        // TÄSTÄ POISTETTU: Sähköposteja ei enää lähetetä UploadView-vaiheessa, vaan vasta DocumentFlow-vaiheessa
-        // kun olemme selvittäneet haluaako "Allekirjoittaja 1" nimensä mukaan asiakirjaan.
-
         // NOLLAA VÄLIMUISTI UUTTA ASIAKIRJAA VARTEN:
         sessionStorage.removeItem('observerPays');
         sessionStorage.removeItem('payForAll');
@@ -127,25 +149,59 @@ export const UploadView: React.FC<UploadViewProps> = () => {
   };
 
   return (
-    <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-      {/* HERO SECTION */}
-      <section className="hero-section animate-fade-in" style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-        <h1 style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '1rem', lineHeight: 1.2 }}>
-          Allekirjoita sopimukset <span style={{ color: 'var(--primary)' }}>turvallisesti</span> verkossa.
+    <div style={{ maxWidth: '880px', margin: '0 auto' }}>
+      {/* CREDIBLE NORDIC INSTITUTIONAL HERO */}
+      <section className="hero-section animate-fade-in">
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center', marginBottom: '0.85rem' }}>
+          <span style={{ background: '#ffffff', border: '1px solid var(--border)', color: 'var(--text-main)', fontSize: '0.775rem', fontWeight: 600, padding: '0.25rem 0.65rem', borderRadius: '4px' }}>
+            Finnish Trust Network (FTN)
+          </span>
+          <span style={{ background: '#ffffff', border: '1px solid var(--border)', color: 'var(--text-muted)', fontSize: '0.775rem', fontWeight: 500, padding: '0.25rem 0.65rem', borderRadius: '4px' }}>
+            EU eIDAS (910/2014)
+          </span>
+          <span style={{ background: '#ecfdf5', border: '1px solid #a7f3d0', color: '#065f46', fontSize: '0.775rem', fontWeight: 600, padding: '0.25rem 0.65rem', borderRadius: '4px' }}>
+            Kertamaksu 1,49 € • Ei tilausta
+          </span>
+        </div>
+
+        <h1 style={{ fontSize: '2.1rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '0.65rem', lineHeight: 1.2 }}>
+          Sähköinen allekirjoitus suomalaisilla pankkitunnuksilla
         </h1>
-        <p style={{ fontSize: '1.125rem', color: 'var(--text-muted)', maxWidth: '600px', margin: '0 auto' }}>
-          Lataa PDF luottamuksellisesti, tunnistaudu pankkitunnuksilla ja pyydä sitova sähköinen allekirjoitus toiselta osapuolelta.
-          Helppoa ja juridisesti sitovaa.
+        <p style={{ fontSize: '1.05rem', color: 'var(--text-muted)', maxWidth: '720px', lineHeight: 1.55 }}>
+          Allekirjoita vuokrasopimus, kauppakirja, valtakirja tai muu PDF-asiakirja juridisesti sitovasti ilman käyttäjätunnusten luomista tai kuukausimaksuja. Valmis asiakirja ja virallinen allekirjoitustodistus toimitetaan suoraan osapuolten sähköpostiin.
         </p>
       </section>
 
       {/* MAIN FORM CARD */}
       <div className="glass-card animate-fade-in" style={{ position: 'relative', zIndex: 10 }}>
-        <h2 style={{ marginBottom: '1.5rem', textAlign: 'center' }}>Aloita uusi allekirjoituspyyntö</h2>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.25rem', paddingBottom: '1rem', borderBottom: '1px solid var(--border)' }}>
+          <h2 style={{ fontSize: '1.25rem', margin: 0 }}>1. Valitse allekirjoitettava PDF-asiakirja ja osapuolet</h2>
+          <button
+            type="button"
+            onClick={() => setShowCertPreview(true)}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'var(--primary)',
+              fontSize: '0.875rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+              textDecoration: 'underline',
+              padding: 0
+            }}
+          >
+            Katso miltä valmis allekirjoitustodistus näyttää →
+          </button>
+        </div>
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label className="form-label">Valitse asiakirja (PDF)</label>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+              <label className="form-label" style={{ margin: 0 }}>Allekirjoitettava tiedosto (PDF)</label>
+              <Link to="/sopimuspohjat" style={{ fontSize: '0.825rem', color: 'var(--primary)', textDecoration: 'none', fontWeight: 500 }}>
+                Puuttuuko PDF? Täytä valmis sopimuspohja tästä →
+              </Link>
+            </div>
             <div
               className={`dropzone ${file ? 'active' : ''}`}
               onDragOver={(e) => e.preventDefault()}
@@ -159,44 +215,49 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                 style={{ display: 'none' }}
                 onChange={handleFileChange}
               />
-              <svg className="dropzone-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+              <svg className="dropzone-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ width: '38px', height: '38px' }}>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
               </svg>
               {file ? (
                 <div>
-                  <strong>{file.name}</strong>
-                  <p style={{ fontSize: '0.875rem', marginTop: '0.25rem', color: 'var(--primary)' }}>Asiakirja on valmis ladattavaksi</p>
+                  <strong style={{ color: 'var(--text-main)', fontSize: '1rem' }}>{file.name}</strong>
+                  <p style={{ fontSize: '0.85rem', marginTop: '0.25rem', color: 'var(--primary)', fontWeight: 500 }}>
+                    PDF-tiedosto valittu • Klikkaa vaihtaaksesi tiedoston
+                  </p>
                 </div>
               ) : (
-                <p>Raahaa ja pudota PDF-tiedosto tähän tai klikkaa selataksesi laitteeltasi</p>
+                <div>
+                  <div style={{ fontWeight: 600, color: 'var(--text-main)', marginBottom: '0.2rem' }}>
+                    Valitse PDF-tiedosto laitteeltasi tai pudota se tähän
+                  </div>
+                  <div style={{ fontSize: '0.825rem', color: 'var(--text-muted)' }}>
+                    Tuettu muoto: PDF • Asiakirja suojataan TLS-salauksella ja poistetaan palvelimelta 24 h kuluessa valmistumisesta
+                  </div>
+                </div>
               )}
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.35rem', marginTop: '0.75rem', color: 'var(--success)', fontSize: '0.75rem', fontWeight: 500 }}>
-              <svg style={{ width: '14px', height: '14px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
-              Zero-knowledge -periaate: Emme lue tai tallenna sopimuksianne. Tiedostot tuhotaan 24h kuluessa.
             </div>
           </div>
 
           <div className="animate-fade-in">
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
 
               {/* LEFT COLUMN: Sender */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 <div className="form-group" style={{ marginBottom: 0 }}>
-                  <label className="form-label">Allekirjoittaja 1</label>
+                  <label className="form-label">Allekirjoittaja 1 (Sinä / Lähettäjä)</label>
                   <input
                     type="email"
                     name="email"
                     autoComplete="email"
                     className="form-input"
-                    placeholder="esim. matti.meikalainen@email.com"
+                    placeholder="esim. etunimi.sukunimi@yritys.fi"
                     value={sender}
                     onChange={(e) => setSender(e.target.value)}
                     required
                   />
+                  <span style={{ display: 'block', fontSize: '0.775rem', color: 'var(--text-muted)', marginTop: '0.35rem' }}>
+                    Voit seuraavassa vaiheessa myös lähettää asiakirjan vain muille allekirjoitettavaksi.
+                  </span>
                 </div>
               </div>
 
@@ -205,7 +266,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                 {recipients.map((rec, index) => (
                   <div key={rec.id} className="form-group animate-fade-in" style={{ marginBottom: 0 }}>
                     <label className="form-label">
-                      {`Allekirjoittaja ${index + 2}`}
+                      {`Allekirjoittaja ${index + 2} (Vastapuolen sähköposti — valinnainen jos allekirjoitat yksin)`}
                     </label>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                       <input
@@ -213,7 +274,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                         name="email"
                         autoComplete="email"
                         className="form-input"
-                        placeholder={index === 0 ? "esim. maija.meikalainen@email.com" : "esim. matti.virtanen@email.com"}
+                        placeholder="esim. vastaanottaja@email.fi"
                         value={rec.email}
                         onChange={(e) => updateRecipient(rec.id, e.target.value)}
                         required={index > 0}
@@ -224,16 +285,15 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                           type="button"
                           onClick={() => removeRecipient(rec.id)}
                           style={{
-                            background: 'rgba(239, 68, 68, 0.1)',
-                            border: 'none',
-                            color: '#ef4444',
+                            background: '#fef2f2',
+                            border: '1px solid #fecaca',
+                            color: '#dc2626',
                             cursor: 'pointer',
                             padding: '0.6rem',
                             borderRadius: 'var(--radius-md)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            transition: 'background 0.2s',
                             flexShrink: 0
                           }}
                           title="Poista allekirjoittaja"
@@ -256,185 +316,315 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                       alignItems: 'center',
                       justifyContent: 'center',
                       gap: '0.4rem',
-                      background: 'rgba(37, 99, 235, 0.03)',
-                      border: '1px dashed rgba(37, 99, 235, 0.3)',
-                      color: 'var(--primary)',
+                      background: '#f8fafc',
+                      border: '1px dashed #94a3b8',
+                      color: 'var(--text-main)',
                       cursor: 'pointer',
                       fontWeight: 500,
-                      padding: '0.75rem',
+                      fontSize: '0.875rem',
+                      padding: '0.65rem',
                       borderRadius: 'var(--radius-md)',
                       width: '100%',
-                      transition: 'all 0.2s ease-in-out'
                     }}
-                    onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(37, 99, 235, 0.08)'; e.currentTarget.style.borderColor = 'rgba(37, 99, 235, 0.5)'; }}
-                    onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(37, 99, 235, 0.03)'; e.currentTarget.style.borderColor = 'rgba(37, 99, 235, 0.3)'; }}
                   >
-                    <svg style={{ width: '18px', height: '18px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                    </svg>
-                    <span>Lisää allekirjoittaja</span>
+                    + Lisää useampi allekirjoittaja
                   </button>
                 </div>
               </div>
 
             </div>
 
-            <div style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'center' }}>
+            <div style={{ marginTop: '1.75rem', paddingTop: '1.25rem', borderTop: '1px solid var(--border)', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
+              <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                Hinta: <strong style={{ color: 'var(--text-main)' }}>1,49 € / allekirjoittaja</strong> (sis. ALV 25,5 %, pankkitunnistautumisen ja todistuksen)
+              </div>
               <button
                 type="submit"
                 className="btn btn-primary"
-                style={{ width: '100%', maxWidth: '400px', fontSize: '1.125rem', padding: '1rem' }}
+                style={{ minWidth: '280px', fontSize: '1rem', padding: '0.9rem 1.75rem' }}
                 disabled={!file || !sender || (recipients.length > 1 && recipients.some(r => r.email.trim() === '')) || isUploading}
               >
-                {isUploading ? 'Ladataan turvallisesti...' : 'Jatka ja tunnistaudu →'}
+                {isUploading ? 'Siirretään asiakirjaa...' : 'Jatka ja tunnistaudu →'}
               </button>
             </div>
           </div>
         </form>
       </div>
 
+      {/* SMART CONTRACT TEMPLATES BAR (Suggestion #1) */}
+      <section style={{ marginTop: '2rem', padding: '1.5rem', background: '#ffffff', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1rem' }}>
+          <div>
+            <h2 style={{ fontSize: '1.15rem', marginBottom: '0.2rem' }}>Eikö sinulla ole vielä valmista PDF-sopimusta?</h2>
+            <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>
+              Täytä valmis suomalainen sopimuspohja suoraan selaimessa ja siirry yhdellä klikkauksella allekirjoittamaan:
+            </p>
+          </div>
+          <Link to="/sopimuspohjat" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--primary)', textDecoration: 'none' }}>
+            Kaikki sopimuspohjat →
+          </Link>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '0.75rem' }}>
+          {contractTemplates.map((tpl) => (
+            <Link
+              key={tpl.slug}
+              to={`/sopimuspohjat/${tpl.slug}`}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '0.75rem 1rem',
+                background: '#f8fafc',
+                border: '1px solid var(--border)',
+                borderRadius: 'var(--radius-md)',
+                textDecoration: 'none',
+                color: 'var(--text-main)',
+                fontSize: '0.9rem',
+                fontWeight: 500
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.borderColor = 'var(--primary)';
+                e.currentTarget.style.background = '#eff6ff';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.borderColor = 'var(--border)';
+                e.currentTarget.style.background = '#f8fafc';
+              }}
+            >
+              <span>{tpl.title}</span>
+              <span style={{ color: 'var(--primary)', fontWeight: 600 }}>→</span>
+            </Link>
+          ))}
+        </div>
+
+        <div style={{ marginTop: '1rem', paddingTop: '0.75rem', borderTop: '1px solid #f1f5f9', fontSize: '0.825rem', color: 'var(--text-muted)', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
+          <span>Tarvitsetko muokattavan Word-asiakirjan (.docx)?</span>
+          <a href="https://dokumenttipohja.fi/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', fontWeight: 500, textDecoration: 'none' }}>
+            Katso yli 70 ilmaista Word-mallia sisarsivustoltamme Dokumenttipohja.fi ↗
+          </a>
+        </div>
+      </section>
+
       {/* HOW IT WORKS */}
-      <section style={{ marginTop: '3rem', marginBottom: '2rem' }}>
-        <h2 style={{ textAlign: 'center', marginBottom: '3rem', fontSize: '2rem' }}>Miten palvelu toimii?</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem' }}>
+      <section style={{ marginTop: '2.75rem' }}>
+        <h2 style={{ fontSize: '1.4rem', marginBottom: '1.25rem' }}>Näin sähköinen allekirjoitus etenee</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
 
-          <div style={{ textAlign: 'center', padding: '1rem' }} className="step-card">
-            <div style={{ width: '56px', height: '56px', background: '#eff6ff', color: 'var(--primary)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem auto' }}>
-              <svg style={{ width: '28px', height: '28px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-              </svg>
+          <div className="step-card">
+            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.4rem' }}>
+              Vaihe 1
             </div>
-            <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>Lataa asiakirja</h3>
-            <p style={{ color: 'var(--text-muted)' }}>Pudota PDF-tiedosto ja syötä osapuolten sähköpostiosoitteet. Tiedosto siirtyy salattuna palvelimelle.</p>
+            <h3 style={{ fontSize: '1.05rem', marginBottom: '0.4rem' }}>Lataa PDF ja syötä sähköpostit</h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+              Valitse valmis PDF-sopimus laitteeltasi ja syötä allekirjoittajien sähköpostiosoitteet. Voit allekirjoittaa myös itse tai maksaa kaikkien osapuolten kulut kerralla.
+            </p>
           </div>
 
-          <div style={{ textAlign: 'center', padding: '1rem' }} className="step-card">
-            <div style={{ width: '56px', height: '56px', background: '#eff6ff', color: 'var(--primary)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem auto' }}>
-              <svg style={{ width: '28px', height: '28px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
+          <div className="step-card">
+            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.4rem' }}>
+              Vaihe 2
             </div>
-            <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>Maksa & Tunnistaudu</h3>
-            <p style={{ color: 'var(--text-muted)' }}>Kaikki osapuolet tunnistautuvat vahvasti omilla pankkitunnuksillaan. Kulu on 1,49 € / hlö (lähettäjä voi myös maksaa kaikkien puolesta).</p>
+            <h3 style={{ fontSize: '1.05rem', marginBottom: '0.4rem' }}>Tunnistaudu pankkitunnuksilla (FTN)</h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+              Osapuolet saavat sähköpostiinsa kutsulinkin ja tunnistautuvat vahvasti omilla suomalaisilla pankkitunnuksillaan (OP, Nordea, Danske Bank, S-Pankki, Säästöpankki, POP, Aktia, Ålandsbanken).
+            </p>
           </div>
 
-          <div style={{ textAlign: 'center', padding: '1rem' }} className="step-card">
-            <div style={{ width: '56px', height: '56px', background: '#eff6ff', color: 'var(--primary)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem auto' }}>
-              <svg style={{ width: '28px', height: '28px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
+          <div className="step-card">
+            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.4rem' }}>
+              Vaihe 3
             </div>
-            <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>Valmis Asiakirja</h3>
-            <p style={{ color: 'var(--text-muted)' }}>Kun molemmat ovat valmiita, järjestelmä liittää asiakirjaan virallisen allekirjoitustodistuksen aikaleimoineen.</p>
+            <h3 style={{ fontSize: '1.05rem', marginBottom: '0.4rem' }}>Valmis sopimus + allekirjoitustodistus</h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+              Kun kaikki osapuolet ovat tunnistautuneet, PDF-asiakirjaan liitetään virallinen allekirjoitustodistus aikaleimoineen ja QR-tarkistuskoodeineen, ja se lähetetään kaikkien sähköpostiin.
+            </p>
           </div>
 
         </div>
       </section>
 
-      {/* TRUST & CREDENTIALS */}
-      <section style={{ marginTop: '4rem', padding: '2rem 1rem', background: '#f8fafc', borderRadius: 'var(--radius-lg)' }}>
-        <h2 style={{ textAlign: 'center', marginBottom: '2rem', fontSize: '1.5rem' }}>Miksi luottaa palveluumme?</h2>
+      {/* TRUST & TECHNICAL SPECIFICATION */}
+      <section style={{ marginTop: '2.75rem' }}>
+        <h2 style={{ fontSize: '1.4rem', marginBottom: '1.25rem' }}>Juridinen sitovuus ja tietosuoja</h2>
         <div className="trust-grid">
 
-          <div style={{ textAlign: 'center', padding: '1rem' }} className="step-card">
-            <div style={{ width: '48px', height: '48px', margin: '0 auto 1rem auto', color: 'var(--primary)' }}>
-              <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-              </svg>
-            </div>
-            <h3 style={{ fontSize: '1rem', marginBottom: '0.5rem' }}>eIDAS-yhteensopiva</h3>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Sähköinen allekirjoitus on juridisesti sitova EU:n eIDAS-asetuksen (910/2014, Art. 25) mukaisesti.</p>
+          <div className="step-card">
+            <h3 style={{ fontSize: '0.975rem', marginBottom: '0.35rem' }}>eIDAS-asetus (EU 910/2014)</h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+              Vahvaan sähköiseen tunnistautumiseen perustuva allekirjoitus on juridisesti sitova Suomen sopimusoikeudessa ja koko EU-alueella.
+            </p>
           </div>
 
-          <div style={{ textAlign: 'center', padding: '1rem' }} className="step-card">
-            <div style={{ width: '48px', height: '48px', margin: '0 auto 1rem auto', color: 'var(--primary)' }}>
-              <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
-              </svg>
-            </div>
-            <h3 style={{ fontSize: '1rem', marginBottom: '0.5rem' }}>FTN-tunnistautuminen</h3>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Traficomin hyväksymä vahva tunnistautuminen omilla pankkitunnuksilla (Finnish Trust Network).</p>
+          <div className="step-card">
+            <h3 style={{ fontSize: '0.975rem', marginBottom: '0.35rem' }}>Finnish Trust Network (FTN)</h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+              Allekirjoittajan virallinen nimi haetaan suoraan Traficomin valvomasta luottamusverkostosta pankkitunnistautumisen yhteydessä.
+            </p>
           </div>
 
-          <div style={{ textAlign: 'center', padding: '1rem' }} className="step-card">
-            <div style={{ width: '48px', height: '48px', margin: '0 auto 1rem auto', color: 'var(--primary)' }}>
-              <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
-              </svg>
-            </div>
-            <h3 style={{ fontSize: '1rem', marginBottom: '0.5rem' }}>Turvallinen maksu</h3>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Maksut käsitellään Stripen kautta — PCI DSS Level 1 -sertifioitu, maailman johtava maksualusta.</p>
+          <div className="step-card">
+            <h3 style={{ fontSize: '0.975rem', marginBottom: '0.35rem' }}>Automaattinen 24 h tietojen poisto</h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+              Emme kerää pysyvää sopimusarkistoa. Valmiit PDF-asiakirjat poistetaan palvelimilta automaattisesti 24 tunnin kuluttua allekirjoituksesta.
+            </p>
           </div>
 
-          <div style={{ textAlign: 'center', padding: '1rem' }} className="step-card">
-            <div style={{ width: '48px', height: '48px', margin: '0 auto 1rem auto', color: 'var(--primary)' }}>
-              <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
-              </svg>
-            </div>
-            <h3 style={{ fontSize: '1rem', marginBottom: '0.5rem' }}>Suomalainen palvelu</h3>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Polarcomp Oy (Y-tunnus: 0969733-4). Tiedot käsitellään EU:n tietosuoja-asetuksen (GDPR) mukaisesti.</p>
+          <div className="step-card">
+            <h3 style={{ fontSize: '0.975rem', marginBottom: '0.35rem' }}>Kotimainen palveluntarjoaja</h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+              Palvelusta vastaa suomalainen Polarcomp Oy (Y-tunnus 0969733-4). Maksuliikenne kulkee PCI DSS Level 1 -sertifioidun Stripen kautta.
+            </p>
           </div>
 
         </div>
       </section>
 
       {/* FAQ SECTION */}
-      <section style={{ marginTop: '4rem', marginBottom: '2rem' }}>
-        <h2 style={{ textAlign: 'center', marginBottom: '2rem', fontSize: '2rem' }}>Usein kysytyt kysymykset</h2>
-        <div style={{ maxWidth: '700px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <section style={{ marginTop: '2.75rem', marginBottom: '2rem' }}>
+        <h2 style={{ fontSize: '1.4rem', marginBottom: '1.25rem' }}>Usein kysytyt kysymykset</h2>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
 
-          <details style={{ background: '#f8fafc', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', padding: '1rem 1.5rem' }}>
-            <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: '1rem', color: 'var(--text-main)' }}>Onko sähköinen allekirjoitus laillinen Suomessa?</summary>
-            <p style={{ marginTop: '0.75rem', color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
-              Kyllä. EU:n eIDAS-asetus (910/2014) tunnustaa sähköiset allekirjoitukset juridisesti sitoviksi kaikissa EU-maissa. Suomen lainsäädäntö ei aseta sopimusten muodollisia muotovaatimuksia, joten sähköinen allekirjoitus on pätevä useimmissa sopimuksissa.
+          <details style={{ background: '#ffffff', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', padding: '1rem 1.25rem' }}>
+            <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: '0.975rem', color: 'var(--text-main)' }}>Onko sähköinen allekirjoitus laillinen Suomessa?</summary>
+            <p style={{ marginTop: '0.65rem', color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
+              Kyllä. EU:n eIDAS-asetus (910/2014) tunnustaa sähköiset allekirjoitukset juridisesti sitoviksi kaikissa EU-maissa. Suomen lainsäädäntö ei aseta useimmille sopimuksille (kuten vuokrasopimuksille, työsopimuksille, velkakirjoille tai irtaimen kauppakirjoille) muotovaatimusta, jota vahva pankkitunnistautuminen ei täyttäisi.
             </p>
           </details>
 
-          <details style={{ background: '#f8fafc', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', padding: '1rem 1.5rem' }}>
-            <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: '1rem', color: 'var(--text-main)' }}>Miten tunnistautuminen toimii?</summary>
-            <p style={{ marginTop: '0.75rem', color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
-              Käytämme Finnish Trust Network (FTN) -tunnistautumista, jonka valvoo Traficom. Tunnistaudut omilla pankkitunnuksillasi (OP, Nordea, Danske Bank jne.), jolloin henkilöllisyytesi vahvistetaan luotettavasti.
+          <details style={{ background: '#ffffff', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', padding: '1rem 1.25rem' }}>
+            <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: '0.975rem', color: 'var(--text-main)' }}>Miten tunnistautuminen toimii?</summary>
+            <p style={{ marginTop: '0.65rem', color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
+              Käytämme Liikenne- ja viestintävirasto Traficomin valvomaa Finnish Trust Network (FTN) -tunnistautumista. Tunnistaudut omilla pankkitunnuksillasi (OP, Nordea, Danske Bank, S-Pankki, Säästöpankki, POP Pankki, Aktia, Ålandsbanken), jolloin virallinen nimesi vahvistetaan suoraan pankin rekisteristä.
             </p>
           </details>
 
-          <details style={{ background: '#f8fafc', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', padding: '1rem 1.5rem' }}>
-            <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: '1rem', color: 'var(--text-main)' }}>Mitä tiedoilleni tapahtuu?</summary>
-            <p style={{ marginTop: '0.75rem', color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
-              Asiakirjat ja henkilötiedot käsitellään EU:n tietosuoja-asetuksen (GDPR) mukaisesti. Allekirjoitetut asiakirjat poistetaan palvelimilta automaattisesti 24 tunnin kuluessa allekirjoituksen valmistumisesta. Palveluun ei jää talteen henkilötietoja eikä asiakirjoja.
+          <details style={{ background: '#ffffff', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', padding: '1rem 1.25rem' }}>
+            <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: '0.975rem', color: 'var(--text-main)' }}>Mitä tiedoilleni ja sopimukselleni tapahtuu?</summary>
+            <p style={{ marginTop: '0.65rem', color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
+              Asiakirjat ja henkilötiedot käsitellään EU:n tietosuoja-asetuksen (GDPR) mukaisesti. Kun kaikki osapuolet ovat allekirjoittaneet asiakirjan, valmis PDF lähetetään liitteenä kaikkien sähköpostiin ja poistetaan palvelimiltamme automaattisesti 24 tunnin kuluessa.
             </p>
           </details>
 
-          <details style={{ background: '#f8fafc', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', padding: '1rem 1.5rem' }}>
-            <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: '1rem', color: 'var(--text-main)' }}>Paljonko palvelu maksaa?</summary>
-            <p style={{ marginTop: '0.75rem', color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
-              Palvelun käyttö maksaa 1,49 € per henkilö (lähettäjä voi myös maksaa kaikkien puolesta). Maksu sisältää tunnistautumisen, asiakirjan käsittelyn ja allekirjoitustodistuksen. Ei kuukausimaksuja tai piilokustannuksia.
+          <details style={{ background: '#ffffff', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', padding: '1rem 1.25rem' }}>
+            <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: '0.975rem', color: 'var(--text-main)' }}>Paljonko palvelu maksaa ja voiko lähettäjä maksaa kaikkien puolesta?</summary>
+            <p style={{ marginTop: '0.65rem', color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
+              Palvelun käyttö maksaa 1,49 € per allekirjoittaja (sis. ALV 25,5 %). Lähettäjä voi halutessaan maksaa koko asiakirjan kaikki kulut kerralla, jolloin vastaanottajat pääsevät suoraan tunnistautumaan pankkitunnuksillaan ilman maksua. Lähettäjä voi myös lähettää asiakirjan muille allekirjoitettavaksi ilman omaa allekirjoitustaan.
             </p>
           </details>
 
-          <details style={{ background: '#f8fafc', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', padding: '1rem 1.5rem' }}>
-            <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: '1rem', color: 'var(--text-main)' }}>Mitä tiedostoja voi allekirjoittaa?</summary>
-            <p style={{ marginTop: '0.75rem', color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
-              Palvelu tukee PDF-tiedostoja. Voit allekirjoittaa sähköisesti esimerkiksi vuokrasopimuksia, työsopimuksia, kauppasopimuksia, valtakirjoja ja muita sopimusasiakirjoja.
-            </p>
-          </details>
-
-          <details style={{ background: '#f8fafc', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', padding: '1rem 1.5rem' }}>
-            <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: '1rem', color: 'var(--text-main)' }}>Miten saan valmiin asiakirjan itselleni?</summary>
-            <p style={{ marginTop: '0.75rem', color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
-              Kun kaikki osapuolet ovat allekirjoittaneet asiakirjan, se lähetetään automaattisesti kaikkien sähköpostiin PDF-liitteenä ja latauslinkkinä. Emme säilytä dokumentteja pysyvästi: tietoturvasyistä tiedostot poistetaan palvelimeltamme 24 tunnin kuluessa, jonka jälkeen ne säilyvät turvallisesti vain teidän omissa sähköposteissanne.
-            </p>
-          </details>
-
-          <details style={{ background: '#f8fafc', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', padding: '1rem 1.5rem' }}>
-            <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: '1rem', color: 'var(--text-main)' }}>Voinko seurata prosessin etenemistä?</summary>
-            <p style={{ marginTop: '0.75rem', color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
-              Kyllä voit! Lähetämme sinulle sähköpostitse turvallisen linkin, jonka kautta näet koko ajan reaaliaikaisesti, ketkä osapuolet ovat jo allekirjoittaneet asiakirjan ja ketkä vielä puuttuvat.
+          <details style={{ background: '#ffffff', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', padding: '1rem 1.25rem' }}>
+            <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: '0.975rem', color: 'var(--text-main)' }}>Miten voin tarkistaa allekirjoitetun PDF-asiakirjan aitouden myöhemmin?</summary>
+            <p style={{ marginTop: '0.65rem', color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
+              Jokaisen allekirjoitetun PDF-sopimuksen viimeiselle sivulle liitetään virallinen allekirjoitustodistus ja QR-koodi. Tarkistussivulla voit myös pudottaa PDF-tiedoston tarkistimeen, joka laskee tiedoston SHA-256-tiivisteen ja varmistaa, ettei PDF-sopimusta ole muokattu yhdenkään tavun vertaa allekirjoituksen jälkeen.
             </p>
           </details>
 
         </div>
       </section>
+
+      {/* INTERNAL SEO LINKS TO ARTICLES */}
+      <section style={{ marginTop: '2.5rem', marginBottom: '1rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1rem' }}>
+          <h2 style={{ fontSize: '1.25rem' }}>Oppaat ja tietoa sähköisestä allekirjoituksesta</h2>
+          <Link to="/asiantuntija-artikkelit" style={{ fontSize: '0.85rem', color: 'var(--primary)', textDecoration: 'none', fontWeight: 600 }}>
+            Kaikki artikkelit →
+          </Link>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
+          {articles.map((art) => (
+            <Link
+              key={art.slug}
+              to={`/asiantuntija-artikkelit/${art.slug}`}
+              className="step-card"
+              style={{ textDecoration: 'none', display: 'block' }}
+            >
+              <h3 style={{ fontSize: '0.975rem', color: 'var(--text-main)', marginBottom: '0.35rem' }}>{art.title}</h3>
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>{art.description}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* CERTIFICATE PREVIEW MODAL (Suggestion #2) */}
+      {showCertPreview && (
+        <div
+          className="modal-overlay"
+          onClick={() => setShowCertPreview(false)}
+          style={{ zIndex: 100 }}
+        >
+          <div
+            className="card"
+            onClick={(e) => e.stopPropagation()}
+            style={{ maxWidth: '640px', width: '100%', maxHeight: '90vh', overflowY: 'auto', padding: '1.75rem', position: 'relative' }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', paddingBottom: '0.75rem', borderBottom: '1px solid var(--border)' }}>
+              <div>
+                <strong style={{ fontSize: '1rem', color: 'var(--text-main)' }}>Esimerkki: Virallinen allekirjoitustodistus</strong>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                  Tämä sivu liitetään automaattisesti jokaisen allekirjoitetun PDF-asiakirjan loppuun.
+                </div>
+              </div>
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => setShowCertPreview(false)}
+                style={{ padding: '0.35rem 0.75rem', fontSize: '0.85rem' }}
+              >
+                Sulje ✕
+              </button>
+            </div>
+
+            {/* Simulated A4 Certificate Sheet */}
+            <div style={{ background: '#ffffff', border: '1px solid #cbd5e1', borderRadius: '6px', padding: '1.5rem', boxShadow: 'inset 0 0 0 4px #f8fafc', fontSize: '0.825rem', color: '#0f172a' }}>
+              <div style={{ height: '6px', background: '#2563eb', margin: '-1.5rem -1.5rem 1.25rem -1.5rem', borderRadius: '5px 5px 0 0' }} />
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+                <strong style={{ color: '#1d4ed8', fontSize: '1rem' }}>Helppo Allekirjoitus</strong>
+                <span style={{ color: '#64748b', fontSize: '0.75rem' }}>Luotettava Sähköinen Allekirjoitus</span>
+              </div>
+
+              <div style={{ textAlign: 'center', margin: '1rem 0 1.25rem' }}>
+                <div style={{ display: 'inline-flex', width: '32px', height: '32px', borderRadius: '50%', background: '#dcfce7', color: '#16a34a', alignItems: 'center', justifyContent: 'center', fontWeight: 700, marginBottom: '0.4rem' }}>
+                  ✓
+                </div>
+                <div style={{ fontWeight: 800, fontSize: '1.05rem', letterSpacing: '0.02em' }}>
+                  SÄHKÖINEN ALLEKIRJOITUSTODISTUS
+                </div>
+                <div style={{ color: '#64748b', fontSize: '0.775rem' }}>
+                  Vahvistettu {new Date().toLocaleDateString('fi-FI')} klo 14.32.10
+                </div>
+              </div>
+
+              <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '4px', padding: '0.85rem', marginBottom: '1rem' }}>
+                <div style={{ fontWeight: 700, marginBottom: '0.35rem' }}>Asiakirjan tiedot</div>
+                <div><strong>Tunnus (ID):</strong> 8f4e2b10-9c4a-4d3b-a12f-7c8d9e0f1a2b</div>
+                <div><strong>Tiedosto:</strong> Asuinhuoneiston_vuokrasopimus.pdf</div>
+                <div><strong>SHA-256-tiiviste:</strong> e3b0c44298fc1c149afbf4c8996fb924...</div>
+              </div>
+
+              <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: '0.75rem', marginBottom: '0.75rem' }}>
+                <div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#64748b', marginBottom: '0.2rem' }}>OSAPUOLI 1: LÄHETTÄJÄ</div>
+                <div style={{ fontWeight: 700, fontSize: '0.9rem' }}>MEIKÄLÄINEN MATTI TAPANI</div>
+                <div style={{ color: '#475569' }}>Sähköposti: matti.meikalainen@esimerkki.fi</div>
+                <div style={{ color: '#64748b', fontSize: '0.75rem' }}>Tunnistustapa: Vahva sähköinen tunnistautuminen (FTN / Pankkitunnukset) • IP: 84.249.xx.xx</div>
+              </div>
+
+              <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: '0.75rem', marginBottom: '1rem' }}>
+                <div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#64748b', marginBottom: '0.2rem' }}>OSAPUOLI 2: VASTAANOTTAJA</div>
+                <div style={{ fontWeight: 700, fontSize: '0.9rem' }}>VIRTANEN MAIJA KAROLIINA</div>
+                <div style={{ color: '#475569' }}>Sähköposti: maija.virtanen@esimerkki.fi</div>
+                <div style={{ color: '#64748b', fontSize: '0.75rem' }}>Tunnistustapa: Vahva sähköinen tunnistautuminen (FTN / Pankkitunnukset) • IP: 91.152.xx.xx</div>
+              </div>
+
+              <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.725rem', color: '#64748b' }}>
+                <span>Sisältää QR-koodin ja SHA-256-aitoustarkistuksen osoitteessa helppoallekirjoitus.fi/verify/...</span>
+                <strong style={{ color: '#1d4ed8' }}>eIDAS & FTN</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* FAQ JSON-LD Schema (invisible, for Google rich results) */}
       <script
@@ -482,22 +672,6 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                 "acceptedAnswer": {
                   "@type": "Answer",
                   "text": "Palvelu tukee PDF-tiedostoja. Voit allekirjoittaa sähköisesti esimerkiksi vuokrasopimuksia, työsopimuksia, kauppasopimuksia, valtakirjoja ja muita sopimusasiakirjoja."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "Miten saan valmiin asiakirjan itselleni?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Kun kaikki osapuolet ovat allekirjoittaneet asiakirjan, se lähetetään automaattisesti kaikkien sähköpostiin PDF-liitteenä ja latauslinkkinä. Emme säilytä dokumentteja pysyvästi: tietoturvasyistä tiedostot poistetaan palvelimeltamme 24 tunnin kuluessa, jonka jälkeen ne säilyvät turvallisesti vain teidän omissa sähköposteissanne."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "Voinko seurata prosessin etenemistä?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Kyllä voit! Lähetämme sinulle sähköpostitse turvallisen linkin, jonka kautta näet koko ajan reaaliaikaisesti, ketkä osapuolet ovat jo allekirjoittaneet asiakirjan ja ketkä vielä puuttuvat."
                 }
               }
             ]

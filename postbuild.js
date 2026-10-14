@@ -6,7 +6,47 @@ import { articles } from './src/data/articles.ts';
 const staticRoutes = [
     { route: '/ehdot', title: 'Käyttöehdot | Helppo Allekirjoitus', description: 'Helppoallekirjoitus.fi -palvelun käyttöehdot.' },
     { route: '/tietosuoja', title: 'Tietosuojaseloste | Helppo Allekirjoitus', description: 'Polarcomp Oy:n tietosuojaseloste ja GDPR-informaatio.' },
-    { route: '/asiantuntija-artikkelit', title: 'Asiantuntija-artikkelit | Helppo Allekirjoitus', description: 'Oppaat ja artikkelit sähköisestä allekirjoituksesta, eIDAS-asetuksesta ja FTN-tunnistautumisesta.' }
+    { route: '/asiantuntija-artikkelit', title: 'Asiantuntija-artikkelit | Helppo Allekirjoitus', description: 'Oppaat ja artikkelit sähköisestä allekirjoituksesta, eIDAS-asetuksesta ja FTN-tunnistautumisesta.' },
+    { route: '/sopimuspohjat', title: 'Ilmaiset sopimuspohjat verkossa – Täytä PDF ja allekirjoita | Helppo Allekirjoitus', description: 'Täytä suomalainen vuokrasopimus, kauppakirja, velkakirja, valtakirja tai salassapitosopimus selaimessa. Lataa ilmainen PDF tai allekirjoita pankkitunnuksilla (1,49 €).' }
+];
+
+const templateRoutes = [
+    {
+        slug: 'asuinhuoneiston-vuokrasopimus',
+        title: 'Asuinhuoneiston vuokrasopimus – Ilmainen pohja & PDF-generaattori | Helppo Allekirjoitus',
+        heading: 'Asuinhuoneiston vuokrasopimus (AHVL 481/1995)',
+        description: 'Laadi suomalainen asuinhuoneiston vuokrasopimus selaimessa. Lataa valmis PDF ilmaiseksi tai allekirjoita sähköisesti pankkitunnuksilla (1,49 €).'
+    },
+    {
+        slug: 'ajoneuvon-kauppakirja',
+        title: 'Ajoneuvon kauppakirja – Ilmainen auton kauppakirjapohja (PDF) | Helppo Allekirjoitus',
+        heading: 'Ajoneuvon kauppakirja (auto, moottoripyörä, vene, työkone)',
+        description: 'Täytä ajoneuvon tai auton kauppakirja suoraan selaimessa. Lataa virallinen PDF ilmaiseksi tai vahvista kauppa pankkitunnuksilla.'
+    },
+    {
+        slug: 'velkakirja',
+        title: 'Velkakirja – Ilmainen velkakirjapohja & PDF-generaattori | Helppo Allekirjoitus',
+        heading: 'Velkakirja (velkakirjalaki 622/1947)',
+        description: 'Laadi selkeä suomalainen velkakirja yksityishenkilöiden tai yritysten välille. Lataa PDF ilmaiseksi tai allekirjoita pankkitunnuksilla.'
+    },
+    {
+        slug: 'valtakirja',
+        title: 'Valtakirja – Ilmainen valtakirjapohja & PDF-generaattori | Helppo Allekirjoitus',
+        heading: 'Yksilöity valtakirja asioiden hoitamiseen',
+        description: 'Luo virallinen yksilöity valtakirja selaimessa. Lataa valmis PDF-asiakirja ilmaiseksi tai allekirjoita vahvalla pankkitunnistautumisella.'
+    },
+    {
+        slug: 'salassapitosopimus-nda',
+        title: 'Salassapitosopimus (NDA) – Ilmainen suomalainen sopimuspohja (PDF) | Helppo Allekirjoitus',
+        heading: 'Salassapitosopimus (NDA) yrityksille ja hankkeille',
+        description: 'Laadi molemminpuolinen suomalainen salassapitosopimus (NDA) selaimessa. Lataa PDF ilmaiseksi tai allekirjoita pankkitunnuksilla.'
+    },
+    {
+        slug: 'irtaimen-kauppakirja',
+        title: 'Irtaimen omaisuuden kauppakirja – Ilmainen pohja (PDF) | Helppo Allekirjoitus',
+        heading: 'Irtaimen omaisuuden kauppakirja (kauppalaki 355/1987)',
+        description: 'Täytä kauppakirja koneen, laitteen tai muun irtaimen omaisuuden kauppaan. Lataa ilmainen PDF tai allekirjoita sähköisesti verkossa.'
+    }
 ];
 
 const distDir = path.join(process.cwd(), 'dist');
@@ -125,7 +165,7 @@ articles.forEach(article => {
         <p><em>${article.description}</em></p>
         <p>Julkaistu: ${article.date} | Polarcomp Oy</p>
         ${article.content}
-        <p><a href="https://helppoallekirjoitus.fi/">Allekirjoita sopimus heti (1,49€) →</a></p>
+        <p><a href="https://helppoallekirjoitus.fi/">Allekirjoita sopimus heti (1,49 €) →</a></p>
       </article>
     </div>
     <!-- End article sr-only content -->`;
@@ -139,6 +179,43 @@ articles.forEach(article => {
     const destFile = path.join(routeDir, 'index.html');
     fs.writeFileSync(destFile, modifiedHtml, 'utf-8');
     console.log(`✔ Injected article content & SEO metadata into ${route}/index.html`);
+});
+
+// For contract template routes: inject SEO metadata and sr-only description
+templateRoutes.forEach(tmpl => {
+    const route = `/sopimuspohjat/${tmpl.slug}`;
+    const routeDir = path.join(distDir, route);
+
+    if (!fs.existsSync(routeDir)) {
+        fs.mkdirSync(routeDir, { recursive: true });
+    }
+
+    let modifiedHtml = updateSeoTags(baseHtml, {
+        route,
+        title: tmpl.title,
+        description: tmpl.description
+    });
+
+    const tmplSrOnly = `
+    <!-- Template sr-only content injected by postbuild -->
+    <div class="sr-only" data-nosnippet>
+      <article>
+        <h1>${tmpl.heading}</h1>
+        <p>${tmpl.description}</p>
+        <p>Asiakirja luodaan suoraan selaimessasi. Voit ladata valmiin PDF-tiedoston veloituksetta omalle laitteellesi tai siirtyä yhdellä painikkeella vahvaan pankkitunnistautumiseen (FTN, 1,49 € / allekirjoittaja).</p>
+        <p><a href="https://helppoallekirjoitus.fi/sopimuspohjat/">Selaa kaikkia sopimuspohjia</a> | <a href="https://dokumenttipohja.fi/">Dokumenttipohja.fi (Word-pohjat)</a></p>
+      </article>
+    </div>
+    <!-- End template sr-only content -->`;
+
+    modifiedHtml = modifiedHtml.replace(
+        SR_ONLY_MARKER,
+        SR_ONLY_MARKER + tmplSrOnly
+    );
+
+    const destFile = path.join(routeDir, 'index.html');
+    fs.writeFileSync(destFile, modifiedHtml, 'utf-8');
+    console.log(`✔ Injected template SEO metadata into ${route}/index.html`);
 });
 
 console.log('Postbuild script completed successfully.');

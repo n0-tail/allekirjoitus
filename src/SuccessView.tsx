@@ -84,7 +84,7 @@ export const SuccessView: React.FC<SuccessViewProps> = ({ data, onReset }) => {
                     Asiakirja on nyt sähköisesti allekirjoitettu ja varustettu kryptografisella allekirjoitustodistuksella. Voit ladata allekirjoitetun asiakirjan alla olevasta painikkeesta.
                 </p>
 
-                <div style={{ display: 'inline-flex', flexDirection: 'column', gap: '1rem', width: '100%', maxWidth: '300px' }}>
+                <div style={{ display: 'inline-flex', flexDirection: 'column', gap: '0.85rem', width: '100%', maxWidth: '320px' }}>
                     <button className="btn btn-primary" onClick={handleDownload} disabled={isDownloading}>
                         <svg style={{ width: '20px', height: '20px', marginRight: '0.5rem' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -93,8 +93,25 @@ export const SuccessView: React.FC<SuccessViewProps> = ({ data, onReset }) => {
                     </button>
 
                     <button className="btn btn-secondary" onClick={onReset}>
-                        Mene etusivulle
+                        Allekirjoita uusi asiakirja
                     </button>
+                </div>
+
+                <div style={{ marginTop: '2.5rem', paddingTop: '1.75rem', borderTop: '1px solid var(--border)', textAlign: 'left', background: '#f8fafc', padding: '1.25rem 1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)' }}>
+                    <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--text-main)', marginBottom: '0.35rem' }}>
+                        Tarvitsetko itse sähköisen allekirjoituksen tai sopimuspohjan?
+                    </div>
+                    <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '0.85rem', lineHeight: 1.5 }}>
+                        Helppo Allekirjoitus -palvelussa voit allekirjoittaa minkä tahansa PDF-sopimuksen pankkitunnuksilla hintaan <strong>1,49 €</strong> ilman rekisteröitymistä tai kuukausimaksuja, tai luoda valmiin vuokrasopimuksen, kauppakirjan tai valtakirjan maksutta.
+                    </p>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', fontSize: '0.875rem', fontWeight: 600 }}>
+                        <a href="/" style={{ color: 'var(--primary)', textDecoration: 'none' }}>
+                            Aloita uusi allekirjoitus (1,49 €) →
+                        </a>
+                        <a href="/sopimuspohjat" style={{ color: 'var(--text-main)', textDecoration: 'none' }}>
+                            Katso ilmaiset sopimuspohjat →
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

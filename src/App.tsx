@@ -24,8 +24,13 @@ function App() {
             <div className="app-logo" onClick={() => navigate('/')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
               <img src={`${import.meta.env.BASE_URL}logo.jpg`} alt="Helppo Allekirjoitus" width={161} height={36} style={{ height: '36px', width: '161px', borderRadius: '4px' }} />
             </div>
-            <span className="header-tagline" style={{ fontSize: '0.8rem', color: 'var(--text-muted)', paddingLeft: '0.85rem', borderLeft: '1px solid var(--border)' }}>
-              Vahva pankkitunnistautuminen (FTN)
+            <span className="header-tagline" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem', fontSize: '0.8rem', color: 'var(--text-main)', fontWeight: 500, paddingLeft: '0.85rem', borderLeft: '1px solid var(--border)' }}>
+              <svg width="18" height="12" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ borderRadius: '2px', boxShadow: '0 0 0 1px #cbd5e1', flexShrink: 0 }} aria-hidden="true">
+                <rect width="18" height="12" fill="#FFFFFF" />
+                <rect x="5" width="3" height="12" fill="#002F6C" />
+                <rect y="4.5" width="18" height="3" fill="#002F6C" />
+              </svg>
+              <span>Aidosti suomalainen palvelu</span>
             </span>
           </div>
 

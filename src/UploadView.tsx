@@ -167,6 +167,14 @@ export const UploadView: React.FC<UploadViewProps> = () => {
       <section className="hero-band">
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center', alignItems: 'center', marginBottom: '1.1rem' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem', background: 'rgba(255, 255, 255, 0.14)', border: '1px solid rgba(255, 255, 255, 0.28)', color: '#ffffff', fontSize: '0.775rem', fontWeight: 600, padding: '0.3rem 0.75rem', borderRadius: '9999px' }}>
+              <svg width="16" height="11" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ borderRadius: '2px', flexShrink: 0 }} aria-hidden="true">
+                <rect width="18" height="12" fill="#FFFFFF" />
+                <rect x="5" width="3" height="12" fill="#002F6C" />
+                <rect y="4.5" width="18" height="3" fill="#002F6C" />
+              </svg>
+              Aidosti suomalainen palvelu
+            </span>
             <span style={{ background: 'rgba(255, 255, 255, 0.1)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#f8fafc', fontSize: '0.775rem', fontWeight: 600, padding: '0.3rem 0.75rem', borderRadius: '9999px' }}>
               ✓ Traficomin valvoma FTN-tunnistautuminen
             </span>
@@ -504,9 +512,16 @@ export const UploadView: React.FC<UploadViewProps> = () => {
           </div>
 
           <div className="step-card">
-            <h3 style={{ fontSize: '0.975rem', marginBottom: '0.35rem' }}>Kotimainen palveluntarjoaja</h3>
+            <h3 style={{ fontSize: '0.975rem', marginBottom: '0.35rem', display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+              <svg width="18" height="12" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ borderRadius: '2px', boxShadow: '0 0 0 1px #cbd5e1', flexShrink: 0 }} aria-hidden="true">
+                <rect width="18" height="12" fill="#FFFFFF" />
+                <rect x="5" width="3" height="12" fill="#002F6C" />
+                <rect y="4.5" width="18" height="3" fill="#002F6C" />
+              </svg>
+              Aidosti suomalainen palvelu
+            </h3>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
-              Palvelusta vastaa suomalainen Polarcomp Oy (Y-tunnus 0969733-4). Maksuliikenne kulkee PCI DSS Level 1 -sertifioidun Stripen kautta.
+              Palvelusta vastaa vuonna 1994 perustettu kotimainen Polarcomp Oy (Y-tunnus 0969733-4, Kemijärvi). Maksut välittää PCI DSS Level 1 -sertifioitu Stripe.
             </p>
           </div>
 

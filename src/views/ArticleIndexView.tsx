@@ -9,7 +9,7 @@ export const ArticleIndexView: React.FC = () => {
         document.title = "Tietoa ja oppaita sähköisestä allekirjoituksesta | Helppo Allekirjoitus";
 
         // Yksinkertainen meta description päivitys (tekoäly lukee nämä dynaamisesti reactin renderöinnin jälkeen)
-        let metaDescription = document.querySelector('meta[name="description"]');
+        const metaDescription = document.querySelector('meta[name="description"]');
         if (metaDescription) {
             metaDescription.setAttribute('content', 'Lue asiantuntija-artikkelit sähköisestä allekirjoituksesta, juridiikasta, hinnoittelusta ja vuokrasopimuksista. Zero-knowledge ja eIDAS/FTN.');
         }
@@ -29,8 +29,8 @@ export const ArticleIndexView: React.FC = () => {
                 Takaisin
             </button>
 
-            <div className="glass-panel" style={{ padding: '3rem 2rem', textAlign: 'left' }}>
-                <h1 style={{ fontSize: '2rem', marginBottom: '1rem', color: 'var(--text)' }}>Asiantuntija-artikkelit ja oppaat</h1>
+            <div className="card" style={{ padding: '3rem 2rem', textAlign: 'left' }}>
+                <h1 style={{ fontSize: '2rem', marginBottom: '1rem', color: 'var(--text-main)' }}>Asiantuntija-artikkelit ja oppaat</h1>
                 <p style={{ color: 'var(--text-muted)', marginBottom: '3rem', fontSize: '1.1rem', lineHeight: 1.6 }}>
                     Syvennä osaamistasi sähköisen allekirjoittamisen juridiikasta (eIDAS) ja arkipäivän käyttötapauksista asiantuntija-artikkeleidemme avulla. Yksityishenkilöille ja yrityksille.
                 </p>
@@ -55,7 +55,7 @@ export const ArticleIndexView: React.FC = () => {
                                         e.currentTarget.style.transform = 'translateY(0)';
                                     }}
                                 >
-                                    <h2 style={{ fontSize: '1.25rem', margin: '0 0 0.5rem 0', color: 'var(--text)' }}>{article.title}</h2>
+                                    <h2 style={{ fontSize: '1.25rem', margin: '0 0 0.5rem 0', color: 'var(--text-main)' }}>{article.title}</h2>
                                     <p style={{ margin: '0 0 1rem 0', color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>
                                         {article.description}
                                     </p>

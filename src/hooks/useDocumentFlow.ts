@@ -81,7 +81,25 @@ export function useDocumentFlow(id: string | undefined, role: 'sender' | 'recipi
                     if (stashedSession === 'processing' && stashedData) {
                         const parsed = JSON.parse(stashedData);
                         if (parsed.documentId === id) {
-                            setData(parsed);
+                            const signersList = doc.signers || [];
+                            const targetSignerId = parsed.signerId || searchParams.get('signer') || undefined;
+                            const enriched: SignatureData = {
+                                ...parsed,
+                                file: parsed.file ?? null,
+                                documentId: doc.id,
+                                sender: parsed.sender || doc.sender_email,
+                                recipient: parsed.recipient || (role === 'recipient'
+                                    ? (signersList.find((s: any) => s.id === targetSignerId)?.email || '')
+                                    : (signersList.length > 0 ? signersList.map((s: any) => s.email).join(', ') : 'Vastaanottajat')),
+                                fileName: parsed.fileName || doc.file_name,
+                                role: parsed.role || role,
+                                signerId: targetSignerId,
+                                allSigners: parsed.allSigners || signersList,
+                                senderPaid: parsed.senderPaid ?? !!doc.sender_paid,
+                                senderSigned: parsed.senderSigned ?? !!doc.sender_name,
+                                senderSigns: parsed.senderSigns ?? (doc.sender_signs !== false),
+                            };
+                            setData(enriched);
                             setView('processing');
                             sessionStorage.removeItem('appState_view');
                             return;
@@ -157,14 +175,14 @@ export function useDocumentFlow(id: string | undefined, role: 'sender' | 'recipi
                         docData.recipient = signersList.length > 0 ? signersList.map((s: any) => s.email).join(', ') : 'Vastaanottajat';
                         setData(docData);
 
-                        const allRecipientsSigned = signersList.length > 0 && signersList.every((s: any) => s.signed === true);
+                        const allRecipientsSigned = (doc.sender_signs === false ? signersList.length > 0 : true) && (signersList.length === 0 || signersList.every((s: any) => s.signed === true));
 
                         if (doc.sender_signs === false) {
                             // OBSERVER: sender ei allekirjoita
                             if (allRecipientsSigned && doc.status === 'signed') {
                                 setView('success');
                             } else if (allRecipientsSigned && doc.status !== 'signed') {
-                                docData.verifiedName = '[Observer]';
+                                docData.verifiedName = '[Ei allekirjoita]';
                                 setData(docData);
                                 setView('processing');
                             } else {
@@ -207,7 +225,7 @@ export function useDocumentFlow(id: string | undefined, role: 'sender' | 'recipi
                     const doc = dbData && dbData.length > 0 ? dbData[0] : null;
                     if (doc) {
                         const signersList = doc.signers || [];
-                        const allRecipientsSigned = signersList.length > 0 && signersList.every((s: any) => s.signed === true);
+                        const allRecipientsSigned = (doc.sender_signs === false ? signersList.length > 0 : true) && (signersList.length === 0 || signersList.every((s: any) => s.signed === true));
                         const senderDone = doc.sender_signs === false ? true : !!doc.sender_name;
                         const allSigned = allRecipientsSigned && senderDone;
 

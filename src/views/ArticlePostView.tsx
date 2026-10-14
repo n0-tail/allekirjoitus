@@ -1,34 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { articles, type Article } from '../data/articles';
+import { articles } from '../data/articles';
 
 export const ArticlePostView: React.FC = () => {
     const { slug } = useParams<{ slug: string }>();
     const navigate = useNavigate();
-    const [article, setArticle] = useState<Article | null>(null);
+    const article = articles.find(a => a.slug === slug) || null;
 
     useEffect(() => {
         window.scrollTo(0, 0); // Scrollaa aina ylös kun artikkeli vaihtuu
-        const found = articles.find(a => a.slug === slug);
-        if (found) {
-            setArticle(found);
-            document.title = `${found.title} | Helppo Allekirjoitus`;
+        if (article) {
+            document.title = `${article.title} | Helppo Allekirjoitus`;
 
-            let metaDescription = document.querySelector('meta[name="description"]');
+            const metaDescription = document.querySelector('meta[name="description"]');
             if (metaDescription) {
-                metaDescription.setAttribute('content', found.description);
+                metaDescription.setAttribute('content', article.description);
             }
-        } else {
-            // 404 käsittely tapahtuu renderissä
         }
-    }, [slug]);
+    }, [article]);
 
     if (!article) {
         return (
             <div style={{ textAlign: 'center', padding: '4rem 1rem' }}>
                 <h2>Artikkelia ei löytynyt.</h2>
-                <p>Etsimääsi sivua ei ole olemassa.</p>
-                <button className="primary-button" onClick={() => navigate('/')}>Palaa etusivulle</button>
+                <p style={{ marginBottom: '1.5rem' }}>Etsimääsi sivua ei ole olemassa.</p>
+                <button className="btn btn-primary" onClick={() => navigate('/')}>Palaa etusivulle</button>
             </div>
         );
     }
@@ -78,15 +74,15 @@ export const ArticlePostView: React.FC = () => {
                 </button>
 
                 <Link to="/" style={{ textDecoration: 'none' }}>
-                    <button className="primary-button" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}>
+                    <button className="btn btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}>
                         Allekirjoita sopimus heti (1,49€) →
                     </button>
                 </Link>
             </nav>
 
-            <article className="glass-panel" style={{ padding: '3rem 2rem', textAlign: 'left' }}>
+            <article className="card" style={{ padding: '3rem 2rem', textAlign: 'left' }}>
                 <header style={{ marginBottom: '2.5rem', borderBottom: '1px solid var(--border)', paddingBottom: '2rem' }}>
-                    <h1 style={{ fontSize: '2.5rem', marginBottom: '1rem', color: 'var(--text)', lineHeight: 1.2 }}>
+                    <h1 style={{ fontSize: '2.5rem', marginBottom: '1rem', color: 'var(--text-main)', lineHeight: 1.2 }}>
                         {article.title}
                     </h1>
                     <div style={{ display: 'flex', gap: '1rem', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
@@ -99,13 +95,13 @@ export const ArticlePostView: React.FC = () => {
                 {/* Itse artikkelin sisältö, turvallisesti markdown/html-injektoitu luotetusta staattisesta tietokannasta */}
                 <div
                     className="article-content"
-                    style={{ lineHeight: 1.8, fontSize: '1.1rem', color: 'var(--text)' }}
+                    style={{ lineHeight: 1.8, fontSize: '1.1rem', color: 'var(--text-main)' }}
                     dangerouslySetInnerHTML={{ __html: article.content }}
                 />
                 <style dangerouslySetInnerHTML={{
                     __html: `
-          .article-content h2 { color: var(--text); margin-top: 2.5rem; margin-bottom: 1rem; font-size: 1.75rem; }
-          .article-content h3 { color: var(--text); margin-top: 2rem; margin-bottom: 0.75rem; font-size: 1.35rem; }
+          .article-content h2 { color: var(--text-main); margin-top: 2.5rem; margin-bottom: 1rem; font-size: 1.75rem; }
+          .article-content h3 { color: var(--text-main); margin-top: 2rem; margin-bottom: 0.75rem; font-size: 1.35rem; }
           .article-content p { margin-bottom: 1.5rem; }
           .article-content ul, .article-content ol { margin-bottom: 1.5rem; padding-left: 1.5rem; }
           .article-content li { margin-bottom: 0.5rem; }
@@ -118,7 +114,7 @@ export const ArticlePostView: React.FC = () => {
                     Vakuutuitko tietoturvasta ja hinnasta (1,49€)?
                 </div>
                 <Link to="/" style={{ textDecoration: 'none' }}>
-                    <button className="primary-button" style={{ padding: '1rem 2rem', fontSize: '1.1rem' }}>
+                    <button className="btn btn-primary" style={{ padding: '1rem 2rem', fontSize: '1.1rem' }}>
                         Siirry allekirjoittamaan PDF tästä →
                     </button>
                 </Link>

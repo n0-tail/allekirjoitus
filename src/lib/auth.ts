@@ -20,10 +20,13 @@ export function initiateAuth(data: SignatureData, role: 'sender' | 'recipient'):
     }
 
     const redirectUri = `${window.location.origin}${import.meta.env.BASE_URL}auth/callback`;
+    const stateParam = data.signerId
+        ? `${data.documentId}_${role}_${data.signerId}`
+        : `${data.documentId}_${role}`;
 
     return supabase.functions.invoke('init-auth', {
         body: {
-            state: data.documentId,
+            state: stateParam,
             redirectUri: redirectUri
         }
     })

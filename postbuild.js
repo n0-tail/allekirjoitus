@@ -83,6 +83,39 @@ articles.forEach(article => {
         description: article.description
     });
 
+    // Inject Article Schema into <head>
+    const fullArticleUrl = "https://helppoallekirjoitus.fi" + route + "/";
+    const articleJsonLd = `  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": ${JSON.stringify(article.title)},
+    "description": ${JSON.stringify(article.description)},
+    "datePublished": ${JSON.stringify(article.date)},
+    "dateModified": ${JSON.stringify(article.date)},
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": ${JSON.stringify(fullArticleUrl)}
+    },
+    "author": {
+      "@type": "Organization",
+      "name": "Polarcomp Oy",
+      "url": "https://polarcomp.fi"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Polarcomp Oy",
+      "url": "https://polarcomp.fi",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://helppoallekirjoitus.fi/logo.jpg"
+      }
+    }
+  }
+  </script>
+</head>`;
+    modifiedHtml = modifiedHtml.replace('</head>', articleJsonLd);
+
     // Build article-specific sr-only content block
     const articleSrOnly = `
     <!-- Article sr-only content injected by postbuild -->

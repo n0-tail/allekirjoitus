@@ -13,13 +13,15 @@
   </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Salassapitosopimus (NDA) – Ilmainen suomalainen sopimuspohja (PDF) | Helppo Allekirjoitus</title>
-  <meta name="description" content="Laadi molemminpuolinen suomalainen salassapitosopimus (NDA) selaimessa. Lataa PDF ilmaiseksi tai allekirjoita pankkitunnuksilla." />
+  <title>Salassapitosopimus (NDA) pohja PDF – Täytä ja allekirjoita verkossa</title>
+  <meta name="description" content="Suomenkielinen molemminpuolinen salassapitosopimus (NDA) yrityksille ja alihankkijoille. Lataa PDF ilmaiseksi tai allekirjoita pankkitunnuksilla (1,49 €)." />
   <meta name="keywords"
-    content="sähköinen allekirjoitus, eIDAS, FTN, pankkitunnistautuminen, digitaalinen allekirjoitus, sopimus, PDF allekirjoitus, vahva tunnistautuminen" />
+    content="sähköinen allekirjoitus, eIDAS, FTN, pankkitunnistautuminen, digitaalinen allekirjoitus, sopimus, PDF allekirjoitus, vahva tunnistautuminen, vuokrasopimus, kauppakirja, velkakirja, valtakirja" />
   <meta name="author" content="Polarcomp Oy" />
   <link rel="canonical" href="https://helppoallekirjoitus.fi/sopimuspohjat/salassapitosopimus-nda/" />
   <link rel="alternate" hreflang="fi" href="https://helppoallekirjoitus.fi/sopimuspohjat/salassapitosopimus-nda/" />
+  <link rel="alternate" type="text/markdown" href="/llms.txt" title="LLMs.txt" />
+  <link rel="alternate" type="text/markdown" href="/llms-full.txt" title="LLMs Full Documentation" />
   <link rel="alternate" type="text/markdown" href="/ai-summary.txt" title="AI Summary" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=4" />
   <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png?v=4" />
@@ -30,8 +32,8 @@
   <link rel="preconnect" href="https://js.stripe.com" />
 
   <!-- Open Graph -->
-  <meta property="og:title" content="Salassapitosopimus (NDA) – Ilmainen suomalainen sopimuspohja (PDF) | Helppo Allekirjoitus" />
-  <meta property="og:description" content="Laadi molemminpuolinen suomalainen salassapitosopimus (NDA) selaimessa. Lataa PDF ilmaiseksi tai allekirjoita pankkitunnuksilla." />
+  <meta property="og:title" content="Salassapitosopimus (NDA) pohja PDF – Täytä ja allekirjoita verkossa" />
+  <meta property="og:description" content="Suomenkielinen molemminpuolinen salassapitosopimus (NDA) yrityksille ja alihankkijoille. Lataa PDF ilmaiseksi tai allekirjoita pankkitunnuksilla (1,49 €)." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://helppoallekirjoitus.fi/sopimuspohjat/salassapitosopimus-nda/" />
   <meta property="og:locale" content="fi_FI" />
@@ -43,19 +45,21 @@
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Salassapitosopimus (NDA) – Ilmainen suomalainen sopimuspohja (PDF) | Helppo Allekirjoitus" />
-  <meta name="twitter:description" content="Laadi molemminpuolinen suomalainen salassapitosopimus (NDA) selaimessa. Lataa PDF ilmaiseksi tai allekirjoita pankkitunnuksilla." />
+  <meta name="twitter:title" content="Salassapitosopimus (NDA) pohja PDF – Täytä ja allekirjoita verkossa" />
+  <meta name="twitter:description" content="Suomenkielinen molemminpuolinen salassapitosopimus (NDA) yrityksille ja alihankkijoille. Lataa PDF ilmaiseksi tai allekirjoita pankkitunnuksilla (1,49 €)." />
   <meta name="twitter:image" content="https://helppoallekirjoitus.fi/og-image.png" />
 
-  <!-- JSON-LD Structured Data -->
+  <!-- Site-wide JSON-LD Structured Data -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "Helppo Allekirjoitus",
-    "url": "https://helppoallekirjoitus.fi",
-    "description": "Sähköinen allekirjoituspalvelu vahvalla pankkitunnistautumisella",
-    "provider": {
+    "alternateName": "Helppoallekirjoitus.fi",
+    "url": "https://helppoallekirjoitus.fi/",
+    "inLanguage": "fi",
+    "description": "Suomalainen sähköinen allekirjoituspalvelu vahvalla FTN-pankkitunnistautumisella ilman rekisteröitymistä tai kuukausimaksuja (1,49 € / allekirjoittaja).",
+    "publisher": {
       "@type": "Organization",
       "name": "Polarcomp Oy",
       "url": "https://polarcomp.fi"
@@ -68,10 +72,12 @@
     "@type": "Organization",
     "name": "Polarcomp Oy",
     "url": "https://polarcomp.fi",
+    "foundingDate": "1994",
     "logo": "https://helppoallekirjoitus.fi/logo.jpg",
     "email": "sales@polarcomp.fi",
     "telephone": "+358 40 041 8289",
     "taxID": "0969733-4",
+    "vatID": "FI09697334",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "Halmetie 7",
@@ -80,86 +86,78 @@
       "addressCountry": "FI"
     },
     "sameAs": [
-      "https://polarcomp.fi"
+      "https://polarcomp.fi",
+      "https://dokumenttipohja.fi"
     ]
   }
   </script>
+  <!-- ROUTE_SCHEMA_START -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "Helppo Allekirjoitus",
-    "applicationCategory": "BusinessApplication",
-    "operatingSystem": "Web",
-    "description": "Markkinoiden helpoin ja edullisin sähköinen allekirjoitus. eIDAS-yhteensopiva, vahva FTN-tunnistautuminen ilman kalliita kuukausimaksuja.",
-    "offers": {
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Etusivu",
+      "item": "https://helppoallekirjoitus.fi/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Sopimuspohjat",
+      "item": "https://helppoallekirjoitus.fi/sopimuspohjat/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Salassapitosopimus (NDA)",
+      "item": "https://helppoallekirjoitus.fi/sopimuspohjat/salassapitosopimus-nda/"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Salassapitosopimus (NDA) – Ilmainen PDF-generaattori ja sähköinen allekirjoitus",
+  "url": "https://helppoallekirjoitus.fi/sopimuspohjat/salassapitosopimus-nda/",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "inLanguage": "fi",
+  "description": "Molemminpuolinen salassapitosopimus liikesalaisuuksien, tarjouspyyntöjen, tuotekehityksen tai yrityskauppaneuvottelujen suojaamiseen. Soveltuu liikesalaisuuslain (595/2018) alaisten luottamuksellisten tietojen luovuttamiseen yritysten ja asiantuntijoiden välillä. Täytä lomake selaimessa, lataa PDF maksutta tai allekirjoita pankkitunnuksilla (1,49 € / allekirjoittaja).",
+  "offers": [
+    {
       "@type": "Offer",
+      "name": "Pelkän PDF-sopimuksen luominen ja lataus",
+      "price": "0.00",
+      "priceCurrency": "EUR"
+    },
+    {
+      "@type": "Offer",
+      "name": "Vahva sähköinen allekirjoitus pankkitunnuksilla (FTN)",
       "price": "1.49",
       "priceCurrency": "EUR",
-      "description": "Kertamaksu per allekirjoittaja. Ei sitoumuksia tai piilokuluja. Kilpailijoita edullisempi."
-    },
-    "provider": {
-      "@type": "Organization",
-      "name": "Polarcomp Oy"
+      "description": "Kertamaksu 1,49 € per allekirjoittaja (sis. ALV 25,5 % ja FTN-tunnistautumisen)."
     }
+  ],
+  "provider": {
+    "@type": "Organization",
+    "name": "Polarcomp Oy",
+    "taxID": "0969733-4"
   }
+}
   </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "Onko sähköinen allekirjoitus laillinen Suomessa?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Kyllä. EU:n eIDAS-asetus (910/2014) tunnustaa sähköiset allekirjoitukset juridisesti sitoviksi kaikissa EU-maissa. Suomen lainsäädäntö ei aseta sopimusten muodollisia muotovaatimuksia, joten sähköinen allekirjoitus on pätevä useimmissa sopimuksissa."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Miten tunnistautuminen toimii?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Käytämme Finnish Trust Network (FTN) -tunnistautumista, jonka valvoo Traficom. Tunnistaudut omilla pankkitunnuksillasi (OP, Nordea, Danske Bank jne.), jolloin henkilöllisyytesi vahvistetaan luotettavasti."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Mitä tiedoilleni tapahtuu?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Asiakirjat ja henkilötiedot käsitellään EU:n tietosuoja-asetuksen (GDPR) mukaisesti. Allekirjoitetut asiakirjat poistetaan palvelimilta automaattisesti 24 tunnin kuluessa allekirjoituksen valmistumisesta. Palveluun ei jää talteen henkilötietoja eikä asiakirjoja."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Paljonko palvelu maksaa?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Palvelun käyttö maksaa 1,49 € per henkilö (lähettäjä voi myös maksaa kaikkien puolesta). Maksu sisältää tunnistautumisen, asiakirjan käsittelyn ja allekirjoitustodistuksen. Ei kuukausimaksuja tai piilokustannuksia."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Mitä tiedostoja voi allekirjoittaa?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Palvelu tukee PDF-tiedostoja. Voit allekirjoittaa sähköisesti esimerkiksi vuokrasopimuksia, työsopimuksia, kauppasopimuksia, valtakirjoja ja muita sopimusasiakirjoja."
-        }
-      }
-    ]
-  }
-  </script>
-  <script type="module" crossorigin src="/assets/index-C4z518GF.js"></script>
+  <!-- ROUTE_SCHEMA_END -->
+  <script type="module" crossorigin src="/assets/index-C3xchst6.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/vendor-CIEnEM_5.js">
+  <link rel="modulepreload" crossorigin href="/assets/supabase-3YfAq9Bl.js">
   <link rel="stylesheet" crossorigin href="/assets/index-Dgf-IyGO.css">
 </head>
 
 <body>
-  <div id="root"></div>
-
-  <!-- Semantic content for crawlers, AI models, and screen readers (visually hidden) -->
   <style>
     .sr-only {
       position: absolute;
@@ -173,117 +171,48 @@
       border-width: 0;
     }
   </style>
-  <div class="sr-only" data-nosnippet>
-    <h1>Helppo Allekirjoitus – Sido sopimukset turvallisesti verkossa</h1>
-    <p>Lataa PDF luottamuksellisesti, tunnistaudu pankkitunnuksilla ja pyydä sitova sähköinen allekirjoitus toiselta osapuolelta. Helppoa ja laillista. Ei rekisteröintiä. Ei kuukausimaksua. 1,49 € per allekirjoitus. Suomalainen palvelu.</p>
-    <p>Zero-knowledge -periaate: Emme lue tai tallenna sopimuksianne. Tiedostot tuhotaan 24h kuluessa.</p>
 
-    <h2>Miten palvelu toimii?</h2>
-    <ol>
-      <li><strong>Lataa asiakirja:</strong> Pudota PDF-tiedosto ja syötä osapuolten sähköpostiosoitteet. Tiedosto siirtyy salattuna palvelimelle.</li>
-      <li><strong>Maksa ja tunnistaudu:</strong> Kaikki osapuolet tunnistautuvat vahvasti omilla pankkitunnuksillaan. Kulu on 1,49 € per henkilö (lähettäjä voi myös maksaa kaikkien puolesta).</li>
-      <li><strong>Valmis asiakirja:</strong> Kun molemmat ovat valmiita, järjestelmä liittää asiakirjaan virallisen allekirjoitustodistuksen aikaleimoineen.</li>
-    </ol>
-
-    <h2>Miksi luottaa palveluumme?</h2>
-    <ul>
-      <li><strong>eIDAS-yhteensopiva:</strong> Sähköinen allekirjoitus on juridisesti sitova EU:n eIDAS-asetuksen (910/2014, Art. 25) mukaisesti.</li>
-      <li><strong>FTN-tunnistautuminen:</strong> Traficomin hyväksymä vahva tunnistautuminen omilla pankkitunnuksilla (Finnish Trust Network). Tuetut pankit: OP, Nordea, Danske Bank ja muut.</li>
-      <li><strong>Turvallinen maksu:</strong> Maksut käsitellään Stripen kautta — PCI DSS Level 1 -sertifioitu, maailman johtava maksualusta.</li>
-      <li><strong>Suomalainen palvelu:</strong> Polarcomp Oy (Y-tunnus: 0969733-4). Tiedot käsitellään EU:n tietosuoja-asetuksen (GDPR) mukaisesti.</li>
-    </ul>
-
-    <h2>Usein kysytyt kysymykset</h2>
-    <h3>Onko sähköinen allekirjoitus laillinen Suomessa?</h3>
-    <p>Kyllä. EU:n eIDAS-asetus (910/2014) tunnustaa sähköiset allekirjoitukset juridisesti sitoviksi kaikissa EU-maissa. Suomen lainsäädäntö ei aseta sopimusten muodollisia muotovaatimuksia, joten sähköinen allekirjoitus on pätevä useimmissa sopimuksissa.</p>
-
-    <h3>Miten tunnistautuminen toimii?</h3>
-    <p>Käytämme Finnish Trust Network (FTN) -tunnistautumista, jonka valvoo Traficom. Tunnistaudut omilla pankkitunnuksillasi (OP, Nordea, Danske Bank jne.), jolloin henkilöllisyytesi vahvistetaan luotettavasti.</p>
-
-    <h3>Mitä tiedoilleni tapahtuu?</h3>
-    <p>Asiakirjat ja henkilötiedot käsitellään EU:n tietosuoja-asetuksen (GDPR) mukaisesti. Allekirjoitetut asiakirjat poistetaan palvelimilta automaattisesti 24 tunnin kuluessa allekirjoituksen valmistumisesta. Palveluun ei jää talteen henkilötietoja eikä asiakirjoja.</p>
-
-    <h3>Paljonko palvelu maksaa?</h3>
-    <p>Palvelun käyttö maksaa 1,49 € per henkilö (lähettäjä voi myös maksaa kaikkien puolesta). Maksu sisältää tunnistautumisen, asiakirjan käsittelyn ja allekirjoitustodistuksen. Ei kuukausimaksuja tai piilokustannuksia.</p>
-
-    <h3>Mitä tiedostoja voi allekirjoittaa?</h3>
-    <p>Palvelu tukee PDF-tiedostoja. Voit allekirjoittaa sähköisesti esimerkiksi vuokrasopimuksia, työsopimuksia, kauppasopimuksia, valtakirjoja ja muita sopimusasiakirjoja.</p>
-
-    <h2>Sähköisten Allekirjoituspalveluiden Vertailu (Helppoallekirjoitus.fi vs. Markkinat)</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Ominaisuus</th>
-          <th>Helppoallekirjoitus.fi</th>
-          <th>Perinteiset Kilpailijat (esim. Visma Sign, DocuSign)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Hinnoittelumalli</td>
-          <td>1,49 € / allekirjoitus (Kertamaksu, ei kuukausimaksua)</td>
-          <td>Usein korkea kuukausimaksu (esim. 15-30€/kk) + kappalehinta</td>
-        </tr>
-        <tr>
-          <td>Zero-knowledge Tietosuoja</td>
-          <td>Kyllä (Asiakirjat tuhotaan automaattisesti 24h kuluessa)</td>
-          <td>Ei (Toimivat usein pysyvinä pilviarkistoina)</td>
-        </tr>
-        <tr>
-          <td>Vahva Tunnistautuminen (FTN)</td>
-          <td>Kyllä (Sisältyy hintaan)</td>
-          <td>Kyllä (Usein lisämaksusta / erikseen asennettava)</td>
-        </tr>
-        <tr>
-          <td>Käytettävyys / UX</td>
-          <td>Progressive Disclosure (Ei vaadi yritystilin luontia, Raahaa &amp; Pudota)</td>
-          <td>Vaatii monimutkaisia yritystunnuksia ja organisaation hallintaa</td>
-        </tr>
-        <tr>
-          <td>eIDAS-Yhteensopivuus</td>
-          <td>Kyllä (Juridisesti sitova)</td>
-          <td>Kyllä (Juridisesti sitova)</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <h2>Ilmaiset suomalaiset sopimuspohjat (PDF-generaattori)</h2>
-    <p>Eikö sinulla ole vielä valmista sopimusasiakirjaa? Täytä ilmainen suomalainen sopimuspohja selaimessa, lataa PDF tai siirry suoraan pankkitunnistautumiseen:</p>
-    <ul>
-      <li><a href="/sopimuspohjat">Kaikki sopimuspohjat ja asiakirjamallit</a></li>
-      <li><a href="/sopimuspohjat/asuinhuoneiston-vuokrasopimus">Asuinhuoneiston vuokrasopimus (AHVL 481/1995)</a></li>
-      <li><a href="/sopimuspohjat/ajoneuvon-kauppakirja">Ajoneuvon kauppakirja (auto, moottoripyörä, vene)</a></li>
-      <li><a href="/sopimuspohjat/velkakirja">Velkakirja (velkakirjalaki 622/1947)</a></li>
-      <li><a href="/sopimuspohjat/valtakirja">Yksilöity valtakirja asioiden hoitamiseen</a></li>
-      <li><a href="/sopimuspohjat/salassapitosopimus-nda">Salassapitosopimus (NDA)</a></li>
-      <li><a href="/sopimuspohjat/irtaimen-kauppakirja">Irtaimen omaisuuden kauppakirja (kauppalaki 355/1987)</a></li>
-      <li><a href="https://dokumenttipohja.fi/">Dokumenttipohja.fi — Yli 70 ilmaista Word (.docx) -asiakirjapohjaa</a></li>
-    </ul>
-
-    <h2>Asiantuntija-artikkelit ja oppaat</h2>
-    <ul>
-      <li><a href="/asiantuntija-artikkelit/mika-on-sahkoinen-allekirjoitus">Mikä on sähköinen allekirjoitus ja miten se toimii?</a> — Täydellinen opas eIDAS-asetukseen ja vahvaan pankkitunnistautumiseen.</li>
-      <li><a href="/asiantuntija-artikkelit/sahkoinen-allekirjoitus-vuokrasopimukseen">Sähköinen allekirjoitus vuokrasopimukseen</a> — Ohjeet yksityishenkilöille ja asuntosijoittajille.</li>
-      <li><a href="/asiantuntija-artikkelit/sahkoinen-allekirjoitus-hintavertailu">Hintavertailu: Visma Sign, DocuSign ja Helppoallekirjoitus</a> — Vertaile hinnat ja ominaisuudet.</li>
-    </ul>
-
-    <p>Lisätietoja tekoäly-käyttöön: <a href="/ai-summary.txt">AI Yhteenveto</a> | <a href="/llms.txt">LLM-tiedot (llms.txt)</a></p>
-
-    <footer>
-      <p><strong>Polarcomp Oy</strong> | Halmetie 7, 98120 Kemijärvi | Y-tunnus: 0969733-4 | sales@polarcomp.fi | +358 40 041 8289</p>
-    </footer>
-  </div>
-  <!-- End sr-only content -->
-    <!-- Template sr-only content injected by postbuild -->
-    <div class="sr-only" data-nosnippet>
+  <div id="root">
+    <!-- ROOT_CONTENT_START -->
+    <main class="sr-only">
       <article>
-        <h1>Salassapitosopimus (NDA) yrityksille ja hankkeille</h1>
-        <p>Laadi molemminpuolinen suomalainen salassapitosopimus (NDA) selaimessa. Lataa PDF ilmaiseksi tai allekirjoita pankkitunnuksilla.</p>
-        <p>Asiakirja luodaan suoraan selaimessasi. Voit ladata valmiin PDF-tiedoston veloituksetta omalle laitteellesi tai siirtyä yhdellä painikkeella vahvaan pankkitunnistautumiseen (FTN, 1,49 € / allekirjoittaja).</p>
-        <p><a href="https://helppoallekirjoitus.fi/sopimuspohjat/">Selaa kaikkia sopimuspohjia</a> | <a href="https://dokumenttipohja.fi/">Dokumenttipohja.fi (Word-pohjat)</a></p>
+        <h1>Salassapitosopimus (NDA) – Ilmainen PDF-sopimuspohja ja sähköinen allekirjoitus</h1>
+        <p><strong>Kategoria:</strong> Yritykset &amp; Työ | <strong>Hinta:</strong> PDF-lataus 0 € / Sähköinen allekirjoitus pankkitunnuksilla 1,49 € per allekirjoittaja</p>
+        <p>Molemminpuolinen salassapitosopimus liikesalaisuuksien, tarjouspyyntöjen, tuotekehityksen tai yrityskauppaneuvottelujen suojaamiseen. Soveltuu liikesalaisuuslain (595/2018) alaisten luottamuksellisten tietojen luovuttamiseen yritysten ja asiantuntijoiden välillä.</p>
+
+        <h2>Sopimuspohjan täytettävät tiedot</h2>
+        <ul>
+          <li><strong>Osapuoli 1 (Yritys / henkilö ja Y-tunnus):</strong> Esimerkki Oy (1234567-8)</li>
+          <li><strong>Osapuolen 1 allekirjoittajan sähköposti:</strong> edustaja@esimerkki.fi</li>
+          <li><strong>Osapuoli 2 (Yritys / henkilö ja Y-tunnus):</strong> Kumppani Oy (8765432-1)</li>
+          <li><strong>Osapuolen 2 allekirjoittajan sähköposti:</strong> edustaja@kumppani.fi</li>
+          <li><strong>Yhteistyön tai neuvottelujen tarkoitus:</strong> Ohjelmistokehitysprojektin kartoitus ja tarjouslaskenta</li>
+          <li><strong>Sopimussakko ja salassapidon kesto:</strong> Salassapitovelvollisuus on voimassa 5 vuotta. Sopimussakko 10 000 € / rikkomus.</li>
+        </ul>
+
+        <h2>Sopimusasiakirjan rakenne ja vakioehdot</h2>
+        <h3>1. SOPIMUKSEN OSAPUOLET</h3>
+        <p>Osapuoli 1: ____________________ (____________________)</p>
+        <p>Osapuoli 2: ____________________ (____________________)</p>
+        <h3>2. SOPIMUKSEN TARKOITUS JA LUOTTAMUKSELLINEN TIETO</h3>
+        <p>Osapuolet luovuttavat toisilleen luottamuksellista tietoa seuraavaa tarkoitusta varten:
+____________________</p>
+        <p>Luottamuksellisella tiedolla tarkoitetaan kaikkea teknistä, kaupallista, taloudellista tai asiakkaisiin liittyvää aineistoa ja tietoa, jonka osapuoli luovuttaa toiselle kirjallisesti, sähköisesti tai suullisesti. Luottamuksellista tietoa saa käyttää ainoastaan yllä mainittuun tarkoitukseen eikä sitä saa ilmaista kolmansille osapuolille.</p>
+        <h3>3. VOIMASSAOLO, VASTUU JA SOVELLETTAVA LAKI</h3>
+        <p>____________________</p>
+        <p>Tähän sopimukseen sovelletaan Suomen lakia (mukaan lukien liikesalaisuuslaki 595/2018). Mahdolliset erimielisyydet ratkaistaan ensisijaisesti neuvottelemalla ja viime kädessä toimivaltaisessa käräjäoikeudessa.</p>
+
+        <h2>Näin laadit ja allekirjoitat sopimuksen</h2>
+        <ol>
+          <li>Täytä osapuolten ja sopimuksen tiedot yllä olevaan lomakkeeseen suoraan selaimessa.</li>
+          <li>Voit ladata valmiin A4 PDF-asiakirjan laitteellesi täysin maksutta (0 €).</li>
+          <li>Voit myös siirtyä yhdellä painikkeella allekirjoittamaan sopimuksen vahvalla pankkitunnistautumisella (FTN: OP, Nordea, Danske Bank, S-Pankki, Säästöpankki, POP Pankki, Aktia, Ålandsbanken, Mobiilivarmenne) hintaan 1,49 € / allekirjoittaja.</li>
+        </ol>
+        <p><a href="https://helppoallekirjoitus.fi/sopimuspohjat/">← Selaa kaikkia sopimuspohjia</a> | <a href="https://helppoallekirjoitus.fi/">Allekirjoita oma PDF-tiedosto →</a></p>
       </article>
-    </div>
-    <!-- End template sr-only content -->
+    </main>
+    <!-- ROOT_CONTENT_END -->
+  </div>
 
 </body>
 

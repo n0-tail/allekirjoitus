@@ -16,9 +16,46 @@ export function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
     const navigate = useNavigate();
     const { data, view, setView } = useDocumentFlow(id, role);
     const [copiedId, setCopiedId] = useState<string | null>(null);
-    const [showObserverInput, setShowObserverInput] = useState(false);
-    const [observerEmail, setObserverEmail] = useState('');
-    const [observerPays, setObserverPays] = useState(false);
+    const observerStorageKey = id ? `helppo_observer_draft_${id}` : '';
+    const [showObserverInput, setShowObserverInput] = useState<boolean>(() => {
+        if (!observerStorageKey) return false;
+        try {
+            const parsed = JSON.parse(localStorage.getItem(observerStorageKey) || '{}');
+            return !!parsed.showObserverInput;
+        } catch {
+            return false;
+        }
+    });
+    const [observerEmail, setObserverEmail] = useState<string>(() => {
+        if (!observerStorageKey) return '';
+        try {
+            const parsed = JSON.parse(localStorage.getItem(observerStorageKey) || '{}');
+            return typeof parsed.observerEmail === 'string' ? parsed.observerEmail : '';
+        } catch {
+            return '';
+        }
+    });
+    const [observerPays, setObserverPays] = useState<boolean>(() => {
+        if (!observerStorageKey) return false;
+        try {
+            const parsed = JSON.parse(localStorage.getItem(observerStorageKey) || '{}');
+            return !!parsed.observerPays;
+        } catch {
+            return false;
+        }
+    });
+
+    useEffect(() => {
+        if (!observerStorageKey) return;
+        try {
+            localStorage.setItem(
+                observerStorageKey,
+                JSON.stringify({ showObserverInput, observerEmail, observerPays })
+            );
+        } catch {
+            // Ignore
+        }
+    }, [observerStorageKey, showObserverInput, observerEmail, observerPays]);
 
     useEffect(() => {
         updateSeoMeta({

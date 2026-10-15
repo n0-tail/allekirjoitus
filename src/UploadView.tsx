@@ -6,6 +6,13 @@ import toast from 'react-hot-toast';
 import { contractTemplates } from './data/contractTemplates';
 import { articles } from './data/articles';
 import { updateSeoMeta } from './lib/seo';
+import {
+  saveUploadFormDraft,
+  loadUploadFormDraft,
+  saveUploadFileDraft,
+  loadUploadFileDraft,
+  clearAllUploadDrafts,
+} from './lib/draftStorage';
 
 interface UploadViewProps { }
 
@@ -21,10 +28,6 @@ export const UploadView: React.FC<UploadViewProps> = () => {
     });
   }, []);
 
-  const [file, setFile] = useState<File | null>(null);
-  const [sender, setSender] = useState('');
-  const [showCertPreview, setShowCertPreview] = useState(false);
-
   interface Recipient {
     id: string;
     email: string;
@@ -33,12 +36,22 @@ export const UploadView: React.FC<UploadViewProps> = () => {
     signed?: boolean;
   }
 
-  const [recipients, setRecipients] = useState<Recipient[]>([
-    { id: crypto.randomUUID(), email: '' }
-  ]);
+  const [file, setFile] = useState<File | null>(null);
+  const [sender, setSender] = useState<string>(() => {
+    const saved = loadUploadFormDraft();
+    return saved?.sender || '';
+  });
+  const [showCertPreview, setShowCertPreview] = useState(false);
+
+  const [recipients, setRecipients] = useState<Recipient[]>(() => {
+    const saved = loadUploadFormDraft();
+    return saved?.recipients && saved.recipients.length > 0
+      ? saved.recipients
+      : [{ id: crypto.randomUUID(), email: '' }];
+  });
   const [isUploading, setIsUploading] = useState(false);
 
-  // Pick up generated contract PDF if navigated from /sopimuspohjat/:slug
+  // Pick up generated contract PDF if navigated from /sopimuspohjat/:slug, or restore saved PDF from IndexedDB
   useEffect(() => {
     const state = location.state as {
       generatedFile?: File;
@@ -48,15 +61,33 @@ export const UploadView: React.FC<UploadViewProps> = () => {
 
     if (state?.generatedFile) {
       setFile(state.generatedFile);
+      saveUploadFileDraft(state.generatedFile);
+      const nextSender = state.senderEmail || sender;
+      const nextRecipients = state.recipientEmail
+        ? [{ id: crypto.randomUUID(), email: state.recipientEmail }]
+        : recipients;
       if (state.senderEmail) {
         setSender(state.senderEmail);
       }
       if (state.recipientEmail) {
-        setRecipients([{ id: crypto.randomUUID(), email: state.recipientEmail }]);
+        setRecipients(nextRecipients);
       }
+      saveUploadFormDraft({ sender: nextSender, recipients: nextRecipients });
       window.history.replaceState({}, document.title);
+    } else {
+      loadUploadFileDraft().then((savedFile) => {
+        if (savedFile) {
+          setFile((prev) => prev || savedFile);
+        }
+      });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.state]);
+
+  // Persist sender & recipients to localStorage whenever they change
+  useEffect(() => {
+    saveUploadFormDraft({ sender, recipients });
+  }, [sender, recipients]);
 
   const addRecipient = () => {
     if (recipients.length >= 20) {
@@ -79,13 +110,17 @@ export const UploadView: React.FC<UploadViewProps> = () => {
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      setFile(e.dataTransfer.files[0]);
+      const selected = e.dataTransfer.files[0];
+      setFile(selected);
+      saveUploadFileDraft(selected);
     }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0]);
+      const selected = e.target.files[0];
+      setFile(selected);
+      saveUploadFileDraft(selected);
     }
   };
 
@@ -145,6 +180,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
         sessionStorage.removeItem('payForAll');
         sessionStorage.removeItem('appState_data');
         sessionStorage.removeItem('appState_view');
+        await clearAllUploadDrafts();
 
         // 5. Proceed to next view via React Router
         navigate(`/lahettaja/${docId}`);

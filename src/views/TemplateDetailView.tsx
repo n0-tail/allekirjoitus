@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { contractTemplates, generateContractPdfFile } from '../data/contractTemplates';
 import { updateSeoMeta } from '../lib/seo';
+import { saveTemplateDraft, loadTemplateDraft, clearTemplateDraft } from '../lib/draftStorage';
 
 export const TemplateDetailView: React.FC = () => {
     const { slug } = useParams<{ slug: string }>();
@@ -10,6 +11,7 @@ export const TemplateDetailView: React.FC = () => {
     const template = contractTemplates.find((t) => t.slug === slug) || null;
 
     const [values, setValues] = useState<Record<string, string>>({});
+    const [hasSavedDraft, setHasSavedDraft] = useState(false);
     const [isGenerating, setIsGenerating] = useState(false);
 
     useEffect(() => {
@@ -24,7 +26,19 @@ export const TemplateDetailView: React.FC = () => {
             template.fields.forEach((f) => {
                 if (f.defaultValue) defaults[f.key] = f.defaultValue;
             });
-            setValues(defaults);
+            const saved = loadTemplateDraft(template.slug);
+            if (saved && Object.keys(saved.values).length > 0) {
+                setValues({ ...defaults, ...saved.values });
+                const hasCustomValue = template.fields.some((f) => {
+                    const savedVal = saved.values[f.key];
+                    const defVal = f.defaultValue || '';
+                    return typeof savedVal === 'string' && savedVal.trim() !== '' && savedVal !== defVal;
+                });
+                setHasSavedDraft(hasCustomValue);
+            } else {
+                setValues(defaults);
+                setHasSavedDraft(false);
+            }
         } else {
             updateSeoMeta({
                 title: 'Sopimuspohjaa ei löytynyt | Helppo Allekirjoitus',
@@ -46,6 +60,24 @@ export const TemplateDetailView: React.FC = () => {
             </div>
         );
     }
+
+    const handleFieldChange = (key: string, newValue: string) => {
+        const nextValues = { ...values, [key]: newValue };
+        setValues(nextValues);
+        saveTemplateDraft(template.slug, nextValues);
+        setHasSavedDraft(true);
+    };
+
+    const handleResetDraft = () => {
+        const defaults: Record<string, string> = {};
+        template.fields.forEach((f) => {
+            if (f.defaultValue) defaults[f.key] = f.defaultValue;
+        });
+        setValues(defaults);
+        clearTemplateDraft(template.slug);
+        setHasSavedDraft(false);
+        toast.success('Lomakkeen kentät tyhjennetty.');
+    };
 
     const extractEmails = (): { senderEmail?: string; recipientEmail?: string } => {
         const senderKeys = ['landlordEmail', 'sellerEmail', 'creditorEmail', 'grantorEmail', 'partyAEmail'];
@@ -143,7 +175,7 @@ export const TemplateDetailView: React.FC = () => {
             </div>
 
             <div className="card" style={{ padding: '2.25rem' }}>
-                <div style={{ borderBottom: '1px solid var(--border)', paddingBottom: '1.5rem', marginBottom: '1.75rem' }}>
+                <div style={{ borderBottom: '1px solid var(--border)', paddingBottom: '1.5rem', marginBottom: '1.25rem' }}>
                     <span
                         style={{
                             display: 'inline-block',
@@ -165,6 +197,46 @@ export const TemplateDetailView: React.FC = () => {
                     </p>
                 </div>
 
+                {/* Auto-save indicator and reset button */}
+                <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        flexWrap: 'wrap',
+                        gap: '0.75rem',
+                        background: '#f0fdf4',
+                        border: '1px solid #bbf7d0',
+                        borderRadius: '8px',
+                        padding: '0.6rem 0.9rem',
+                        marginBottom: '1.5rem',
+                        fontSize: '0.82rem',
+                        color: '#166534',
+                    }}
+                >
+                    <span>
+                        <strong>✓ Automaattinen tallennus päällä:</strong> Täyttämäsi tiedot tallentuvat selaimeesi reaaliajassa, eivätkä ne katoa jos sivu latautuu uudelleen.
+                    </span>
+                    {hasSavedDraft && (
+                        <button
+                            type="button"
+                            onClick={handleResetDraft}
+                            style={{
+                                background: '#ffffff',
+                                border: '1px solid #86efac',
+                                color: '#15803d',
+                                borderRadius: '6px',
+                                padding: '0.28rem 0.65rem',
+                                fontSize: '0.78rem',
+                                fontWeight: 600,
+                                cursor: 'pointer',
+                            }}
+                        >
+                            Tyhjennä kentät
+                        </button>
+                    )}
+                </div>
+
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1rem', marginBottom: '1.75rem' }}>
                     {template.fields.map((field) => (
                         <div
@@ -182,7 +254,7 @@ export const TemplateDetailView: React.FC = () => {
                                     rows={3}
                                     placeholder={field.placeholder}
                                     value={values[field.key] || ''}
-                                    onChange={(e) => setValues({ ...values, [field.key]: e.target.value })}
+                                    onChange={(e) => handleFieldChange(field.key, e.target.value)}
                                     style={{ resize: 'vertical', fontSize: '0.925rem' }}
                                 />
                             ) : (
@@ -191,7 +263,7 @@ export const TemplateDetailView: React.FC = () => {
                                     className="form-input"
                                     placeholder={field.placeholder}
                                     value={values[field.key] || ''}
-                                    onChange={(e) => setValues({ ...values, [field.key]: e.target.value })}
+                                    onChange={(e) => handleFieldChange(field.key, e.target.value)}
                                     style={{ fontSize: '0.925rem', padding: '0.65rem 0.85rem' }}
                                 />
                             )}

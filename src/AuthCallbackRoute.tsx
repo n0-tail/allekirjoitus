@@ -1,12 +1,23 @@
+import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { OidcCallbackView } from './OidcCallbackView';
+import { updateSeoMeta } from './lib/seo';
 
 export function AuthCallbackRoute() {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const code = searchParams.get('code') || '';
     const stateParam = searchParams.get('state') || '';
+
+    useEffect(() => {
+        updateSeoMeta({
+            title: 'Vahvistetaan tunnistautumista... | Helppo Allekirjoitus',
+            description: 'Vahva sähköinen tunnistautuminen.',
+            canonicalPath: '/',
+            noindex: true,
+        });
+    }, []);
 
     const parseFallbackState = () => {
         if (!stateParam) return null;

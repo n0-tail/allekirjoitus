@@ -5,6 +5,7 @@ import { useNavigate, useLocation, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { contractTemplates } from './data/contractTemplates';
 import { articles } from './data/articles';
+import { updateSeoMeta } from './lib/seo';
 
 interface UploadViewProps { }
 
@@ -13,11 +14,11 @@ export const UploadView: React.FC<UploadViewProps> = () => {
   const location = useLocation();
 
   useEffect(() => {
-    document.title = "Helppo Allekirjoitus – Sähköinen allekirjoitus verkossa | eIDAS & FTN";
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute('content', 'Helppo ja kotimainen sähköinen allekirjoitus ilman rekisteröintiä tai kuukausimaksuja, vain 1,49 € per allekirjoitus.');
-    }
+    updateSeoMeta({
+      title: 'Helppo Allekirjoitus – Sähköinen allekirjoitus verkossa | eIDAS & FTN',
+      description: 'Helppo ja kotimainen sähköinen allekirjoitus pankkitunnuksilla ilman rekisteröintiä tai kuukausimaksuja, vain 1,49 € per allekirjoitus. Mukana ilmaiset PDF-sopimuspohjat.',
+      canonicalPath: '/',
+    });
   }, []);
 
   const [file, setFile] = useState<File | null>(null);
@@ -202,7 +203,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                 <label className="form-label" style={{ margin: 0, fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-main)' }}>
                   1. Valitse allekirjoitettava PDF-asiakirja
                 </label>
-                <Link to="/sopimuspohjat" style={{ fontSize: '0.825rem', color: 'var(--primary)', textDecoration: 'none', fontWeight: 600 }}>
+                <Link to="/sopimuspohjat/" style={{ fontSize: '0.825rem', color: 'var(--primary)', textDecoration: 'none', fontWeight: 600 }}>
                   Puuttuuko PDF? Täytä valmis sopimuspohja →
                 </Link>
               </div>
@@ -398,7 +399,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
                 Täytä valmis suomalainen sopimuspohja suoraan selaimessa ja siirry yhdellä klikkauksella allekirjoittamaan:
               </p>
             </div>
-            <Link to="/sopimuspohjat" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--primary)', textDecoration: 'none' }}>
+            <Link to="/sopimuspohjat/" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--primary)', textDecoration: 'none' }}>
               Kaikki sopimuspohjat →
             </Link>
           </div>
@@ -407,7 +408,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
             {contractTemplates.map((tpl) => (
               <Link
                 key={tpl.slug}
-                to={`/sopimuspohjat/${tpl.slug}`}
+                to={`/sopimuspohjat/${tpl.slug}/`}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -559,6 +560,13 @@ export const UploadView: React.FC<UploadViewProps> = () => {
           </details>
 
           <details style={{ background: '#ffffff', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', padding: '1rem 1.25rem' }}>
+            <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: '0.975rem', color: 'var(--text-main)' }}>Miten Helppo Allekirjoitus eroaa kuukausimaksullisista palveluista (esim. Visma Sign tai DocuSign)?</summary>
+            <p style={{ marginTop: '0.65rem', color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
+              Yrityksille suunnatut sopimusportaalit on rakennettu suuren volyymin organisaatioille ja vaativat yleensä käyttäjätilin sekä kuukausimaksun (esim. 15–35 €/kk) tai ennakkoon ostettavan krediittipaketin. Helppo Allekirjoitus toimii kertamaksulla (1,49 € / allekirjoittaja, kahden osapuolen sopimus 2,98 €) suoraan selaimessa ilman tilin luomista, mikä tekee siitä edullisimman ja nopeimman vaihtoehdon yksityishenkilöille, vuokranantajille, yhdistyksille ja pk-yrityksille.
+            </p>
+          </details>
+
+          <details style={{ background: '#ffffff', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', padding: '1rem 1.25rem' }}>
             <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: '0.975rem', color: 'var(--text-main)' }}>Miten voin tarkistaa allekirjoitetun PDF-asiakirjan aitouden myöhemmin?</summary>
             <p style={{ marginTop: '0.65rem', color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
               Jokaisen allekirjoitetun PDF-sopimuksen viimeiselle sivulle liitetään virallinen allekirjoitustodistus ja QR-koodi. Tarkistussivulla voit myös pudottaa PDF-tiedoston tarkistimeen, joka laskee tiedoston SHA-256-tiivisteen ja varmistaa, ettei PDF-sopimusta ole muokattu yhdenkään tavun vertaa allekirjoituksen jälkeen.
@@ -572,7 +580,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
       <section style={{ marginTop: '2.5rem', marginBottom: '1rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1rem' }}>
           <h2 style={{ fontSize: '1.25rem' }}>Oppaat ja tietoa sähköisestä allekirjoituksesta</h2>
-          <Link to="/asiantuntija-artikkelit" style={{ fontSize: '0.85rem', color: 'var(--primary)', textDecoration: 'none', fontWeight: 600 }}>
+          <Link to="/asiantuntija-artikkelit/" style={{ fontSize: '0.85rem', color: 'var(--primary)', textDecoration: 'none', fontWeight: 600 }}>
             Kaikki artikkelit →
           </Link>
         </div>
@@ -580,7 +588,7 @@ export const UploadView: React.FC<UploadViewProps> = () => {
           {articles.map((art) => (
             <Link
               key={art.slug}
-              to={`/asiantuntija-artikkelit/${art.slug}`}
+              to={`/asiantuntija-artikkelit/${art.slug}/`}
               className="step-card"
               style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
             >
@@ -676,59 +684,6 @@ export const UploadView: React.FC<UploadViewProps> = () => {
           </div>
         </div>
       )}
-
-      {/* FAQ JSON-LD Schema (invisible, for Google rich results) */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            "mainEntity": [
-              {
-                "@type": "Question",
-                "name": "Onko sähköinen allekirjoitus laillinen Suomessa?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Kyllä. EU:n eIDAS-asetus (910/2014) tunnustaa sähköiset allekirjoitukset juridisesti sitoviksi kaikissa EU-maissa. Suomen lainsäädäntö ei aseta sopimusten muodollisia muotovaatimuksia, joten sähköinen allekirjoitus on pätevä useimmissa sopimuksissa."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "Miten tunnistautuminen toimii?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Käytämme Finnish Trust Network (FTN) -tunnistautumista, jonka valvoo Traficom. Tunnistaudut omilla pankkitunnuksillasi (OP, Nordea, Danske Bank jne.), jolloin henkilöllisyytesi vahvistetaan luotettavasti."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "Mitä tiedoilleni tapahtuu?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Asiakirjat ja henkilötiedot käsitellään EU:n tietosuoja-asetuksen (GDPR) mukaisesti. Allekirjoitetut asiakirjat poistetaan palvelimilta automaattisesti 24 tunnin kuluessa allekirjoituksen valmistumisesta. Palveluun ei jää talteen henkilötietoja eikä asiakirjoja."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "Paljonko palvelu maksaa?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Palvelun käyttö maksaa 1,49 € per henkilö (lähettäjä voi myös maksaa kaikkien puolesta). Maksu sisältää tunnistautumisen, asiakirjan käsittelyn ja allekirjoitustodistuksen. Ei kuukausimaksuja tai piilokustannuksia."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "Mitä tiedostoja voi allekirjoittaa?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Palvelu tukee PDF-tiedostoja. Voit allekirjoittaa sähköisesti esimerkiksi vuokrasopimuksia, työsopimuksia, kauppasopimuksia, valtakirjoja ja muita sopimusasiakirjoja."
-                }
-              }
-            ]
-          })
-        }}
-      />
       </div>
     </div>
   );

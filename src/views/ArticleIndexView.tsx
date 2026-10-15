@@ -1,18 +1,18 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { articles } from '../data/articles';
+import { updateSeoMeta } from '../lib/seo';
 
 export const ArticleIndexView: React.FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        document.title = "Tietoa ja oppaita sähköisestä allekirjoituksesta | Helppo Allekirjoitus";
-
-        // Yksinkertainen meta description päivitys (tekoäly lukee nämä dynaamisesti reactin renderöinnin jälkeen)
-        const metaDescription = document.querySelector('meta[name="description"]');
-        if (metaDescription) {
-            metaDescription.setAttribute('content', 'Lue asiantuntija-artikkelit sähköisestä allekirjoituksesta, juridiikasta, hinnoittelusta ja vuokrasopimuksista. Zero-knowledge ja eIDAS/FTN.');
-        }
+        window.scrollTo(0, 0);
+        updateSeoMeta({
+            title: 'Asiantuntija-artikkelit ja oppaat sähköisestä allekirjoituksesta | Helppo Allekirjoitus',
+            description: 'Käytännön oppaat sähköiseen allekirjoitukseen Suomessa: eIDAS-asetus, FTN-pankkitunnistautuminen, vuokrasopimuksen allekirjoitus ja hintavertailu.',
+            canonicalPath: '/asiantuntija-artikkelit/',
+        });
     }, []);
 
     return (
@@ -40,7 +40,7 @@ export const ArticleIndexView: React.FC = () => {
                         {articles.map((article) => (
                             <li key={article.slug}>
                                 <Link
-                                    to={`/asiantuntija-artikkelit/${article.slug}`}
+                                    to={`/asiantuntija-artikkelit/${article.slug}/`}
                                     style={{
                                         display: 'block', padding: '1.5rem', borderRadius: '12px',
                                         border: '1px solid var(--border)', textDecoration: 'none',

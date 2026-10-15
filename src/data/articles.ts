@@ -28,7 +28,7 @@ export const articles: Article[] = [
 
       <h2>Miten allekirjoitusprosessi etenee käytännössä?</h2>
       <ol>
-        <li><strong>PDF-asiakirjan valinta:</strong> Lähettäjä lataa valmiin PDF-sopimuksen omalta laitteeltaan tai täyttää valmiin <a href="/sopimuspohjat">sopimuspohjan</a> suoraan selaimessa.</li>
+        <li><strong>PDF-asiakirjan valinta:</strong> Lähettäjä lataa valmiin PDF-sopimuksen omalta laitteeltaan tai täyttää valmiin <a href="/sopimuspohjat/">sopimuspohjan</a> suoraan selaimessa.</li>
         <li><strong>Osapuolten sähköpostit:</strong> Lähettäjä syöttää oman sähköpostiosoitteensa ja mahdollisten muiden allekirjoittajien sähköpostiosoitteet.</li>
         <li><strong>Pankkitunnistautuminen ja allekirjoitustodistus:</strong> Osapuolet tunnistautuvat pankkitunnuksillaan. Kun kaikki ovat valmiita, järjestelmä liittää PDF-asiakirjaan virallisen allekirjoitustodistuksen, SHA-256-tiivisteen ja QR-tarkistuskoodin.</li>
         <li><strong>Toimitus ja automaattinen poisto:</strong> Valmis PDF toimitetaan kaikkien osapuolten sähköpostiin, ja asiakirja poistetaan palvelimelta automaattisesti 24 tunnin kuluessa valmistumisesta.</li>
@@ -55,7 +55,7 @@ export const articles: Article[] = [
 
       <h2>Näin allekirjoitat vuokrasopimuksen 5 minuutissa:</h2>
       <ol>
-        <li>Laadi vuokrasopimus PDF-muotoon — voit käyttää omaa pohjaasi tai täyttää <a href="/sopimuspohjat/asuinhuoneiston-vuokrasopimus">ilmaisen vuokrasopimuspohjan</a> suoraan sivustollamme.</li>
+        <li>Laadi vuokrasopimus PDF-muotoon — voit käyttää omaa pohjaasi tai täyttää <a href="/sopimuspohjat/asuinhuoneiston-vuokrasopimus/">ilmaisen vuokrasopimuspohjan</a> suoraan sivustollamme.</li>
         <li>Valitse PDF-tiedosto <a href="/">etusivun</a> lomakkeelle.</li>
         <li>Syötä oma sähköpostiosoitteesi (Allekirjoittaja 1) ja vuokralaisen sähköpostiosoite (Allekirjoittaja 2).</li>
         <li>Maksa käsittelymaksu ja tunnistaudu pankkitunnuksillasi.</li>

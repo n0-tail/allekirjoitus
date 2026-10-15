@@ -1,10 +1,10 @@
 import { Suspense, lazy } from 'react';
 import { Routes, Route, useNavigate, Link } from 'react-router-dom';
 import { UploadView } from './UploadView';
-import { DocumentFlow } from './DocumentFlow';
-import { AuthCallbackRoute } from './AuthCallbackRoute';
 import './index.css';
 
+const DocumentFlow = lazy(() => import('./DocumentFlow').then(m => ({ default: m.DocumentFlow })));
+const AuthCallbackRoute = lazy(() => import('./AuthCallbackRoute').then(m => ({ default: m.AuthCallbackRoute })));
 const PrivacyView = lazy(() => import('./PrivacyView'));
 const TermsView = lazy(() => import('./TermsView'));
 const ArticleIndexView = lazy(() => import('./views/ArticleIndexView').then(m => ({ default: m.ArticleIndexView })));
@@ -12,6 +12,7 @@ const ArticlePostView = lazy(() => import('./views/ArticlePostView').then(m => (
 const TemplateIndexView = lazy(() => import('./views/TemplateIndexView').then(m => ({ default: m.TemplateIndexView })));
 const TemplateDetailView = lazy(() => import('./views/TemplateDetailView').then(m => ({ default: m.TemplateDetailView })));
 const VerifyView = lazy(() => import('./VerifyView').then(m => ({ default: m.VerifyView })));
+const NotFoundView = lazy(() => import('./views/NotFoundView').then(m => ({ default: m.NotFoundView })));
 
 function App() {
   const navigate = useNavigate();
@@ -38,10 +39,10 @@ function App() {
             <Link to="/" style={{ color: 'var(--text-main)', textDecoration: 'none', fontWeight: 600 }}>
               Allekirjoita PDF
             </Link>
-            <Link to="/sopimuspohjat" style={{ color: 'var(--text-main)', textDecoration: 'none', fontWeight: 500 }}>
+            <Link to="/sopimuspohjat/" style={{ color: 'var(--text-main)', textDecoration: 'none', fontWeight: 500 }}>
               Sopimuspohjat
             </Link>
-            <Link to="/asiantuntija-artikkelit" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontWeight: 500 }}>
+            <Link to="/asiantuntija-artikkelit/" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontWeight: 500 }}>
               Oppaat
             </Link>
             <span style={{ background: '#f1f5f9', color: '#0f172a', border: '1px solid #cbd5e1', padding: '0.3rem 0.7rem', borderRadius: '6px', fontSize: '0.8rem', fontWeight: 600 }}>
@@ -65,6 +66,7 @@ function App() {
             <Route path="/sopimuspohjat/:slug" element={<TemplateDetailView />} />
             <Route path="/asiantuntija-artikkelit" element={<ArticleIndexView />} />
             <Route path="/asiantuntija-artikkelit/:slug" element={<ArticlePostView />} />
+            <Route path="*" element={<NotFoundView />} />
           </Routes>
         </Suspense>
       </main>
@@ -78,19 +80,19 @@ function App() {
             </span>
           </div>
           <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '1.25rem' }}>
-            <Link to="/sopimuspohjat" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 500 }}>
+            <Link to="/sopimuspohjat/" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 500 }}>
               Ilmaiset sopimuspohjat (PDF)
             </Link>
-            <Link to="/asiantuntija-artikkelit" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 500 }}>
+            <Link to="/asiantuntija-artikkelit/" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 500 }}>
               Asiantuntija-artikkelit
             </Link>
             <a href="https://dokumenttipohja.fi/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 500 }}>
               Dokumenttipohja.fi (Word-pohjat) ↗
             </a>
-            <Link to="/ehdot" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontWeight: 500 }}>
+            <Link to="/ehdot/" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontWeight: 500 }}>
               Käyttöehdot
             </Link>
-            <Link to="/tietosuoja" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontWeight: 500 }}>
+            <Link to="/tietosuoja/" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontWeight: 500 }}>
               Tietosuojaseloste
             </Link>
           </div>

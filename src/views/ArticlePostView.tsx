@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { articles } from '../data/articles';
+import { updateSeoMeta } from '../lib/seo';
 
 export const ArticlePostView: React.FC = () => {
     const { slug } = useParams<{ slug: string }>();
@@ -8,14 +9,20 @@ export const ArticlePostView: React.FC = () => {
     const article = articles.find(a => a.slug === slug) || null;
 
     useEffect(() => {
-        window.scrollTo(0, 0); // Scrollaa aina ylös kun artikkeli vaihtuu
+        window.scrollTo(0, 0);
         if (article) {
-            document.title = `${article.title} | Helppo Allekirjoitus`;
-
-            const metaDescription = document.querySelector('meta[name="description"]');
-            if (metaDescription) {
-                metaDescription.setAttribute('content', article.description);
-            }
+            updateSeoMeta({
+                title: `${article.title} | Helppo Allekirjoitus`,
+                description: article.description,
+                canonicalPath: `/asiantuntija-artikkelit/${article.slug}/`,
+            });
+        } else {
+            updateSeoMeta({
+                title: 'Artikkelia ei löytynyt | Helppo Allekirjoitus',
+                description: 'Etsimääsi artikkelia ei löytynyt.',
+                canonicalPath: '/asiantuntija-artikkelit/',
+                noindex: true,
+            });
         }
     }, [article]);
 
@@ -29,40 +36,12 @@ export const ArticlePostView: React.FC = () => {
         );
     }
 
-    // JSON-LD RAG/SEO Malleille
-    const jsonLd = {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": article.title,
-        "description": article.description,
-        "datePublished": article.date,
-        "author": {
-            "@type": "Organization",
-            "name": "Polarcomp Oy",
-            "url": "https://helppoallekirjoitus.fi/"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Polarcomp Oy",
-            "logo": {
-                "@type": "ImageObject",
-                "url": "https://helppoallekirjoitus.fi/logo.jpg"
-            }
-        }
-    };
-
     return (
         <div style={{ maxWidth: '820px', margin: '0 auto', padding: '2rem 1rem' }}>
 
-            {/* RAG-optimoitu piilotettu Schema.org JSON Data */}
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-            />
-
             <nav style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <button
-                    onClick={() => navigate('/asiantuntija-artikkelit')}
+                    onClick={() => navigate('/asiantuntija-artikkelit/')}
                     style={{
                         background: 'none', border: 'none', color: 'var(--primary)',
                         cursor: 'pointer', padding: '0', display: 'flex', alignItems: 'center', gap: '0.5rem',

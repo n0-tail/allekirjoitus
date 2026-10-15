@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { updateSeoMeta } from './lib/seo';
 
 const PrivacyView: React.FC = () => {
     useEffect(() => {
-        document.title = "Tietosuojaseloste | Helppo Allekirjoitus";
-        const metaDescription = document.querySelector('meta[name="description"]');
-        if (metaDescription) {
-            metaDescription.setAttribute('content', 'Helppo Allekirjoitus -palvelun tietosuojaseloste. Lue kuinka suojaamme tietosi ja asiakirjasi zero-knowledge-periaatteella. Emme varastoi asiakirjojasi pysyvästi.');
-        }
+        window.scrollTo(0, 0);
+        updateSeoMeta({
+            title: 'Tietosuojaseloste (GDPR) | Helppo Allekirjoitus',
+            description: 'Polarcomp Oy:n tietosuojaseloste ja GDPR-informaatio. Automaattinen 24 tunnin asiakirjojen poisto ja tietojen minimointi.',
+            canonicalPath: '/tietosuoja/',
+        });
     }, []);
 
     return (

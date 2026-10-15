@@ -1,18 +1,16 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { contractTemplates } from '../data/contractTemplates';
+import { updateSeoMeta } from '../lib/seo';
 
 export const TemplateIndexView: React.FC = () => {
     useEffect(() => {
         window.scrollTo(0, 0);
-        document.title = 'Ilmaiset sopimuspohjat (PDF) – Täytä ja allekirjoita verkossa | Helppo Allekirjoitus';
-        const metaDescription = document.querySelector('meta[name="description"]');
-        if (metaDescription) {
-            metaDescription.setAttribute(
-                'content',
-                'Täytä virallinen suomalainen sopimuspohja suoraan selaimessa: vuokrasopimus, auton kauppakirja, velkakirja, valtakirja tai NDA. Lataa PDF ilmaiseksi tai allekirjoita pankkitunnuksilla (1,49 €).'
-            );
-        }
+        updateSeoMeta({
+            title: 'Ilmaiset sopimuspohjat verkossa – Täytä PDF ja allekirjoita | Helppo Allekirjoitus',
+            description: 'Täytä virallinen suomalainen vuokrasopimus, auton kauppakirja, velkakirja, valtakirja, irtaimen kauppakirja tai salassapitosopimus (NDA) suoraan selaimessa. Lataa ilmainen PDF tai allekirjoita pankkitunnuksilla (1,49 €).',
+            canonicalPath: '/sopimuspohjat/',
+        });
     }, []);
 
     return (
@@ -61,7 +59,7 @@ export const TemplateIndexView: React.FC = () => {
                     {contractTemplates.map((tpl) => (
                         <Link
                             key={tpl.slug}
-                            to={`/sopimuspohjat/${tpl.slug}`}
+                            to={`/sopimuspohjat/${tpl.slug}/`}
                             style={{
                                 display: 'flex',
                                 flexDirection: 'column',

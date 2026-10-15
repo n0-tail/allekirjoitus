@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from './lib/supabase';
 import { reportError } from './lib/errorReporter';
+import { updateSeoMeta } from './lib/seo';
 
 export const VerifyView = () => {
     const { id } = useParams<{ id: string }>();
@@ -12,6 +13,15 @@ export const VerifyView = () => {
     const [isCalculatingHash, setIsCalculatingHash] = useState(false);
     const [hashMatch, setHashMatch] = useState<boolean | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        updateSeoMeta({
+            title: 'Allekirjoitustodistuksen tarkistus | Helppo Allekirjoitus',
+            description: 'Tarkista sähköisesti allekirjoitetun PDF-asiakirjan aitous ja SHA-256-tiiviste.',
+            canonicalPath: '/',
+            noindex: true,
+        });
+    }, []);
 
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];

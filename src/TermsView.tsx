@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { updateSeoMeta } from './lib/seo';
 
 const TermsView: React.FC = () => {
     useEffect(() => {
-        document.title = "Käyttöehdot | Helppo Allekirjoitus";
-        const metaDescription = document.querySelector('meta[name="description"]');
-        if (metaDescription) {
-            metaDescription.setAttribute('content', 'Helppo Allekirjoitus -palvelun käyttöehdot. Tutustu sähköisen allekirjoituspalvelumme ehtoihin, vastuisiin, teknisiin rajoitteisiin ja eIDAS-yhteensopivuuteen.');
-        }
+        window.scrollTo(0, 0);
+        updateSeoMeta({
+            title: 'Käyttöehdot | Helppo Allekirjoitus',
+            description: 'Helppoallekirjoitus.fi -sähköisen allekirjoituspalvelun käyttöehdot, hinnoittelu (1,49 € / allekirjoitus) ja palvelukuvaus.',
+            canonicalPath: '/ehdot/',
+        });
     }, []);
 
     return (

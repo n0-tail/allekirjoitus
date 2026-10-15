@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { contractTemplates, generateContractPdfFile } from '../data/contractTemplates';
+import { updateSeoMeta } from '../lib/seo';
 
 export const TemplateDetailView: React.FC = () => {
     const { slug } = useParams<{ slug: string }>();
@@ -14,16 +15,23 @@ export const TemplateDetailView: React.FC = () => {
     useEffect(() => {
         window.scrollTo(0, 0);
         if (template) {
-            document.title = template.seoTitle;
-            const metaDescription = document.querySelector('meta[name="description"]');
-            if (metaDescription) {
-                metaDescription.setAttribute('content', template.seoDescription);
-            }
+            updateSeoMeta({
+                title: template.seoTitle,
+                description: template.seoDescription,
+                canonicalPath: `/sopimuspohjat/${template.slug}/`,
+            });
             const defaults: Record<string, string> = {};
             template.fields.forEach((f) => {
                 if (f.defaultValue) defaults[f.key] = f.defaultValue;
             });
             setValues(defaults);
+        } else {
+            updateSeoMeta({
+                title: 'Sopimuspohjaa ei löytynyt | Helppo Allekirjoitus',
+                description: 'Valitse haluamasi suomalainen sopimusmalli listasta.',
+                canonicalPath: '/sopimuspohjat/',
+                noindex: true,
+            });
         }
     }, [template]);
 
@@ -32,7 +40,7 @@ export const TemplateDetailView: React.FC = () => {
             <div className="container" style={{ textAlign: 'center', padding: '4rem 1rem' }}>
                 <h2>Sopimuspohjaa ei löytynyt.</h2>
                 <p style={{ margin: '0.75rem 0 1.5rem' }}>Valitse haluamasi sopimusmalli listasta.</p>
-                <button className="btn btn-primary" onClick={() => navigate('/sopimuspohjat')}>
+                <button className="btn btn-primary" onClick={() => navigate('/sopimuspohjat/')}>
                     Katso kaikki sopimuspohjat
                 </button>
             </div>
@@ -102,12 +110,13 @@ export const TemplateDetailView: React.FC = () => {
     };
 
     const previewSections = template.buildSections(values);
+    const otherTemplates = contractTemplates.filter((t) => t.slug !== template.slug);
 
     return (
         <div className="container animate-fade-in" style={{ maxWidth: '920px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1.5rem' }}>
                 <Link
-                    to="/sopimuspohjat"
+                    to="/sopimuspohjat/"
                     style={{
                         color: 'var(--primary)',
                         textDecoration: 'none',
@@ -248,6 +257,50 @@ export const TemplateDetailView: React.FC = () => {
                     </button>
                 </div>
             </div>
+
+            {/* SEO & Legal Guidance Section */}
+            <section className="card" style={{ marginTop: '1.75rem', padding: '2rem' }}>
+                <h2 style={{ fontSize: '1.3rem', color: 'var(--text-main)', marginBottom: '0.75rem' }}>
+                    Näin laadit ja allekirjoitat asiakirjan ({template.title.toLowerCase()}) verkossa
+                </h2>
+                <p style={{ fontSize: '0.925rem', color: 'var(--text-muted)', lineHeight: 1.65, marginBottom: '1rem' }}>
+                    Yllä olevalla lomakkeella voit täyttää suomalaisen asiakirjamallin (<strong>{template.title.toLowerCase()}</strong>) suoraan selaimessasi. Asiakirja muodostetaan laitteellasi, ja voit joko ladata valmiin A4 PDF-tiedoston täysin maksutta tai siirtyä suoraan vahvaan sähköiseen allekirjoitukseen.
+                </p>
+                <p style={{ fontSize: '0.925rem', color: 'var(--text-muted)', lineHeight: 1.65, marginBottom: '1.25rem' }}>
+                    {template.legalNote} Kun sopimus allekirjoitetaan pankkitunnuksilla (Finnish Trust Network: OP, Nordea, Danske Bank, S-Pankki, Säästöpankki, POP Pankki, Aktia, Ålandsbanken) tai mobiilivarmenteella, osapuolten viralliset nimet vahvistetaan pankin rekisteristä ja PDF-tiedoston loppuun liitetään virallinen allekirjoitustodistus aikaleimoineen ja SHA-256-tiivisteineen.
+                </p>
+
+                <div style={{ borderTop: '1px solid var(--border)', paddingTop: '1.25rem', marginTop: '1.25rem' }}>
+                    <h3 style={{ fontSize: '1rem', color: 'var(--text-main)', marginBottom: '0.75rem' }}>
+                        Muut ilmaiset sopimuspohjat
+                    </h3>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '0.65rem' }}>
+                        {otherTemplates.map((other) => (
+                            <Link
+                                key={other.slug}
+                                to={`/sopimuspohjat/${other.slug}/`}
+                                style={{
+                                    padding: '0.65rem 0.9rem',
+                                    borderRadius: 'var(--radius-md)',
+                                    border: '1px solid var(--border)',
+                                    background: '#f8fafc',
+                                    textDecoration: 'none',
+                                    color: 'var(--text-main)',
+                                    fontSize: '0.875rem',
+                                    fontWeight: 500,
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center'
+                                }}
+                            >
+                                <span>{other.title}</span>
+                                <span style={{ color: 'var(--primary)' }}>→</span>
+                            </Link>
+                        ))}
+                    </div>
+                </div>
+            </section>
         </div>
     );
 };
+

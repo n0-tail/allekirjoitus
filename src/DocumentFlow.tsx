@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { RecipientView } from './RecipientView';
 import { ProcessingView } from './ProcessingView';
@@ -8,6 +8,7 @@ import { PaymentView } from './PaymentView';
 import { useDocumentFlow } from './hooks/useDocumentFlow';
 import { supabase } from './lib/supabase';
 import { initiateAuth } from './lib/auth';
+import { updateSeoMeta } from './lib/seo';
 export { initiateAuth };
 
 export function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
@@ -18,6 +19,15 @@ export function DocumentFlow({ role }: { role: 'sender' | 'recipient' }) {
     const [showObserverInput, setShowObserverInput] = useState(false);
     const [observerEmail, setObserverEmail] = useState('');
     const [observerPays, setObserverPays] = useState(false);
+
+    useEffect(() => {
+        updateSeoMeta({
+            title: 'Asiakirjan allekirjoitus | Helppo Allekirjoitus',
+            description: 'Sähköinen allekirjoitus pankkitunnuksilla.',
+            canonicalPath: '/',
+            noindex: true,
+        });
+    }, []);
 
     const sendEmailsOnce = async () => {
         if (!data?.documentId) return;

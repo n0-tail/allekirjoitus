@@ -38,9 +38,9 @@ export const SuccessView: React.FC<SuccessViewProps> = ({ data, onReset }) => {
 
         setIsDownloading(true);
         try {
-            const safeFileName = displayFileName.replace(/[^a-zA-Z0-9.\-_]/g, '_');
-            const filePath = `${data.documentId}/${safeFileName}`;
-            const { data: urlData, error } = await supabase.storage.from('pdfs').createSignedUrl(filePath, 60);
+            const { data: urlData, error } = await supabase.functions.invoke('get-download-url', {
+                body: { documentId: data.documentId }
+            });
 
             if (error) {
                 throw new Error(`Latausvirhe: ${error.message}`);

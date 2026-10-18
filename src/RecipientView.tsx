@@ -30,9 +30,9 @@ export const RecipientView: React.FC<RecipientViewProps> = ({ data, isPaid, onSi
 
         setIsDownloading(true);
         try {
-            const safeFileName = displayFileName.replace(/[^a-zA-Z0-9.\-_]/g, '_');
-            const filePath = `${data.documentId}/${safeFileName}`;
-            const { data: urlData, error } = await supabase.storage.from('pdfs').createSignedUrl(filePath, 60); // 60 sekuntia voimassa
+            const { data: urlData, error } = await supabase.functions.invoke('get-download-url', {
+                body: { documentId: data.documentId }
+            }); // linkki voimassa 60 sekuntia
 
             if (error) {
                 throw new Error(`Latausvirhe: ${error.message}`);

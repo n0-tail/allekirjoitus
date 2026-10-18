@@ -1,10 +1,13 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import * as jose from "npm:jose@5.2.2";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.8";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
@@ -12,7 +15,7 @@ serve(async (req: Request) => {
   }
 
   try {
-    const { code, redirectUri } = await req.json();
+    const { code, redirectUri, state } = await req.json();
 
     if (!code || !redirectUri) {
       throw new Error('Code or redirectUri missing in request');
@@ -89,6 +92,31 @@ serve(async (req: Request) => {
 
     // In Criipto/Idura, the user's name is in the 'name' claim.
     const fullName = (verifiedClaims.name as string) || "Tuntematon Allekirjoittaja";
+
+    // Persist the bank-verified name server-side, bound to the document/signer in `state`
+    // (format: `${documentId}_${role}` or `${documentId}_${role}_${signerId}`).
+    // record-action reads it from here instead of trusting a name sent by the browser.
+    // Never allowed to break the login itself.
+    if (typeof state === 'string' && state.length > 0) {
+      try {
+        const parts = state.split('_');
+        const documentId = parts[0] || '';
+        const role = parts[1] === 'sender' ? 'sender' : 'recipient';
+        const signerId = role === 'recipient' ? (parts[2] || null) : null;
+        if (UUID_RE.test(documentId)) {
+          const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+          const { error: idError } = await supabase.from('verified_identities').insert({
+            document_id: documentId,
+            role,
+            signer_id: signerId,
+            verified_name: fullName,
+          });
+          if (idError) console.error('verified_identities insert failed:', idError.message);
+        }
+      } catch (idErr) {
+        console.error('verified_identities insert exception:', idErr);
+      }
+    }
 
     return new Response(
       JSON.stringify({

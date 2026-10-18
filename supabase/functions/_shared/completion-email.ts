@@ -1,3 +1,5 @@
+import { escapeHtml } from "./escape.ts";
+
 interface CompletionEmailParams {
     resendApiKey: string;
     fileName: string;
@@ -36,7 +38,7 @@ export async function sendCompletionEmails(params: CompletionEmailParams): Promi
 
     const emailBody = signers.length === 0
         ? `Olet sähköisesti allekirjoittanut asiakirjan.`
-        : `Kaikki osapuolet (<strong>${allNames}</strong>) ovat nyt sähköisesti allekirjoittaneet asiakirjan.`;
+        : `Kaikki osapuolet (<strong>${escapeHtml(allNames)}</strong>) ovat nyt sähköisesti allekirjoittaneet asiakirjan.`;
 
     const emailHtml = `
     <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #10b981; border-radius: 8px;">

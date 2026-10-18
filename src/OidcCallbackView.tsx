@@ -18,12 +18,14 @@ export const OidcCallbackView: React.FC<OidcCallbackViewProps> = ({ code, onSucc
             try {
                 // Determine the exact clean redirect URI we sent to Idura
                 const redirectUri = window.location.origin + window.location.pathname;
+                // state = `${documentId}_${role}[_${signerId}]` – lets the server bind the verified name to the right signer
+                const state = new URLSearchParams(window.location.search).get('state') || undefined;
 
                 setStatus('Haetaan vahvistettuja henkilötietoja Suomen Luottamusverkostosta...');
 
                 // Swap the code for the JWT payload via the Edge Function
                 const { data, error } = await supabase.functions.invoke('auth-callback', {
-                    body: { code, redirectUri }
+                    body: { code, redirectUri, state }
                 });
 
                 if (error) {

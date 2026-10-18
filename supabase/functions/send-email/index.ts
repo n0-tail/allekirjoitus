@@ -1,5 +1,6 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.8"
+import { escapeHtml } from "../_shared/escape.ts"
 
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')
 
@@ -28,12 +29,14 @@ serve(async (req) => {
         const emailPromises: Promise<any>[] = []
 
         if (emailType === 'admin_error') {
+            const contextText = String(errorContext || 'Tuntematon').slice(0, 200)
+            const detailsText = (typeof errorDetails === 'object' ? JSON.stringify(errorDetails, null, 2) : String(errorDetails || 'Ei tarkempia tietoja')).slice(0, 5000)
             const html = `<div style="font-family: sans-serif; max-width: 800px; padding: 20px;">
                 <h2 style="color: #dc2626; margin-top: 0;">Järjestelmävirhe (Helppo Allekirjoitus)</h2>
                 <p><strong>Aikaleima:</strong> ${new Date().toLocaleString('fi-FI')}</p>
-                <p><strong>Konteksti:</strong> ${errorContext || 'Tuntematon'}</p>
+                <p><strong>Konteksti:</strong> ${escapeHtml(contextText)}</p>
                 <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; margin-top: 20px;">
-                    <pre style="white-space: pre-wrap; font-size: 14px; color: #1e293b; margin: 0; font-family: monospace;">${typeof errorDetails === 'object' ? JSON.stringify(errorDetails, null, 2) : (errorDetails || 'Ei tarkempia tietoja')}</pre>
+                    <pre style="white-space: pre-wrap; font-size: 14px; color: #1e293b; margin: 0; font-family: monospace;">${escapeHtml(detailsText)}</pre>
                 </div>
             </div>`;
             
@@ -44,7 +47,7 @@ serve(async (req) => {
                     body: JSON.stringify({
                         from: 'Helppo Allekirjoitus Error <noreply@helppoallekirjoitus.fi>',
                         to: ['antti.nikkanen@polarcomp.fi'],
-                        subject: `🚨 [VIRHE] Helppo Allekirjoitus: ${errorContext || 'Tuntematon virhe'}`,
+                        subject: `🚨 [VIRHE] Helppo Allekirjoitus: ${contextText.replace(/[\r\n]+/g, ' ')}`,
                         html,
                     }),
                 })
@@ -75,7 +78,7 @@ serve(async (req) => {
                 const html = `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
                   <h2 style="color: #111827; margin-top: 0;">Hei!</h2>
                   <p style="color: #374151; font-size: 16px; line-height: 1.5;">
-                    <strong>${doc.sender_email}</strong> on lähettänyt sinulle asiakirjan <em>(${doc.file_name})</em> sähköisesti allekirjoitettavaksi.
+                    <strong>${escapeHtml(doc.sender_email)}</strong> on lähettänyt sinulle asiakirjan <em>(${escapeHtml(doc.file_name)})</em> sähköisesti allekirjoitettavaksi.
                   </p>
                   <div style="margin: 30px 0;">
                     <a href="${link}" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500; display: inline-block;">
@@ -108,8 +111,8 @@ serve(async (req) => {
               : `Asiakirjasi on ladattu: ${doc.file_name}`;
             
             const senderMessage = hasRecipients
-              ? `Olet luonut sähköisen allekirjoituspyynnön asiakirjalle <em>(${doc.file_name})</em>.`
-              : `Olet ladattu asiakirjan <em>(${doc.file_name})</em> sähköistä allekirjoitusta varten.`;
+              ? `Olet luonut sähköisen allekirjoituspyynnön asiakirjalle <em>(${escapeHtml(doc.file_name)})</em>.`
+              : `Olet ladattu asiakirjan <em>(${escapeHtml(doc.file_name)})</em> sähköistä allekirjoitusta varten.`;
 
             const observerTextPart = doc.sender_signs === false 
               ? `<p style="color: #374151; font-size: 16px; line-height: 1.5;">Vastaanottajille on lähetetty allekirjoituspyynnöt. Voit seurata asiakirjan valmistumista ja ladata lopullisen kappaleen alla olevasta linkistä:</p>

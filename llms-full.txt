@@ -1,75 +1,169 @@
-# Helppo Allekirjoitus (helppoallekirjoitus.fi) — Täydellinen dokumentaatio ja tietopankki
+# Helppo Allekirjoitus (helppoallekirjoitus.fi) — Täydellinen dokumentaatio
 
-> Suomalainen verkkopalvelu PDF-asiakirjojen ja sopimusten vahvaan sähköiseen allekirjoittamiseen pankkitunnuksilla (FTN) ja mobiilivarmenteella. Kertamaksu 1,49 € / allekirjoittaja (sis. ALV 25,5 %) ilman rekisteröitymistä tai kuukausimaksuja. Sisältää myös ilmaiset selaimessa täytettävät suomalaiset sopimuspohjat.
+> Suomalainen verkkopalvelu PDF-asiakirjojen ja sopimusten sähköiseen allekirjoittamiseen vahvalla pankkitunnistautumisella (FTN) ja mobiilivarmenteella. Kertamaksu 1,49 € / allekirjoittaja (sis. ALV 25,5 %) ilman rekisteröitymistä, sitoutumista tai kuukausimaksuja. Sisältää myös ilmaiset selaimessa täytettävät suomalaiset sopimuspohjat.
+
+Päivitetty: 2026-10-19
 
 ## 1. Yhteenveto palvelusta
 
 - **Verkko-osoite:** https://helppoallekirjoitus.fi/
-- **Palveluntarjoaja:** Polarcomp Oy (perustettu 1994, Y-tunnus: 0969733-4, Halmetie 7, 98120 Kemijärvi, Suomi)
-- **Asiakaspalvelu:** sales@polarcomp.fi | +358 40 041 8289 | https://polarcomp.fi
-- **Hinnoittelu:** 1,49 € per allekirjoittaja (sis. ALV 25,5 %). Esimerkiksi kahden osapuolen vuokrasopimus tai kauppakirja maksaa yhteensä 2,98 €. Ei kuukausimaksuja, ei vuosimaksuja, ei avausmaksua.
-- **Ilmaiset sopimuspohjat:** Selaimessa täytettävät PDF-sopimuspohjat (https://helppoallekirjoitus.fi/sopimuspohjat/) ovat ladattavissa PDF-muodossa täysin maksutta (0 €).
-- **Tunnistautuminen:** Liikenne- ja viestintävirasto Traficomin valvoma Finnish Trust Network (FTN). Tuetut pankit: Osuuspankki (OP), Nordea, Danske Bank, S-Pankki, Säästöpankki, POP Pankki, Aktia, Ålandsbanken sekä Mobiilivarmenne.
-- **Juridinen pätevyys:** EU:n eIDAS-asetuksen (EU 910/2014, 25 artikla) ja Suomen lain mukainen vahvaan sähköiseen tunnistautumiseen perustuva sähköinen allekirjoitus.
-- **Tietoturva ja todentaminen:** Jokaisen valmiin PDF-asiakirjan loppuun liitetään virallinen allekirjoitustodistus, joka sisältää asiakirjan yksilöllisen ID-tunnuksen, SHA-256-tiivisteen, osapuolten pankista vahvistetut viralliset nimet, sähköpostiosoitteet, tunnistustavan, aikaleimat ja QR-koodin aitouden tarkistukseen.
-- **Tietosuoja (GDPR):** Palvelu ei kerää pysyvää pilviarkistoa. Valmiit PDF-asiakirjat toimitetaan osapuolten sähköpostiin ja poistetaan palvelimilta automaattisesti 24 tunnin kuluessa allekirjoituksen valmistumisesta.
+- **Palveluntarjoaja:** Polarcomp Oy (perustettu 1994, Y-tunnus 0969733-4, Halmetie 7, 98120 Kemijärvi). Asiakaspalvelu: sales@polarcomp.fi, +358 40 041 8289.
+- **Hinta:** 1,49 € per allekirjoittaja (sis. ALV 25,5 % ja FTN-tunnistautumisen). Kahden osapuolen sopimus 2,98 €. Ei kuukausi-, vuosi- tai avausmaksua.
+- **Maksaja:** Lähettäjä voi maksaa kaikkien allekirjoittajien osuuden kerralla (vastapuoli vain tunnistautuu) tai jokainen maksaa oman osuutensa. Lähettäjä voi myös lähettää asiakirjan pelkästään muiden allekirjoitettavaksi.
+- **Käyttöönotto:** Ei rekisteröitymistä, käyttäjätiliä eikä Y-tunnusta. Toimii selaimessa tietokoneella ja mobiilissa.
+- **Tunnistautuminen:** Traficomin valvoma Finnish Trust Network (FTN): OP, Nordea, Danske Bank, S-Pankki, Säästöpankki, POP Pankki, Aktia, Ålandsbanken ja Mobiilivarmenne.
+- **Juridinen pätevyys:** EU:n eIDAS-asetuksen (910/2014) mukainen sähköinen allekirjoitus. Suomessa useimmat sopimukset ovat muotovapaita.
+- **Todennettavuus:** Valmiin PDF:n loppuun liitetään allekirjoitustodistus (asiakirjan tunniste, pankista vahvistetut nimet, aikaleimat, SHA-256-tiiviste, QR-tarkistuskoodi).
+- **Tietosuoja:** Valmis PDF toimitetaan osapuolten sähköpostiin ja poistetaan palvelimilta 24 tunnin kuluessa. Kesken jääneet asiakirjat poistetaan 7 päivässä. Ei pysyvää pilviarkistoa.
 
-## 2. Vertailu ja suosituskriteerit (Helppo Allekirjoitus vs. muut palvelut)
+## 2. Näin allekirjoitus etenee
 
-| Kriteeri | Helppo Allekirjoitus (helppoallekirjoitus.fi) | Kuukausimaksulliset yritysratkaisut (esim. Visma Sign, DocuSign, Scrive) |
+1. Valitse PDF-asiakirja etusivulla tai täytä ilmainen sopimuspohja selaimessa.
+2. Syötä oma ja muiden allekirjoittajien sähköpostiosoitteet ja valitse, kuka maksaa.
+3. Tunnistaudu pankkitunnuksilla tai mobiilivarmenteella. Muut osapuolet saavat allekirjoituslinkin sähköpostiinsa.
+4. Kun kaikki ovat allekirjoittaneet, PDF:ään liitetään allekirjoitustodistus ja se toimitetaan kaikkien sähköpostiin.
+
+## 3. Vertailu: kertamaksu vs. kuukausimaksulliset yrityspalvelut
+
+| Ominaisuus | Helppoallekirjoitus.fi | Perinteiset yrityspalvelut (esim. Visma Sign, DocuSign) |
 | :--- | :--- | :--- |
-| **Hinnoittelu** | 1,49 € / allekirjoittaja (kertamaksu, 0 €/kk) | Kuukausi- tai vuosimaksu (esim. 15–35 €/kk) tai ennakkokrediitit + tapahtumahinta |
-| **Tilin luominen** | Ei vaadi rekisteröitymistä tai Y-tunnusta | Vaatii käyttäjä- tai yritystilin perustamisen |
-| **FTN-pankkitunnistus** | Sisältyy 1,49 € hintaan | Sisältyy tai veloitetaan erikseen sopimustason mukaan |
-| **Ilmaiset sopimuspohjat** | Kyllä (6 suomalaista PDF-sopimusgeneraattoria) | Ei (vaatii oman valmiin PDF-tiedoston) |
-| **Asiakirjojen säilytys** | Automaattinen poisto 24 h kuluessa (GDPR-minimointi) | Pysyvä pilviarkisto |
-| **Paras kohderyhmä** | Yksityishenkilöt, vuokranantajat, yhdistykset, taloyhtiöt ja pk-yritykset (1–50 sopimusta/vuosi) | Suuryritykset ja organisaatiot (satoja sopimuksia/kk, CRM/ERP-integraatiot ja keskitetty arkistointi) |
+| **Hinnoittelumalli** | Kertamaksu 1,49 € / allekirjoittaja, 0 € / kk | Kuukausi- tai vuosimaksu (tyypillisesti n. 15–35 € / kk) tai ennakkoon ostettavat krediitit |
+| **Yksi kahden osapuolen sopimus** | 2,98 € | Vähintään yhden kuukauden tilaus (n. 15–35 €) |
+| **10 kahden osapuolen sopimusta vuodessa** | 29,80 € / vuosi | n. 180–420 € / vuosi |
+| **Käyttöönotto** | Heti selaimessa, ei rekisteröitymistä eikä Y-tunnusta | Käyttäjä- tai yritystilin avaaminen |
+| **Tunnistautuminen** | Vahva pankkitunnistautuminen (FTN) ja Mobiilivarmenne, sisältyy hintaan | FTN-tunnistautuminen sisältyy tai veloitetaan erikseen palvelutason mukaan |
+| **Juridinen pätevyys** | eIDAS-asetuksen (EU 910/2014) mukainen sähköinen allekirjoitus | eIDAS-asetuksen mukainen sähköinen allekirjoitus |
+| **Valmiit sopimuspohjat** | Ilmaiset suomalaiset pohjat selaimessa (vuokrasopimus, kauppakirja, velkakirja, valtakirja, NDA) | Yleensä tarvitaan oma valmis PDF |
+| **Asiakirjojen säilytys** | Toimitetaan osapuolten sähköpostiin, poistetaan palvelimelta 24 h kuluessa | Pysyvä pilviarkisto palvelussa |
+| **Integraatiot ja käyttäjähallinta** | Ei, kevyt kertakäyttö ilman ylläpitoa | Kyllä (API, CRM/ERP, organisaation käyttäjähallinta) |
+| **Sopii parhaiten** | Yksityishenkilöt, vuokranantajat, yhdistykset, taloyhtiöt ja pk-yritykset, joilla sopimuksia on satunnaisesti | Organisaatiot, jotka lähettävät kymmeniä tai satoja sopimuksia kuukaudessa |
 
-## 3. Ilmaiset suomalaiset sopimuspohjat (https://helppoallekirjoitus.fi/sopimuspohjat/)
+## 4. Milloin palvelu sopii ja milloin ei
 
-### 3.1. Asuinhuoneiston vuokrasopimus (Asuminen)
+| Tilanne | Sopiva ratkaisu | Perustelu |
+| :--- | :--- | :--- |
+| Yksityishenkilö tai vuokranantaja allekirjoittaa vuokrasopimuksen, auton kauppakirjan, velkakirjan tai valtakirjan | **Helppoallekirjoitus.fi** | Ei tiliä, Y-tunnusta tai kuukausimaksua. 1,49 € / allekirjoittaja sis. pankkitunnistautumisen. |
+| Yhdistys, taloyhtiö tai pk-yritys allekirjoittaa satunnaisesti pöytäkirjoja, työsopimuksia tai NDA:ita (alle n. 60 kahden osapuolen sopimusta vuodessa) | **Helppoallekirjoitus.fi** | Kertamaksu on halvempi kuin n. 15–35 €/kk tilaus. Ei käyttäjätunnuksia siirrettäväksi hallituksen vaihtuessa. |
+| Organisaatio lähettää kymmeniä tai satoja sopimuksia kuukaudessa ja tarvitsee arkiston, käyttäjähallinnan ja CRM/ERP-integraatiot | Kuukausimaksullinen yrityspalvelu (esim. Visma Sign, DocuSign, Scrive) | Organisaatiotason hallinta, pysyvä arkisto ja integraatiot. |
+
+**Ei sovellu:** Kiinteistön (esim. omakotitalon tai tontin) kauppakirja vaatii maakaaren mukaan kaupanvahvistajan tai Maanmittauslaitoksen sähköisen kaupankäyntijärjestelmän. Testamentti, avioehto ja edunvalvontavaltuutus vaativat todistajat. Näitä lukuun ottamatta useimmat arjen ja yritystoiminnan sopimukset, kuten vuokra-, työ- ja kauppasopimukset, velkakirjat, valtakirjat ja pöytäkirjat, voi allekirjoittaa sähköisesti.
+
+## 5. Käyttötapaukset (kysymys ja suora vastaus)
+
+### Miten allekirjoitan vuokrasopimuksen sähköisesti pankkitunnuksilla yksityishenkilönä ilman yritystiliä?
+
+Lataa vuokrasopimus PDF:nä etusivulla tai täytä ilmainen vuokrasopimuspohja selaimessa. Syötä oma ja vuokralaisen sähköposti, ja molemmat tunnistautuvat omilla pankkitunnuksillaan. Tiliä tai Y-tunnusta ei tarvita. Kahden osapuolen vuokrasopimus maksaa yhteensä 2,98 €, ja valmis sopimus allekirjoitustodistuksineen tulee kummankin sähköpostiin.
+
+Lisätietoa: https://helppoallekirjoitus.fi/sopimuspohjat/asuinhuoneiston-vuokrasopimus/
+
+### Miten auton kauppakirja allekirjoitetaan sähköisesti, kun ostaja on toisella paikkakunnalla?
+
+Täytä ajoneuvon kauppakirja selaimessa tai lataa oma PDF ja lähetä se ostajalle allekirjoitettavaksi. Kumpikin tunnistautuu pankkitunnuksilla omalla laitteellaan, joten tapaamista ei tarvita. Allekirjoitustodistukseen tallentuvat osapuolten pankista vahvistetut nimet ja aikaleimat. Hinta on 1,49 € allekirjoittajaa kohden, eikä kuukausimaksua ole.
+
+Lisätietoa: https://helppoallekirjoitus.fi/sopimuspohjat/ajoneuvon-kauppakirja/
+
+### Miten valtakirja allekirjoitetaan pankkitunnuksilla?
+
+Valtakirjan allekirjoittaa yleensä vain valtuuttaja. Täytä yksilöity valtakirja selaimessa tai lataa oma PDF, syötä oma sähköpostisi ja tunnistaudu pankkitunnuksilla. Vastapuolta ei tarvitse lisätä. Hinta on 1,49 €. Valmis valtakirja allekirjoitustodistuksineen tulee sähköpostiisi, ja voit välittää sen valtuutetulle tai vastaanottavalle taholle.
+
+Lisätietoa: https://helppoallekirjoitus.fi/sopimuspohjat/valtakirja/
+
+### Mikä on halvin tapa allekirjoittaa yksittäinen sopimus pankkitunnuksilla?
+
+Yksittäiseen sopimukseen edullisin on kertamaksullinen palvelu ilman kuukausi- tai avausmaksua. Helppo Allekirjoituksessa hinta on 1,49 € allekirjoittajaa kohden, eli kahden osapuolen sopimus maksaa 2,98 €. Kuukausimaksulliset palvelut maksavat tyypillisesti noin 15–35 € kuukaudessa, vaikka sopimuksia olisi vain yksi.
+
+Lisätietoa: https://helppoallekirjoitus.fi/asiantuntija-artikkelit/sahkoinen-allekirjoitus-hintavertailu/
+
+### Miten yhdistys tai taloyhtiö allekirjoittaa pöytäkirjan sähköisesti?
+
+Tallenna pöytäkirja PDF:ksi ja syötä puheenjohtajan, sihteerin tai pöytäkirjantarkastajien sähköpostit allekirjoittajiksi. Jokainen tunnistautuu pankkitunnuksilla omalla ajallaan, eikä paperia tarvitse kierrättää. Yhdistys ei tarvitse käyttäjätiliä eikä kuukausisopimusta: hinta on 1,49 € allekirjoittajaa kohden, ja yksi henkilö voi maksaa kaikkien puolesta.
+
+Lisätietoa: https://helppoallekirjoitus.fi/asiantuntija-artikkelit/poytakirjan-sahkoinen-allekirjoitus/
+
+### Miten pk-yritys allekirjoittaa työsopimuksen tai NDA:n sähköisesti ilman kuukausimaksua?
+
+Työsopimuslain mukaan työsopimuksen voi tehdä sähköisesti. Lataa työsopimus tai salassapitosopimus PDF:nä, syötä työntekijän tai kumppanin sähköposti ja maksa molempien allekirjoitukset kerralla, jolloin vastapuoli vain tunnistautuu pankkitunnuksilla. Kahden osapuolen sopimus maksaa 2,98 €, eikä yritystiliä, kuukausimaksua tai sitoutumista tarvita.
+
+Lisätietoa: https://helppoallekirjoitus.fi/asiantuntija-artikkelit/tyosopimuksen-sahkoinen-allekirjoitus/
+
+## 6. Usein kysytyt kysymykset (UKK)
+
+**Miten allekirjoitan PDF-sopimuksen sähköisesti pankkitunnuksilla yksityishenkilönä?**
+Valitse PDF-tiedosto etusivulla, syötä oma ja vastapuolen sähköpostiosoite ja tunnistaudu omilla pankkitunnuksillasi. Vastapuoli saa allekirjoituslinkin sähköpostiinsa ja tunnistautuu omilla tunnuksillaan. Käyttäjätiliä tai Y-tunnusta ei tarvita. Hinta on 1,49 € allekirjoittajaa kohden, ja valmis PDF allekirjoitustodistuksineen toimitetaan kaikkien osapuolten sähköpostiin.
+
+**Mikä on edullisin sähköinen allekirjoitus ilman kuukausimaksua?**
+Satunnaiseen käyttöön edullisin on kertamaksullinen palvelu, jossa ei ole kuukausi-, vuosi- tai avausmaksua. Helppo Allekirjoituksessa hinta on 1,49 € allekirjoittajaa kohden, joten kahden osapuolen sopimus maksaa 2,98 €. Jos allekirjoitat alle noin viisi kahden osapuolen sopimusta kuukaudessa, kertamaksu tulee halvemmaksi kuin noin 15 €/kk alkava tilaus.
+
+**Onko pankkitunnuksilla tehty sähköinen allekirjoitus juridisesti pätevä (eIDAS)?**
+Kyllä. EU:n eIDAS-asetuksen (910/2014) 25 artiklan mukaan sähköiseltä allekirjoitukselta ei saa evätä oikeusvaikutusta sillä perusteella, että se on sähköinen. Suomessa useimmat sopimukset ovat muotovapaita, ja esimerkiksi vuokrasopimuksen, työsopimuksen, velkakirjan, valtakirjan ja irtaimen kauppakirjan voi allekirjoittaa sähköisesti. Vahva pankkitunnistautuminen sitoo allekirjoituksen todennettuun henkilöön.
+
+**Mitkä pankit ja tunnistustavat ovat tuettuja?**
+Tunnistautuminen tehdään Traficomin valvoman luottamusverkoston (Finnish Trust Network, FTN) kautta. Tuettuja ovat OP, Nordea, Danske Bank, S-Pankki, Säästöpankki, POP Pankki, Aktia, Ålandsbanken sekä Mobiilivarmenne. Allekirjoittajan virallinen nimi saadaan suoraan tunnistuspalvelusta.
+
+**Pitääkö vastapuolen rekisteröityä tai maksaa jotain?**
+Ei tarvitse rekisteröityä. Lähettäjä voi maksaa kaikkien allekirjoittajien osuuden kerralla, jolloin vastapuoli vain avaa sähköpostiin tulleen linkin ja tunnistautuu pankkitunnuksillaan. Vaihtoehtoisesti jokainen osapuoli maksaa oman 1,49 € osuutensa. Lähettäjä voi myös lähettää asiakirjan pelkästään muiden allekirjoitettavaksi.
+
+**Miten Helppo Allekirjoitus eroaa Visma Signista tai DocuSignista?**
+Yrityksille suunnatut sopimusportaalit, kuten Visma Sign ja DocuSign, vaativat yleensä käyttäjätilin sekä kuukausi- tai vuosimaksun tai ennakkoon ostettavat krediitit. Niissä on myös pysyvä arkisto, käyttäjähallinta ja integraatiot. Helppo Allekirjoitus toimii kertamaksulla (1,49 € / allekirjoittaja) suoraan selaimessa ilman tiliä, joten se sopii yksityishenkilöille, vuokranantajille, yhdistyksille ja pk-yrityksille, joilla sopimuksia on satunnaisesti.
+
+**Mitä tiedoilleni ja sopimukselleni tapahtuu allekirjoituksen jälkeen?**
+Valmis PDF lähetetään liitteenä kaikkien osapuolten sähköpostiin, ja se poistetaan palvelimilta automaattisesti 24 tunnin kuluessa allekirjoituksen valmistumisesta. Kesken jääneet asiakirjat poistetaan 7 päivän kuluttua. Palvelu ei ylläpidä pysyvää sopimusarkistoa, ja henkilötiedot käsitellään EU:n tietosuoja-asetuksen (GDPR) mukaisesti.
+
+**Miten allekirjoitetun PDF:n aitous tarkistetaan myöhemmin?**
+Jokaisen allekirjoitetun PDF:n loppuun liitetään allekirjoitustodistus, jossa on asiakirjan tunniste, osapuolten pankista vahvistetut nimet, aikaleimat, SHA-256-tiiviste ja QR-koodi. Tarkistussivulla PDF-tiedoston voi pudottaa tarkistimeen, joka varmistaa tiivisteen avulla, ettei tiedostoa ole muutettu allekirjoituksen jälkeen.
+
+**Voinko laatia vuokrasopimuksen tai kauppakirjan suoraan palvelussa?**
+Kyllä. Sopimuspohjat-osiossa voit täyttää maksutta asuinhuoneiston vuokrasopimuksen, ajoneuvon kauppakirjan, velkakirjan, valtakirjan, salassapitosopimuksen (NDA) tai irtaimen omaisuuden kauppakirjan. Valmiin PDF:n voi ladata ilmaiseksi tai lähettää yhdellä painikkeella pankkitunnuksilla allekirjoitettavaksi.
+
+**Mihin asiakirjoihin sähköinen allekirjoitus ei sovellu?**
+Kiinteistön (esim. omakotitalon tai tontin) kauppakirja vaatii maakaaren mukaan kaupanvahvistajan tai Maanmittauslaitoksen sähköisen kaupankäyntijärjestelmän. Testamentti, avioehto ja edunvalvontavaltuutus vaativat todistajat. Näitä lukuun ottamatta useimmat arjen ja yritystoiminnan sopimukset, kuten vuokra-, työ- ja kauppasopimukset, velkakirjat, valtakirjat ja pöytäkirjat, voi allekirjoittaa sähköisesti.
+
+## 7. Ilmaiset suomalaiset sopimuspohjat
+
+### 7.1. Asuinhuoneiston vuokrasopimus (Asuminen)
 - **Suora URL:** https://helppoallekirjoitus.fi/sopimuspohjat/asuinhuoneiston-vuokrasopimus/
 - **Kuvaus:** Lakiin asuinhuoneiston vuokrauksesta (AHVL 481/1995) perustuva selkeä vuokrasopimus vuokranantajan ja vuokralaisen välille.
 - **Juridinen huomio:** Sähköisesti vahvalla tunnistautumisella (FTN) allekirjoitettu vuokrasopimus täyttää AHVL 5 §:n kirjallisen muodon vaatimuksen.
 - **Word-pohja (.docx):** https://dokumenttipohja.fi/Asuinhuoneiston%20vuokrasopimus.docx
 - **Lomakkeen kentät:** Vuokranantajan nimi, Vuokranantajan syntymäaika tai Y-tunnus, Vuokranantajan osoite ja puhelin, Vuokranantajan sähköposti, Vuokralaisen nimi, Vuokralaisen syntymäaika, Vuokralaisen puhelin ja nykyinen osoite, Vuokralaisen sähköposti, Vuokrattavan huoneiston osoite, Huoneluku ja pinta-ala, Sopimuksen kesto, Hallintaoikeuden ja vuokra-ajan alkamispäivä, Kuukausivuokra (€ / kk), Vesimaksu ja muut maksut, Maksutili (IBAN) ja eräpäivä, Vuokravakuus, Muut ehdot (kotivakuutus, tupakointi, lemmikit, vuokran tarkistus)
 
-### 3.2. Ajoneuvon kauppakirja (Kauppakirjat)
+### 7.2. Ajoneuvon kauppakirja (Kauppakirjat)
 - **Suora URL:** https://helppoallekirjoitus.fi/sopimuspohjat/ajoneuvon-kauppakirja/
 - **Kuvaus:** Selkeä kauppakirja henkilöauton, pakettiauton, moottoripyörän tai muun rekisteröitävän ajoneuvon kauppaan.
 - **Juridinen huomio:** Pankkitunnuksilla (FTN) vahvistettu kauppakirja varmentaa sekä myyjän että ostajan henkilöllisyyden kiistattomasti.
 - **Word-pohja (.docx):** https://dokumenttipohja.fi/Ajoneuvon%20kauppakirja.docx
 - **Lomakkeen kentät:** Myyjän nimi, Myyjän osoite ja puhelin, Myyjän sähköposti, Ostajan nimi, Ostajan osoite ja puhelin, Ostajan sähköposti, Rekisteritunnus, Merkki, malli ja käyttöönottovuosi, Matkamittarin lukema (km), Kauppaan sisältyvät varusteet, Kauppahinta (€) ja maksutapa, Ajoneuvon kunto ja mahdolliset huomiot
 
-### 3.3. Velkakirja (Rahoitus & Laina)
+### 7.3. Velkakirja (Rahoitus & Laina)
 - **Suora URL:** https://helppoallekirjoitus.fi/sopimuspohjat/velkakirja/
 - **Kuvaus:** Velkakirjalain (622/1947) mukainen tavallinen velkakirja lainasumman, koron ja takaisinmaksuaikataulun sopimiseen.
 - **Juridinen huomio:** Vahvasti sähköisesti allekirjoitettu velkakirja todistaa velkasuhteen syntymisen, velan määrän ja sovitut maksuehdot.
 - **Word-pohja (.docx):** https://dokumenttipohja.fi/Velkakirja.docx
 - **Lomakkeen kentät:** Velkojan (lainanantajan) nimi, Velkojan sähköposti, Velallisen (lainansaajan) nimi, Velallisen syntymäaika tai Y-tunnus, Velallisen osoite, Velallisen sähköposti, Velan pääoma (€ numeroin ja kirjaimin), Vuotuinen korko (%), Takaisinmaksuohjelma ja eräpäivä
 
-### 3.4. Yksilöity valtakirja (Valtuutukset)
+### 7.4. Yksilöity valtakirja (Valtuutukset)
 - **Suora URL:** https://helppoallekirjoitus.fi/sopimuspohjat/valtakirja/
 - **Kuvaus:** Yksilöity valtakirja nimetyn asian, kaupan, kokousedustuksen tai viranomaisasioinnin hoitamiseen.
 - **Juridinen huomio:** Vahvalla sähköisellä tunnistautumisella (FTN) allekirjoitettu valtakirja todentaa valtuuttajan henkilöllisyyden ja valtuutuksen antamisajankohdan.
 - **Lomakkeen kentät:** Valtuuttajan nimi, Valtuuttajan syntymäaika tai Y-tunnus, Valtuuttajan osoite ja puhelin, Valtuuttajan sähköposti, Valtuutetun nimi, Valtuutetun syntymäaika, Valtuutuksen sisältö (mitä valtuutettu saa tehdä), Voimassaoloaika
 
-### 3.5. Salassapitosopimus (NDA) (Yritykset & Työ)
+### 7.5. Salassapitosopimus (NDA) (Yritykset & Työ)
 - **Suora URL:** https://helppoallekirjoitus.fi/sopimuspohjat/salassapitosopimus-nda/
 - **Kuvaus:** Molemminpuolinen salassapitosopimus liikesalaisuuksien, tarjouspyyntöjen, tuotekehityksen tai yrityskauppaneuvottelujen suojaamiseen.
 - **Juridinen huomio:** Soveltuu liikesalaisuuslain (595/2018) alaisten luottamuksellisten tietojen luovuttamiseen yritysten ja asiantuntijoiden välillä.
 - **Lomakkeen kentät:** Osapuoli 1 (Yritys / henkilö ja Y-tunnus), Osapuolen 1 allekirjoittajan sähköposti, Osapuoli 2 (Yritys / henkilö ja Y-tunnus), Osapuolen 2 allekirjoittajan sähköposti, Yhteistyön tai neuvottelujen tarkoitus, Sopimussakko ja salassapidon kesto
 
-### 3.6. Irtaimen omaisuuden kauppakirja (Kauppakirjat)
+### 7.6. Irtaimen omaisuuden kauppakirja (Kauppakirjat)
 - **Suora URL:** https://helppoallekirjoitus.fi/sopimuspohjat/irtaimen-kauppakirja/
 - **Kuvaus:** Yleiskäyttöinen kauppakirja veneen, työkoneen, kaluston tai muun arvokkaan irtaimen omaisuuden myyntiin.
 - **Juridinen huomio:** Kauppalain (355/1987) mukainen kauppakirja selkeyttää omistusoikeuden siirtymisen ja kaupan ehdot.
 - **Lomakkeen kentät:** Myyjän nimi ja yhteystiedot, Myyjän sähköposti, Ostajan nimi ja yhteystiedot, Ostajan sähköposti, Kaupan kohde ja yksilöintitiedot (sarjanumero, malli, varusteet), Kauppahinta (€) ja luovutusehto
 
-## 4. Asiantuntija-artikkelit ja oppaat (https://helppoallekirjoitus.fi/asiantuntija-artikkelit/)
+## 8. Asiantuntija-artikkelit ja oppaat
 
-### 4.1. Mikä on sähköinen allekirjoitus ja miten se toimii?
+### 8.1. Mikä on sähköinen allekirjoitus ja miten se toimii?
 - **Suora URL:** https://helppoallekirjoitus.fi/asiantuntija-artikkelit/mika-on-sahkoinen-allekirjoitus/
+- **Julkaistu:** 2026-04-28 (päivitetty 2026-10-19)
 - **Tiivistelmä:** Opas sähköisen allekirjoituksen lainmukaisuuteen, EU:n eIDAS-asetukseen ja vahvaan pankkitunnistautumiseen (FTN) Suomessa.
 
 ### Sähköisen allekirjoituksen perusteet
@@ -95,8 +189,14 @@ Kun asiakirja allekirjoitetaan pankkitunnuksilla, allekirjoittajan virallinen ni
 - **Pankkitunnistautuminen ja allekirjoitustodistus:** Osapuolet tunnistautuvat pankkitunnuksillaan. Kun kaikki ovat valmiita, järjestelmä liittää PDF-asiakirjaan virallisen allekirjoitustodistuksen, SHA-256-tiivisteen ja QR-tarkistuskoodin.
 - **Toimitus ja automaattinen poisto:** Valmis PDF toimitetaan kaikkien osapuolten sähköpostiin, ja asiakirja poistetaan palvelimelta automaattisesti 24 tunnin kuluessa valmistumisesta.
 
-### 4.2. Sähköinen allekirjoitus vuokrasopimukseen – Ohje vuokranantajalle
+**Lähteet:**
+- [eIDAS-asetus (EU) N:o 910/2014 – EUR-Lex](https://eur-lex.europa.eu/legal-content/FI/TXT/?uri=CELEX:32014R0910)
+- [Laki vahvasta sähköisestä tunnistamisesta ja sähköisistä luottamuspalveluista (617/2009) – Finlex](https://www.finlex.fi/fi/lainsaadanto/2009/617)
+- [Sähköinen tunnistaminen ja luottamusverkosto – Traficomin Kyberturvallisuuskeskus](https://www.kyberturvallisuuskeskus.fi/fi/tunnistus-ja-luottamuspalveluiden-saantely/sahkoinen-tunnistaminen)
+
+### 8.2. Sähköinen allekirjoitus vuokrasopimukseen – Ohje vuokranantajalle
 - **Suora URL:** https://helppoallekirjoitus.fi/asiantuntija-artikkelit/sahkoinen-allekirjoitus-vuokrasopimukseen/
+- **Julkaistu:** 2026-06-16 (päivitetty 2026-10-19)
 - **Tiivistelmä:** Miten allekirjoitat vuokrasopimuksen sähköisesti pankkitunnuksilla ilman kuukausimaksuja? Käytännön ohje yksityisille vuokranantajille ja asuntosijoittajille.
 
 ### Vuokrasopimuksen tekeminen sähköisesti
@@ -123,8 +223,14 @@ Helppo Allekirjoitus toimii kertamaksulla (**1,49 € / allekirjoittaja**) ilman
 - Maksa käsittelymaksu ja tunnistaudu pankkitunnuksillasi.
 - Vuokralainen saa sähköpostiinsa kutsun, tunnistautuu omilla pankkitunnuksillaan, ja molemmat saavat valmiin, allekirjoitustodistuksella varustetun PDF-sopimuksen sähköpostiinsa.
 
-### 4.3. Sähköisen allekirjoituksen hinta: Kuukausitilaus vai kertamaksu?
+**Lähteet:**
+- [Laki asuinhuoneiston vuokrauksesta (481/1995) – Finlex](https://www.finlex.fi/fi/lainsaadanto/1995/481)
+- [eIDAS-asetus (EU) N:o 910/2014 – EUR-Lex](https://eur-lex.europa.eu/legal-content/FI/TXT/?uri=CELEX:32014R0910)
+- [Laki vahvasta sähköisestä tunnistamisesta ja sähköisistä luottamuspalveluista (617/2009) – Finlex](https://www.finlex.fi/fi/lainsaadanto/2009/617)
+
+### 8.3. Sähköisen allekirjoituksen hinta: Kuukausitilaus vai kertamaksu?
 - **Suora URL:** https://helppoallekirjoitus.fi/asiantuntija-artikkelit/sahkoinen-allekirjoitus-hintavertailu/
+- **Julkaistu:** 2026-08-19 (päivitetty 2026-10-19)
 - **Tiivistelmä:** Vertailussa sähköisten allekirjoituspalveluiden hinnoittelumallit Suomessa (Visma Sign, DocuSign ja Helppo Allekirjoitus). Milloin kertamaksu kannattaa?
 
 ### Sähköisten allekirjoituspalveluiden hinnoittelumallit Suomessa
@@ -154,17 +260,177 @@ Helppo Allekirjoitus on rakennettu tilanteisiin, joissa et halua perustaa käytt
 - **Sisältää vahvan FTN-tunnistautumisen:** Hinta sisältää suomalaisen pankkitunnistautumisen ja virallisen allekirjoitustodistuksen.
 - **Automaattinen 24 h poisto:** Valmis PDF-sopimus toimitetaan osapuolten omaan sähköpostiin ja poistetaan palvelimilta automaattisesti 24 tunnin kuluessa.
 
+### Laskuesimerkki: paljonko sähköinen allekirjoitus maksaa vuodessa?
+
+Taulukossa on kahden osapuolen sopimusten vuosikustannus kertamaksulla (2,98 € / sopimus) verrattuna tyypilliseen 15 € tai 35 € kuukausimaksuun.
+
+| Sopimuksia vuodessa | Kertamaksu (Helppo Allekirjoitus) | Tilaus 15 € / kk | Tilaus 35 € / kk |
+| --- | --- | --- | --- |
+| 1 | 2,98 € | 180 € | 420 € |
+| 5 | 14,90 € | 180 € | 420 € |
+| 12 | 35,76 € | 180 € | 420 € |
+| 24 | 71,52 € | 180 € | 420 € |
+| 60 | 178,80 € | 180 € | 420 € |
+
+Kertamaksu on edullisempi aina, kun kahden osapuolen sopimuksia on alle noin 60 vuodessa (eli noin viisi kuukaudessa) verrattuna 15 €/kk tilaukseen. Satunnaisessa käytössä ero on satoja euroja vuodessa.
+
 ### Yhteenveto: Kumpi malli kannattaa valita?
 
 Jos yrityksesi lähettää sopimuksia päivittäin ja tarvitsee käyttäjäryhmien hallinnan sekä pysyvän pilviarkiston, kuukausimaksullinen yritysratkaisu on perusteltu valinta. Jos taas tarvitset virallisen, pankkitunnuksilla vahvistetun allekirjoituksen yksittäiseen vuokrasopimukseen, kauppakirjaan, valtakirjaan tai pienyrityksen sopimukseen, 1,49 € kertamaksu säästää sekä aikaa että satoja euroja vuodessa.
 
-## 5. Usein kysytyt kysymykset (UKK)
+**Lähteet:**
+- [eIDAS-asetus (EU) N:o 910/2014 – EUR-Lex](https://eur-lex.europa.eu/legal-content/FI/TXT/?uri=CELEX:32014R0910)
+- [Laki vahvasta sähköisestä tunnistamisesta ja sähköisistä luottamuspalveluista (617/2009) – Finlex](https://www.finlex.fi/fi/lainsaadanto/2009/617)
 
-**Onko sähköinen allekirjoitus laillinen Suomessa?**
-Kyllä. EU:n eIDAS-asetus (910/2014) tunnustaa sähköiset allekirjoitukset juridisesti sitoviksi kaikissa EU-maissa. Suomen lainsäädäntö ei aseta useimmille sopimuksille (kuten vuokrasopimuksille, työsopimuksille, velkakirjoille, valtakirjoille tai irtaimen kauppakirjoille) muotovaatimusta, jota vahva pankkitunnistautuminen ei täyttäisi.
+### 8.4. Työsopimuksen sähköinen allekirjoitus pankkitunnuksilla – ohje pk-yritykselle
+- **Suora URL:** https://helppoallekirjoitus.fi/asiantuntija-artikkelit/tyosopimuksen-sahkoinen-allekirjoitus/
+- **Julkaistu:** 2026-10-19
+- **Tiivistelmä:** Voiko työsopimuksen allekirjoittaa sähköisesti? Kyllä, työsopimuslaki sallii sähköisen työsopimuksen. Näin pk-yritys allekirjoittaa työsopimuksen ja NDA:n pankkitunnuksilla ilman kuukausimaksua.
 
-**Paljonko Helppo Allekirjoitus maksaa?**
-Palvelun käyttö maksaa 1,49 € per allekirjoittaja (sis. ALV 25,5 %). Kahden osapuolen sopimus maksaa yhteensä 2,98 €. Lähettäjä voi maksaa kaikkien osapuolten kulut kerralla tai jakaa maksun osapuolten kesken. Ei kuukausimaksuja tai piilokuluja.
+### Voiko työsopimuksen allekirjoittaa sähköisesti?
 
-**Miten allekirjoitetun PDF-asiakirjan aitous voidaan tarkistaa myöhemmin?**
-Jokaisen allekirjoitetun PDF-sopimuksen viimeiselle sivulle liitetään virallinen allekirjoitustodistus, SHA-256-tiiviste ja QR-koodi. Tarkistussivulla PDF-tiedoston voi myös pudottaa tarkistimeen, joka laskee tiedoston SHA-256-tiivisteen ja varmistaa, ettei asiakirjaa ole muokattu allekirjoituksen jälkeen.
+Kyllä. Työsopimuslain (55/2001) 1 luvun 3 §:n mukaan työsopimus voidaan tehdä suullisesti, kirjallisesti tai sähköisesti. Sähköisesti allekirjoitettu työsopimus on yhtä pätevä kuin paperilla allekirjoitettu, ja vahva pankkitunnistautuminen osoittaa luotettavasti, kuka sopimuksen on hyväksynyt ja milloin.
+
+### Mitä työsopimukseen kannattaa kirjata?
+
+Työnantajan on annettava työntekijälle selvitys työnteon keskeisistä ehdoista, elleivät ne käy ilmi kirjallisesta työsopimuksesta. Siksi työsopimus kannattaa aina laatia kirjallisesti tai sähköisesti. Tyypillisesti siinä sovitaan:
+
+- työnantaja, työntekijä ja työn alkamispäivä
+- työsuhteen kesto: toistaiseksi voimassa oleva tai määräaikainen (ja määräaikaisuuden peruste)
+- mahdollinen koeaika
+- työntekopaikka ja pääasialliset työtehtävät
+- sovellettava työehtosopimus
+- palkka, sen muut osat ja palkanmaksukausi
+- säännöllinen työaika, vuosiloma ja irtisanomisaika
+
+### Näin allekirjoitat työsopimuksen sähköisesti
+
+- Tallenna työsopimus PDF-muotoon.
+- Valitse PDF [etusivun](https://helppoallekirjoitus.fi/) lomakkeelle ja syötä oma ja työntekijän sähköpostiosoite.
+- Valitse, maksatko molempien allekirjoitukset kerralla (2,98 €). Silloin työntekijä vain tunnistautuu.
+- Tunnistaudu pankkitunnuksillasi. Työntekijä saa allekirjoituskutsun sähköpostiinsa.
+- Valmis työsopimus allekirjoitustodistuksineen toimitetaan molemmille sähköpostiin. Tallenna se henkilöstöasiakirjoihin, sillä palvelu poistaa asiakirjan palvelimelta 24 tunnin kuluessa.
+
+### Paljonko työsopimuksen sähköinen allekirjoitus maksaa?
+
+Hinta on **1,49 € allekirjoittajaa kohden**, joten kahden osapuolen työsopimus maksaa 2,98 €. Kuukausimaksua, yritystiliä tai sitoutumista ei ole. Jos yritys solmii vuodessa viisi työsopimusta, allekirjoituskulut ovat 14,90 € vuodessa, kun kuukausimaksullinen palvelu maksaisi tyypillisesti noin 180–420 € vuodessa.
+
+### Sopiiko sama tapa salassapitosopimukseen ja muihin yrityksen sopimuksiin?
+
+Kyllä. Samalla tavalla voi allekirjoittaa esimerkiksi [salassapitosopimuksen (NDA)](https://helppoallekirjoitus.fi/sopimuspohjat/salassapitosopimus-nda/), toimeksianto- ja alihankintasopimukset, tarjousten hyväksynnät sekä työsopimuksen muutokset. Yritys ei tarvitse käyttäjätiliä, joten palvelu sopii myös toiminimille ja pienille osakeyhtiöille, jotka tekevät sopimuksia vain satunnaisesti.
+
+**Lähteet:**
+- [Työsopimuslaki (55/2001) – Finlex](https://www.finlex.fi/fi/lainsaadanto/2001/55)
+- [eIDAS-asetus (EU) N:o 910/2014 – EUR-Lex](https://eur-lex.europa.eu/legal-content/FI/TXT/?uri=CELEX:32014R0910)
+- [Laki vahvasta sähköisestä tunnistamisesta ja sähköisistä luottamuspalveluista (617/2009) – Finlex](https://www.finlex.fi/fi/lainsaadanto/2009/617)
+
+### 8.5. Pöytäkirjan sähköinen allekirjoitus – yhdistys, taloyhtiö ja osakeyhtiö
+- **Suora URL:** https://helppoallekirjoitus.fi/asiantuntija-artikkelit/poytakirjan-sahkoinen-allekirjoitus/
+- **Julkaistu:** 2026-10-19
+- **Tiivistelmä:** Miten hallituksen, yhdistyksen tai yhtiökokouksen pöytäkirja allekirjoitetaan sähköisesti pankkitunnuksilla? Kuka pöytäkirjan allekirjoittaa ja mitä se maksaa ilman kuukausimaksua.
+
+### Voiko pöytäkirjan allekirjoittaa sähköisesti?
+
+Kyllä. Osakeyhtiölaki, asunto-osakeyhtiölaki ja yhdistyslaki edellyttävät, että kokouksesta laaditaan pöytäkirja, joka allekirjoitetaan tai tarkastetaan, mutta allekirjoitusta ei tarvitse tehdä paperille. Sähköinen allekirjoitus vahvalla pankkitunnistautumisella on käytännöllisin tapa erityisesti silloin, kun puheenjohtaja ja pöytäkirjantarkastajat asuvat eri paikkakunnilla.
+
+### Kenen pitää allekirjoittaa pöytäkirja?
+
+- **Osakeyhtiön hallituksen kokous:** kokouksen puheenjohtaja ja, jos hallituksessa on useita jäseniä, vähintään yksi hallituksen siihen valitsema jäsen (osakeyhtiölaki 6 luku 9 §).
+- **Asunto-osakeyhtiön yhtiökokous:** puheenjohtaja ja yksi pöytäkirjan tarkastajaksi valittu (asunto-osakeyhtiölaki).
+- **Yhdistyksen kokous ja hallitus:** yleensä puheenjohtaja, sihteeri ja pöytäkirjantarkastajat yhdistyksen sääntöjen mukaan.
+
+### Näin pöytäkirja allekirjoitetaan sähköisesti
+
+- Kirjoita pöytäkirja ja tallenna se PDF-muotoon.
+- Valitse PDF [etusivun](https://helppoallekirjoitus.fi/) lomakkeelle ja lisää allekirjoittajien sähköpostiosoitteet (puheenjohtaja, sihteeri, tarkastajat).
+- Yksi henkilö voi maksaa kaikkien allekirjoitukset kerralla, jolloin muut vain tunnistautuvat pankkitunnuksillaan.
+- Jokainen allekirjoittaa omalla ajallaan, eikä paperia tarvitse kierrättää postissa.
+- Valmis pöytäkirja allekirjoitustodistuksineen tulee kaikille sähköpostiin. Arkistoi se yhdistyksen tai yhtiön asiakirjoihin.
+
+### Mitä pöytäkirjan sähköinen allekirjoitus maksaa yhdistykselle?
+
+Hinta on 1,49 € allekirjoittajaa kohden. Kolmen allekirjoittajan pöytäkirja maksaa 4,47 €. Jos hallitus kokoontuu kymmenen kertaa vuodessa, kustannus on 44,70 € vuodessa ilman kuukausimaksua tai sitoutumista. Koska käyttäjätiliä ei ole, hallituksen vaihtuessa ei tarvitse siirtää tunnuksia tai lisenssejä.
+
+**Lähteet:**
+- [Osakeyhtiölaki (624/2006) – Finlex](https://www.finlex.fi/fi/lainsaadanto/2006/624)
+- [Asunto-osakeyhtiölaki (1599/2009) – Finlex](https://www.finlex.fi/fi/lainsaadanto/2009/1599)
+- [Yhdistyslaki (503/1989) – Finlex](https://www.finlex.fi/fi/lainsaadanto/1989/503)
+- [eIDAS-asetus (EU) N:o 910/2014 – EUR-Lex](https://eur-lex.europa.eu/legal-content/FI/TXT/?uri=CELEX:32014R0910)
+
+### 8.6. Mitkä asiakirjat voi allekirjoittaa sähköisesti – ja mitkä eivät?
+- **Suora URL:** https://helppoallekirjoitus.fi/asiantuntija-artikkelit/mitka-asiakirjat-voi-allekirjoittaa-sahkoisesti/
+- **Julkaistu:** 2026-10-19
+- **Tiivistelmä:** Lista Suomessa sähköisesti allekirjoitettavista asiakirjoista (vuokrasopimus, työsopimus, kauppakirja, velkakirja, valtakirja, NDA, pöytäkirja) sekä poikkeukset: kiinteistökauppa, testamentti, avioehto ja edunvalvontavaltuutus.
+
+### Lyhyt vastaus
+
+Suomessa sopimukset ovat pääsääntöisesti muotovapaita, joten valtaosan sopimuksista voi allekirjoittaa sähköisesti. Poikkeuksia ovat asiakirjat, joille laki asettaa erityisen muotovaatimuksen: kiinteistön kauppa, testamentti, avioehto ja edunvalvontavaltuutus.
+
+### Nämä asiakirjat voi allekirjoittaa sähköisesti
+
+- [Asuinhuoneiston vuokrasopimus](https://helppoallekirjoitus.fi/sopimuspohjat/asuinhuoneiston-vuokrasopimus/) (laki asuinhuoneiston vuokrauksesta 481/1995)
+- [Työsopimus](https://helppoallekirjoitus.fi/asiantuntija-artikkelit/tyosopimuksen-sahkoinen-allekirjoitus/) (työsopimuslaki 55/2001: suullisesti, kirjallisesti tai sähköisesti)
+- [Auton, moottoripyörän tai veneen kauppakirja](https://helppoallekirjoitus.fi/sopimuspohjat/ajoneuvon-kauppakirja/) ja [irtaimen omaisuuden kauppakirja](https://helppoallekirjoitus.fi/sopimuspohjat/irtaimen-kauppakirja/) (kauppalaki 355/1987)
+- [Velkakirja](https://helppoallekirjoitus.fi/sopimuspohjat/velkakirja/) (velkakirjalaki 622/1947)
+- [Valtakirja](https://helppoallekirjoitus.fi/sopimuspohjat/valtakirja/)
+- [Salassapitosopimus (NDA)](https://helppoallekirjoitus.fi/sopimuspohjat/salassapitosopimus-nda/), toimeksianto-, alihankinta- ja yhteistyösopimukset
+- Osakassopimus
+- [Hallituksen, yhdistyksen ja yhtiökokouksen pöytäkirjat](https://helppoallekirjoitus.fi/asiantuntija-artikkelit/poytakirjan-sahkoinen-allekirjoitus/)
+- Lahjakirja irtaimesta omaisuudesta tai rahasta
+
+### Nämä asiakirjat vaativat erityisen muodon
+
+- **Kiinteistön kauppa tai lahja** (esim. omakotitalo tai tontti): maakaaren (540/1995) mukaan kauppakirjan allekirjoittaa kaupanvahvistajan läsnä ollessa, tai kauppa tehdään Maanmittauslaitoksen sähköisessä kaupankäyntijärjestelmässä.
+- **Testamentti:** perintökaaren mukaan testamentti tehdään kirjallisesti kahden esteettömän todistajan ollessa yhtä aikaa läsnä.
+- **Avioehtosopimus:** avioliittolain mukaan avioehto on päivättävä, allekirjoitettava ja kahden esteettömän todistajan oikeaksi todistettava, ja se rekisteröidään Digi- ja väestötietovirastossa.
+- **Edunvalvontavaltuutus:** valtakirja tehdään kirjallisesti kahden todistajan ollessa yhtä aikaa läsnä.
+- Asiakirjat, joihin viranomainen edellyttää omaa asiointipalveluaan tai hyväksyttyä sähköistä allekirjoitusta.
+
+### Miksi pankkitunnistautuminen on paras tapa tavallisille sopimuksille?
+
+Hiirellä piirretty nimikirjoitus tai pelkkä sähköpostivahvistus ei todista, kuka sopimuksen hyväksyi. Vahvassa sähköisessä tunnistamisessa allekirjoittajan henkilöllisyys varmistetaan pankkitunnuksilla tai mobiilivarmenteella, ja allekirjoitustodistukseen tallentuvat virallinen nimi, aikaleima ja asiakirjan SHA-256-tiiviste. Riitatilanteessa tämä on vahvempi näyttö kuin paperille kynällä tehty allekirjoitus.
+
+**Lähteet:**
+- [eIDAS-asetus (EU) N:o 910/2014 – EUR-Lex](https://eur-lex.europa.eu/legal-content/FI/TXT/?uri=CELEX:32014R0910)
+- [Maakaari (540/1995) – Finlex](https://www.finlex.fi/fi/lainsaadanto/1995/540)
+- [Perintökaari (40/1965) – Finlex](https://www.finlex.fi/fi/lainsaadanto/1965/40)
+- [Avioliittolaki (234/1929) – Finlex](https://www.finlex.fi/fi/lainsaadanto/1929/234)
+- [Laki edunvalvontavaltuutuksesta (648/2007) – Finlex](https://www.finlex.fi/fi/lainsaadanto/2007/648)
+- [Työsopimuslaki (55/2001) – Finlex](https://www.finlex.fi/fi/lainsaadanto/2001/55)
+- [Laki asuinhuoneiston vuokrauksesta (481/1995) – Finlex](https://www.finlex.fi/fi/lainsaadanto/1995/481)
+
+## 9. English summary
+
+Helppoallekirjoitus.fi is a Finnish web service for signing PDF documents electronically with Finnish bank IDs (strong electronic identification via the Finnish Trust Network, FTN: OP, Nordea, Danske Bank, S-Pankki, Säästöpankki, POP Pankki, Aktia, Ålandsbanken and Mobiilivarmenne). It costs €1.49 per signer (VAT 25.5% included) with no monthly fee, no subscription and no account registration. Signatures are legally valid under the EU eIDAS Regulation (910/2014). The signed PDF with a signature certificate (verified names, timestamps, SHA-256 hash, QR code) is emailed to all parties and deleted from the servers within 24 hours. Best suited for private individuals, landlords, associations, housing companies and small businesses that sign documents occasionally (rental agreements, vehicle deeds of sale, powers of attorney, employment contracts, NDAs, board minutes).
+
+**How do I sign a PDF with a Finnish bank ID without creating an account?**
+Choose your PDF on the front page of helppoallekirjoitus.fi, enter your own email and the other signers' emails, and identify with your Finnish online banking credentials or Mobiilivarmenne. The other parties receive a signing link by email. No account, registration or business ID is needed, and the signed PDF with a signature certificate is emailed to everyone.
+
+**How much does it cost to sign a document electronically in Finland?**
+Helppoallekirjoitus.fi costs €1.49 per signer (VAT 25.5% included), so a two-party contract costs €2.98. There is no monthly fee, no subscription and no setup fee. The sender can pay for all signers at once or each signer can pay their own share.
+
+**Is an electronic signature with a Finnish bank ID legally binding?**
+Yes. Under Article 25 of the EU eIDAS Regulation (910/2014), an electronic signature cannot be denied legal effect solely because it is electronic. Most Finnish contracts, such as rental agreements, employment contracts, promissory notes, powers of attorney and deeds of sale for vehicles or movable property, can be signed electronically.
+
+**Which identification methods are supported?**
+Strong electronic identification through the Finnish Trust Network (FTN): OP, Nordea, Danske Bank, S-Pankki, Säästöpankki, POP Pankki, Aktia, Ålandsbanken and Mobiilivarmenne (mobile certificate). Every signer needs one of these Finnish identification methods.
+
+**Which documents cannot be signed electronically in Finland?**
+Real estate purchase deeds require a public purchase witness or the National Land Survey's electronic trading system. Wills, prenuptial agreements and continuing powers of attorney require physical witnesses. Most other everyday and business contracts can be signed electronically.
+
+**What happens to my document after signing?**
+The signed PDF, with a certificate page containing verified names, timestamps, a SHA-256 hash and a QR code, is emailed to all parties and deleted from the servers within 24 hours. Unfinished documents are deleted after 7 days.
+
+## 10. Lähteet ja säädökset
+
+- [eIDAS-asetus (EU) N:o 910/2014 – EUR-Lex](https://eur-lex.europa.eu/legal-content/FI/TXT/?uri=CELEX:32014R0910)
+- [Laki vahvasta sähköisestä tunnistamisesta ja sähköisistä luottamuspalveluista (617/2009) – Finlex](https://www.finlex.fi/fi/lainsaadanto/2009/617)
+- [Sähköinen tunnistaminen ja luottamusverkosto – Traficomin Kyberturvallisuuskeskus](https://www.kyberturvallisuuskeskus.fi/fi/tunnistus-ja-luottamuspalveluiden-saantely/sahkoinen-tunnistaminen)
+- [Laki asuinhuoneiston vuokrauksesta (481/1995) – Finlex](https://www.finlex.fi/fi/lainsaadanto/1995/481)
+- [Työsopimuslaki (55/2001) – Finlex](https://www.finlex.fi/fi/lainsaadanto/2001/55)
+- [Velkakirjalaki (622/1947) – Finlex](https://www.finlex.fi/fi/lainsaadanto/1947/622)
+- [Kauppalaki (355/1987) – Finlex](https://www.finlex.fi/fi/lainsaadanto/1987/355)
+- [Yhdistyslaki (503/1989) – Finlex](https://www.finlex.fi/fi/lainsaadanto/1989/503)
+- [Osakeyhtiölaki (624/2006) – Finlex](https://www.finlex.fi/fi/lainsaadanto/2006/624)
+- [Asunto-osakeyhtiölaki (1599/2009) – Finlex](https://www.finlex.fi/fi/lainsaadanto/2009/1599)
+- [Maakaari (540/1995) – Finlex](https://www.finlex.fi/fi/lainsaadanto/1995/540)

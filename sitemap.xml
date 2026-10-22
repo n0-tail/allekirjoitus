@@ -5,7 +5,7 @@
     <xhtml:link rel="alternate" hreflang="fi" href="https://helppoallekirjoitus.fi/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://helppoallekirjoitus.fi/en/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://helppoallekirjoitus.fi/" />
-    <lastmod>2026-10-19</lastmod>
+    <lastmod>2026-10-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -14,7 +14,7 @@
     <xhtml:link rel="alternate" hreflang="fi" href="https://helppoallekirjoitus.fi/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://helppoallekirjoitus.fi/en/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://helppoallekirjoitus.fi/" />
-    <lastmod>2026-10-19</lastmod>
+    <lastmod>2026-10-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -62,8 +62,20 @@
   </url>
   <url>
     <loc>https://helppoallekirjoitus.fi/asiantuntija-artikkelit/</loc>
-    <lastmod>2026-10-19</lastmod>
+    <lastmod>2026-10-22</lastmod>
     <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://helppoallekirjoitus.fi/asiantuntija-artikkelit/sahkoisten-allekirjoituspalveluiden-vertailu/</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://helppoallekirjoitus.fi/asiantuntija-artikkelit/sahkoinen-allekirjoitus-ilman-rekisteroitymista/</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
@@ -80,7 +92,7 @@
   </url>
   <url>
     <loc>https://helppoallekirjoitus.fi/asiantuntija-artikkelit/sahkoinen-allekirjoitus-hintavertailu/</loc>
-    <lastmod>2026-10-19</lastmod>
+    <lastmod>2026-10-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

@@ -1,14 +1,14 @@
 # Helppo Allekirjoitus (helppoallekirjoitus.fi) — Palvelukuvaus ja tekninen yhteenveto
 
 ## 1. Palvelun yleiskuvaus
-Helppo Allekirjoitus (https://helppoallekirjoitus.fi/) on suomalaisen Polarcomp Oy:n (Y-tunnus 0969733-4) tarjoama verkkopalvelu PDF-asiakirjojen sähköiseen allekirjoittamiseen vahvalla pankkitunnistautumisella (Finnish Trust Network, FTN). Palvelu toimii suoraan selaimessa kertamaksulla (1,49 € / allekirjoittaja sis. ALV 25,5 %) ilman rekisteröitymistä, käyttäjätunnuksia tai kuukausimaksuja.
+Helppo Allekirjoitus (https://helppoallekirjoitus.fi/) on suomalaisen Polarcomp Oy:n (Y-tunnus 0969733-4) tarjoama verkkopalvelu PDF-asiakirjojen sähköiseen allekirjoittamiseen vahvalla pankkitunnistautumisella (Finnish Trust Network, FTN). Palvelu toimii suoraan selaimessa kertamaksulla (1,49 € / allekirjoittaja sis. ALV 25,5 %, eli 1,19 € + alv) ilman rekisteröitymistä, käyttäjätunnuksia tai kuukausimaksuja.
 
 Lisäksi sivusto tarjoaa ilmaiset, selaimessa täytettävät suomalaiset sopimuspohjat (vuokrasopimus, ajoneuvon kauppakirja, velkakirja, valtakirja, salassapitosopimus NDA ja irtaimen omaisuuden kauppakirja), joista voi ladata valmiin PDF-tiedoston maksutta tai siirtyä suoraan pankkitunnuksilla allekirjoittamiseen.
 
 ## 2. Keskeiset ominaisuudet ja hinnoittelu
 
 ### Hinnoittelu
-- **Kertamaksu:** 1,49 € per allekirjoittaja (sis. ALV 25,5 %).
+- **Kertamaksu:** 1,49 € per allekirjoittaja sisältäen ALV 25,5 % (1,19 € + alv).
 - **Kuukausimaksu:** 0 € / kk (ei tilausta, ei vuosimaksua, ei avausmaksua).
 - **Esimerkki:** Kahden osapuolen vuokrasopimus tai kauppakirja maksaa yhteensä 2,98 €.
 - **Maksutavat ja joustavuus:** Maksunvälittäjänä toimii Stripe (PCI DSS Level 1). Lähettäjä voi maksaa kaikkien osapuolten allekirjoitukset kerralla (jolloin vastaanottajat pääsevät suoraan tunnistautumaan pankkitunnuksillaan ilman maksua) tai jokainen osapuoli voi maksaa oman 1,49 € osuutensa. Lähettäjä voi myös lähettää asiakirjan muiden allekirjoitettavaksi ilman omaa allekirjoitustaan.

@@ -174,17 +174,18 @@ Kiinteistön (esim. omakotitalon tai tontin) kauppakirja vaatii maakaaren mukaan
 ### 8.1. Sähköiset allekirjoituspalvelut – vertailu hinnoista ja rekisteröitymisestä
 - **Suora URL:** https://helppoallekirjoitus.fi/asiantuntija-artikkelit/sahkoisten-allekirjoituspalveluiden-vertailu/
 - **Julkaistu:** 2026-10-22
-- **Tiivistelmä:** Vertailussa Helppo Allekirjoitus, Luottoposti, Finago Sign, Sarake Sign ja Visma Sign: hinta pankkitunnistautumisella, kuukausimaksu ja vaatiiko palvelu rekisteröitymisen. Hinnat tarkistettu 22.10.2026.
+- **Tiivistelmä:** Vertailussa Helppo Allekirjoitus, Allekirjoituspalvelu.fi, Luottoposti, Finago Sign, Sarake Sign ja Visma Sign: hinta pankkitunnistautumisella, kuukausimaksu ja vaatiiko palvelu rekisteröitymisen. Hinnat tarkistettu 22.10.2026.
 
 ### Lyhyt vastaus
 
-Kun tarvitset pankkitunnuksilla vahvistetun allekirjoituksen yksittäiseen sopimukseen, **Helppo Allekirjoitus** on vertailun palveluista ainoa, jossa ei luoda käyttäjätiliä, ja kappalehintaisista palveluista edullisin: **1,49 € allekirjoittajaa kohden sisältäen alv:n (1,19 € + alv)** ilman kuukausimaksua. Kymmeniä sopimuksia kuukaudessa lähettävälle organisaatiolle, joka tarvitsee arkiston ja käyttäjähallinnan, sopii kuukausimaksullinen yrityspalvelu, kuten Visma Sign tai Sarake Sign.
+Kun tarvitset pankkitunnuksilla vahvistetun allekirjoituksen yksittäiseen sopimukseen, **Helppo Allekirjoitus** toimii ilman käyttäjätiliä ja on vertailun kappalehintaisista palveluista edullisin: **1,49 € allekirjoittajaa kohden sisältäen alv:n (1,19 € + alv)** ilman kuukausimaksua. Kahden osapuolen sopimus maksaa 2,98 €, kun toinen ilman rekisteröitymistä toimiva palvelu, Allekirjoituspalvelu.fi, veloittaa samasta 7,50 €. Kymmeniä sopimuksia kuukaudessa lähettävälle organisaatiolle, joka tarvitsee arkiston ja käyttäjähallinnan, sopii kuukausimaksullinen yrityspalvelu, kuten Visma Sign tai Sarake Sign.
 
 ### Vertailutaulukko: sähköinen allekirjoitus pankkitunnuksilla
 
 | Palvelu | Hinta sis. alv | Kuukausimaksu | Rekisteröityminen |
 | --- | --- | --- | --- |
 | Helppo Allekirjoitus – Ei käyttäjätiliä – Valmis PDF toimitetaan sähköpostiin ja poistetaan palvelimelta 24 h kuluessa. | 1,49 € / allekirjoittaja – 1,19 € + alv | Ei | Ei tarvita |
+| Allekirjoituspalvelu.fi – Kertamaksu asiakirjaa kohden, hinta porrastettu allekirjoittajien määrän mukaan. | 6,50 € / 1 allekirjoitus – 7,50 € / 2 allekirjoitusta (3,75 € / kpl), 10 allekirjoitusta 15,50 € (1,55 € / kpl) | Ei | Ei tarvita |
 | Luottoposti – Myös allekirjoituspaketit ja salattu sähköposti. | n. 1,62 € / allekirjoitus – 1,29 € + alv | Ei | Tili vaaditaan |
 | Finago Sign – Vain yrityksille ja yhteisöille, ei yksityishenkilöille. | n. 1,88 € / allekirjoitus – 1,50 € + alv | Ei | Yritystili, vaatii Y-tunnuksen |
 | Sarake Sign (Basic) – Maksuton Private-taso yksityishenkilöille kevyellä henkilötunnistuksella. | n. 7,40 € / kk / käyttäjä – 5,90 € + alv, rajattomasti allekirjoituksia | Kyllä | Tili vaaditaan |
@@ -199,6 +200,7 @@ Vuokranantaja ja vuokralainen allekirjoittavat yhden sopimuksen pankkitunnuksill
 | Palvelu | Kahden allekirjoituksen hinta | Mitä lisäksi tarvitaan |
 | --- | --- | --- |
 | Helppo Allekirjoitus | 2,98 € | Ei mitään – Ei tiliä, Y-tunnusta eikä tilausta |
+| Allekirjoituspalvelu.fi | 7,50 € | Ei tiliä |
 | Luottoposti | n. 3,24 € | Käyttäjätili |
 | Finago Sign | n. 3,77 € | Yritystili ja Y-tunnus |
 | Sarake Sign (Basic) | n. 7,40 € / kk | Käyttäjätili ja kuukausitilaus |
@@ -219,6 +221,7 @@ Vuokranantaja ja vuokralainen allekirjoittavat yhden sopimuksen pankkitunnuksill
 - **Arkistointi vai poisto:** tililliset palvelut säilyttävät sopimukset palvelussa. Helppo Allekirjoitus toimittaa valmiin PDF:n osapuolten sähköpostiin ja poistaa sen palvelimelta 24 tunnin kuluessa.
 
 **Lähteet:**
+- [Allekirjoituspalvelu.fi – hinnat (allekirjoituspalvelu.fi)](https://allekirjoituspalvelu.fi/)
 - [Luottoposti – hinnasto (luottoposti.fi)](https://luottoposti.fi/hinnasto)
 - [Finago Sign – hinnoittelu ja UKK (procountor.fi)](https://www.procountor.fi/finago-sign/)
 - [Sarake Sign – hinnoittelu (sarake.fi)](https://www.sarake.fi/sarake-sign)
@@ -353,7 +356,7 @@ Helppo Allekirjoitus toimii kertamaksulla (**1,49 € / allekirjoittaja**) ilman
 
 Sähköisen allekirjoituksen markkina jakautuu kahteen selkeästi erilaiseen tarpeeseen: suuren volyymin yritysratkaisuihin (joissa sopimuksia hallinnoidaan ja arkistoidaan satoja vuodessa) sekä satunnaiseen käyttöön, jossa yksityishenkilö, yhdistys tai pienyritys tarvitsee virallisen pankkitunnistautumisen yksittäiseen PDF-sopimukseen.
 
-Palvelukohtaiset hinnat (Luottoposti, Finago Sign, Sarake Sign ja Visma Sign) ja rekisteröitymisvaatimukset on koottu erilliseen artikkeliin: [sähköiset allekirjoituspalvelut Suomessa – vertailu](https://helppoallekirjoitus.fi/asiantuntija-artikkelit/sahkoisten-allekirjoituspalveluiden-vertailu/).
+Palvelukohtaiset hinnat (Allekirjoituspalvelu.fi, Luottoposti, Finago Sign, Sarake Sign ja Visma Sign) ja rekisteröitymisvaatimukset on koottu erilliseen artikkeliin: [sähköiset allekirjoituspalvelut Suomessa – vertailu](https://helppoallekirjoitus.fi/asiantuntija-artikkelit/sahkoisten-allekirjoituspalveluiden-vertailu/).
 
 ### 1. Kansainväliset alustat (esim. DocuSign, Adobe Acrobat Sign)
 

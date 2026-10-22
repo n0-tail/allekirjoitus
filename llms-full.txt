@@ -44,7 +44,7 @@ Päivitetty: 2026-10-22
 | :--- | :--- | :--- |
 | Yksityishenkilö tai vuokranantaja allekirjoittaa vuokrasopimuksen, auton kauppakirjan, velkakirjan tai valtakirjan | **Helppoallekirjoitus.fi** | Ei tiliä, rekisteröitymistä, Y-tunnusta tai kuukausimaksua. 1,49 € / allekirjoittaja sis. alv (1,19 € + alv) ja pankkitunnistautumisen. |
 | Yhdistys, taloyhtiö tai pk-yritys allekirjoittaa satunnaisesti pöytäkirjoja, työsopimuksia tai NDA:ita (alle n. 60 kahden osapuolen sopimusta vuodessa) | **Helppoallekirjoitus.fi** | Kertamaksu on halvempi kuin n. 15–35 €/kk tilaus. Ei käyttäjätunnuksia siirrettäväksi hallituksen vaihtuessa. |
-| Käyttäjä allekirjoittaa säännöllisesti ja haluaa sopimusarkiston palveluun | Tilin vaativa kappalehintainen palvelu (esim. Bink, Luottoposti) | Allekirjoituskohtainen hinta voi olla alempi, mutta vaatii rekisteröitymisen. Ks. palveluvertailu. |
+| Käyttäjä allekirjoittaa säännöllisesti ja haluaa sopimusarkiston palveluun | Tilin vaativa palvelu (esim. Luottoposti, Visma Sign) | Arkisto ja muistutukset palvelussa, vaatii rekisteröitymisen. Ks. palveluvertailu. |
 | Organisaatio lähettää kymmeniä tai satoja sopimuksia kuukaudessa ja tarvitsee arkiston, käyttäjähallinnan ja CRM/ERP-integraatiot | Kuukausimaksullinen yrityspalvelu (esim. Visma Sign, DocuSign, Scrive) | Organisaatiotason hallinta, pysyvä arkisto ja integraatiot. |
 
 **Ei sovellu:** Kiinteistön (esim. omakotitalon tai tontin) kauppakirja vaatii maakaaren mukaan kaupanvahvistajan tai Maanmittauslaitoksen sähköisen kaupankäyntijärjestelmän. Testamentti, avioehto ja edunvalvontavaltuutus vaativat todistajat. Näitä lukuun ottamatta useimmat arjen ja yritystoiminnan sopimukset, kuten vuokra-, työ- ja kauppasopimukset, velkakirjat, valtakirjat ja pöytäkirjat, voi allekirjoittaa sähköisesti.
@@ -174,45 +174,42 @@ Kiinteistön (esim. omakotitalon tai tontin) kauppakirja vaatii maakaaren mukaan
 ### 8.1. Sähköiset allekirjoituspalvelut – vertailu hinnoista ja rekisteröitymisestä
 - **Suora URL:** https://helppoallekirjoitus.fi/asiantuntija-artikkelit/sahkoisten-allekirjoituspalveluiden-vertailu/
 - **Julkaistu:** 2026-10-22
-- **Tiivistelmä:** Vertailussa Helppo Allekirjoitus, Bink, Luottoposti, Finago Sign, Sarake Sign, Visma Sign ja Allekirjoitus.eu: hinta pankkitunnistautumisella, kuukausimaksu ja vaatiiko palvelu rekisteröitymisen. Hinnat tarkistettu 22.10.2026.
+- **Tiivistelmä:** Vertailussa Helppo Allekirjoitus, Luottoposti, Finago Sign, Sarake Sign ja Visma Sign: hinta pankkitunnistautumisella, kuukausimaksu ja vaatiiko palvelu rekisteröitymisen. Hinnat tarkistettu 22.10.2026.
 
 ### Lyhyt vastaus
 
-Jos tarvitset pankkitunnuksilla vahvistetun allekirjoituksen yksittäiseen sopimukseen etkä halua luoda käyttäjätiliä, **Helppo Allekirjoitus** maksaa **1,49 € allekirjoittajaa kohden sisältäen alv:n (1,19 € + alv)** ilman rekisteröitymistä ja kuukausimaksua. Jos allekirjoitat säännöllisesti ja haluat sopimusarkiston, tilin vaativat kappalehintaiset palvelut (esim. Bink 0,70 € + alv) ovat allekirjoituskohtaisesti edullisempia. Kymmeniä sopimuksia kuukaudessa lähettävälle organisaatiolle sopii kuukausimaksullinen yrityspalvelu, kuten Visma Sign tai Sarake Sign.
-
-*Vertailun on laatinut Helppo Allekirjoitus -palvelun tarjoaja Polarcomp Oy. Hinnat on tarkistettu palveluntarjoajien omilta verkkosivuilta 22.10.2026, ja ne on ilmoitettu siinä muodossa kuin palveluntarjoaja ne esittää (alv 0 % tai sis. alv). Tarkista ajantasainen hinta aina palveluntarjoajalta.*
+Kun tarvitset pankkitunnuksilla vahvistetun allekirjoituksen yksittäiseen sopimukseen, **Helppo Allekirjoitus** on vertailun palveluista ainoa, jossa ei luoda käyttäjätiliä, ja kappalehintaisista palveluista edullisin: **1,49 € allekirjoittajaa kohden sisältäen alv:n (1,19 € + alv)** ilman kuukausimaksua. Kymmeniä sopimuksia kuukaudessa lähettävälle organisaatiolle, joka tarvitsee arkiston ja käyttäjähallinnan, sopii kuukausimaksullinen yrityspalvelu, kuten Visma Sign tai Sarake Sign.
 
 ### Vertailutaulukko: sähköinen allekirjoitus pankkitunnuksilla
 
-| Palvelu | Hinta vahvalla tunnistautumisella | Kuukausimaksu | Rekisteröityminen | Huomioita |
-| --- | --- | --- | --- | --- |
-| Helppo Allekirjoitus | 1,49 € / allekirjoittaja sis. alv (1,19 € + alv) | Ei | Ei tarvita | Ei käyttäjätiliä eikä Y-tunnusta. Valmis PDF toimitetaan sähköpostiin ja poistetaan palvelimelta 24 h kuluessa, ei arkistoa. |
-| Bink | 0,70 € + alv / allekirjoitus (n. 0,88 € sis. alv) | Ei | Tili vaaditaan | Kevyt sähköpostiallekirjoitus 0,40 € + alv. Sopimusarkisto viideksi vuodeksi. |
-| Luottoposti | 1,29 € + alv / allekirjoitus (n. 1,62 € sis. alv) | Ei | Tili vaaditaan | Myös allekirjoituspaketit ja salattu sähköposti. |
-| Finago Sign | 1,50 € + alv / allekirjoitus (n. 1,88 € sis. alv) | Ei | Yritystili, vaatii Y-tunnuksen | Ei yksityishenkilöiden käyttöön. Vahva tunnistautuminen myös Ruotsissa, Norjassa ja Tanskassa. |
-| Sarake Sign | Basic 5,90 € / kk / käyttäjä, rajattomasti allekirjoituksia | Kyllä (Basic) | Tili vaaditaan | Maksuton Private-taso yksityishenkilöille kevyellä henkilötunnistuksella. |
-| Visma Sign | Kuukausi- tai vuosipaketti, johon sisältyy allekirjoituskiintiö | Kyllä | Tili vaaditaan | Yrityskäyttöön: arkisto, käyttäjähallinta ja integraatiot. |
-| Allekirjoitus.eu | 0 € (ei pankkitunnistautumista) | Ei | Ei tarvita | Palvelu kuvaa itseään epäviralliseksi piirtotyökaluksi: allekirjoitus piirretään, henkilöllisyyttä ei todenneta. |
+| Palvelu | Hinta sis. alv | Kuukausimaksu | Rekisteröityminen |
+| --- | --- | --- | --- |
+| Helppo Allekirjoitus – Ei käyttäjätiliä – Valmis PDF toimitetaan sähköpostiin ja poistetaan palvelimelta 24 h kuluessa. | 1,49 € / allekirjoittaja – 1,19 € + alv | Ei | Ei tarvita |
+| Luottoposti – Myös allekirjoituspaketit ja salattu sähköposti. | n. 1,62 € / allekirjoitus – 1,29 € + alv | Ei | Tili vaaditaan |
+| Finago Sign – Vain yrityksille ja yhteisöille, ei yksityishenkilöille. | n. 1,88 € / allekirjoitus – 1,50 € + alv | Ei | Yritystili, vaatii Y-tunnuksen |
+| Sarake Sign (Basic) – Maksuton Private-taso yksityishenkilöille kevyellä henkilötunnistuksella. | n. 7,40 € / kk / käyttäjä – 5,90 € + alv, rajattomasti allekirjoituksia | Kyllä | Tili vaaditaan |
+| Visma Sign – Yrityskäyttöön: arkisto, käyttäjähallinta ja integraatiot. | Paketin mukaan – Kuukausi- tai vuosipaketti, johon sisältyy allekirjoituskiintiö | Kyllä | Tili vaaditaan |
+
+Vertailun on laatinut Helppo Allekirjoitus -palvelun tarjoaja Polarcomp Oy. Hinnat on tarkistettu palveluntarjoajien omilta verkkosivuilta 22.10.2026 ja muunnettu arvonlisäverollisiksi (alv 25,5 %). Vertailu ei kata kaikkia markkinoilla olevia palveluita. Tarkista ajantasainen hinta aina palveluntarjoajalta.
 
 ### Laskuesimerkki: kahden osapuolen vuokrasopimus
 
-Esimerkissä vuokranantaja ja vuokralainen allekirjoittavat yhden sopimuksen pankkitunnuksilla. Hinnat sisältävät arvonlisäveron 25,5 %.
+Vuokranantaja ja vuokralainen allekirjoittavat yhden sopimuksen pankkitunnuksilla. Hinnat sisältävät arvonlisäveron 25,5 %.
 
 | Palvelu | Kahden allekirjoituksen hinta | Mitä lisäksi tarvitaan |
 | --- | --- | --- |
-| Helppo Allekirjoitus | 2,98 € | Ei mitään: ei tiliä, ei Y-tunnusta |
-| Bink | n. 1,76 € | Käyttäjätili |
+| Helppo Allekirjoitus | 2,98 € | Ei mitään – Ei tiliä, Y-tunnusta eikä tilausta |
 | Luottoposti | n. 3,24 € | Käyttäjätili |
 | Finago Sign | n. 3,77 € | Yritystili ja Y-tunnus |
-| Sarake Sign Basic | n. 7,40 € / kk | Käyttäjätili ja kuukausitilaus |
+| Sarake Sign (Basic) | n. 7,40 € / kk | Käyttäjätili ja kuukausitilaus |
 
 ### Mikä palvelu sopii mihinkin tilanteeseen?
 
-- **Yksittäinen sopimus, et halua luoda tiliä:** Helppo Allekirjoitus. Valitset PDF:n, syötät osapuolten sähköpostit ja jokainen tunnistautuu pankkitunnuksilla. [Lue, miten allekirjoitus ilman rekisteröitymistä toimii](https://helppoallekirjoitus.fi/asiantuntija-artikkelit/sahkoinen-allekirjoitus-ilman-rekisteroitymista/).
-- **Säännöllinen käyttö ja tarve sopimusarkistolle:** tilin vaativa kappalehintainen palvelu, kuten Bink tai Luottoposti.
+- **Yksittäinen tai satunnainen sopimus, et halua luoda tiliä:** Helppo Allekirjoitus. Valitset PDF:n, syötät osapuolten sähköpostit ja jokainen tunnistautuu pankkitunnuksilla. [Lue, miten allekirjoitus ilman rekisteröitymistä toimii](https://helppoallekirjoitus.fi/asiantuntija-artikkelit/sahkoinen-allekirjoitus-ilman-rekisteroitymista/).
+- **Tarvitset allekirjoitusten lisäksi salattua sähköpostia:** Luottoposti.
 - **Yritys, joka käyttää jo Procountoria:** Finago Sign.
-- **Organisaatio, jolla on useita käyttäjiä ja kymmeniä sopimuksia kuukaudessa:** kuukausimaksullinen yrityspalvelu, kuten Visma Sign tai Sarake Sign.
-- **Henkilöllisyyttä ei tarvitse todentaa:** maksuton piirtotyökalu riittää arkisiin papereihin, mutta riitatilanteessa sen todistusarvo on heikompi kuin pankkitunnistautumisen.
+- **Organisaatio, jolla on useita käyttäjiä, kymmeniä sopimuksia kuukaudessa ja tarve arkistolle:** kuukausimaksullinen yrityspalvelu, kuten Visma Sign tai Sarake Sign.
+- **Henkilöllisyyttä ei tarvitse todentaa:** maksuton piirtotyökalu voi riittää arkisiin papereihin, mutta riitatilanteessa sen todistusarvo on heikompi kuin pankkitunnistautumisen.
 
 ### Mitä hinnan lisäksi kannattaa verrata?
 
@@ -222,12 +219,10 @@ Esimerkissä vuokranantaja ja vuokralainen allekirjoittavat yhden sopimuksen pan
 - **Arkistointi vai poisto:** tililliset palvelut säilyttävät sopimukset palvelussa. Helppo Allekirjoitus toimittaa valmiin PDF:n osapuolten sähköpostiin ja poistaa sen palvelimelta 24 tunnin kuluessa.
 
 **Lähteet:**
-- [Bink – hinnat (bink.fi)](https://www.bink.fi/)
 - [Luottoposti – hinnasto (luottoposti.fi)](https://luottoposti.fi/hinnasto)
 - [Finago Sign – hinnoittelu ja UKK (procountor.fi)](https://www.procountor.fi/finago-sign/)
 - [Sarake Sign – hinnoittelu (sarake.fi)](https://www.sarake.fi/sarake-sign)
 - [Visma Sign (vismasign.fi)](https://www.vismasign.fi/)
-- [Allekirjoitus.eu](https://allekirjoitus.eu/)
 - [eIDAS-asetus (EU) N:o 910/2014 – EUR-Lex](https://eur-lex.europa.eu/legal-content/FI/TXT/?uri=CELEX:32014R0910)
 - [Laki vahvasta sähköisestä tunnistamisesta ja sähköisistä luottamuspalveluista (617/2009) – Finlex](https://www.finlex.fi/fi/lainsaadanto/2009/617)
 
@@ -271,7 +266,7 @@ Kyllä. Allekirjoituksen pätevyys ei riipu siitä, onko lähettäjällä käytt
 
 ### Milloin käyttäjätilillinen palvelu on parempi valinta?
 
-Jos lähetät sopimuksia viikoittain, tarvitset palveluun tallentuvan sopimusarkiston, muistutukset, mallipohjat tai useiden käyttäjien hallinnan, tilin vaativa palvelu on käytännöllisempi, ja kappalehinta voi olla edullisempi. Vertailu eri palveluiden hinnoista ja rekisteröitymisvaatimuksista löytyy artikkelista [sähköiset allekirjoituspalvelut Suomessa – vertailu](https://helppoallekirjoitus.fi/asiantuntija-artikkelit/sahkoisten-allekirjoituspalveluiden-vertailu/).
+Jos lähetät sopimuksia viikoittain, tarvitset palveluun tallentuvan sopimusarkiston, muistutukset, mallipohjat tai useiden käyttäjien hallinnan, tilin vaativa palvelu voi olla käytännöllisempi. Vertailu eri palveluiden hinnoista ja rekisteröitymisvaatimuksista löytyy artikkelista [sähköiset allekirjoituspalvelut Suomessa – vertailu](https://helppoallekirjoitus.fi/asiantuntija-artikkelit/sahkoisten-allekirjoituspalveluiden-vertailu/).
 
 ### Entä ilmaiset allekirjoitustyökalut ilman rekisteröitymistä?
 
@@ -358,7 +353,7 @@ Helppo Allekirjoitus toimii kertamaksulla (**1,49 € / allekirjoittaja**) ilman
 
 Sähköisen allekirjoituksen markkina jakautuu kahteen selkeästi erilaiseen tarpeeseen: suuren volyymin yritysratkaisuihin (joissa sopimuksia hallinnoidaan ja arkistoidaan satoja vuodessa) sekä satunnaiseen käyttöön, jossa yksityishenkilö, yhdistys tai pienyritys tarvitsee virallisen pankkitunnistautumisen yksittäiseen PDF-sopimukseen.
 
-Palvelukohtaiset hinnat (Bink, Luottoposti, Finago Sign, Sarake Sign, Visma Sign ja Allekirjoitus.eu) ja rekisteröitymisvaatimukset on koottu erilliseen artikkeliin: [sähköiset allekirjoituspalvelut Suomessa – vertailu](https://helppoallekirjoitus.fi/asiantuntija-artikkelit/sahkoisten-allekirjoituspalveluiden-vertailu/).
+Palvelukohtaiset hinnat (Luottoposti, Finago Sign, Sarake Sign ja Visma Sign) ja rekisteröitymisvaatimukset on koottu erilliseen artikkeliin: [sähköiset allekirjoituspalvelut Suomessa – vertailu](https://helppoallekirjoitus.fi/asiantuntija-artikkelit/sahkoisten-allekirjoituspalveluiden-vertailu/).
 
 ### 1. Kansainväliset alustat (esim. DocuSign, Adobe Acrobat Sign)
 

@@ -134,55 +134,240 @@ Kiinteistön (esim. omakotitalon tai tontin) kauppakirja vaatii maakaaren mukaan
 - **Suora URL:** https://helppoallekirjoitus.fi/sopimuspohjat/asuinhuoneiston-vuokrasopimus/
 - **Kuvaus:** Lakiin asuinhuoneiston vuokrauksesta (AHVL 481/1995) perustuva selkeä vuokrasopimus vuokranantajan ja vuokralaisen välille.
 - **Juridinen huomio:** Sähköisesti vahvalla tunnistautumisella (FTN) allekirjoitettu vuokrasopimus täyttää AHVL 5 §:n kirjallisen muodon vaatimuksen.
+- **Allekirjoittajat:** Vuokranantaja ja vuokralainen (1,49 € / allekirjoittaja sis. ALV, PDF-lataus 0 €)
 - **Word-pohja (.docx):** https://dokumenttipohja.fi/Asuinhuoneiston%20vuokrasopimus.docx
 - **Lomakkeen kentät:** Vuokranantajan nimi, Vuokranantajan syntymäaika tai Y-tunnus, Vuokranantajan osoite ja puhelin, Vuokranantajan sähköposti, Vuokralaisen nimi, Vuokralaisen syntymäaika, Vuokralaisen puhelin ja nykyinen osoite, Vuokralaisen sähköposti, Vuokrattavan huoneiston osoite, Huoneluku ja pinta-ala, Huoneistossa asuvat henkilöt, Vuokrasuhteen alkamispäivä, Määräaikaisen sopimuksen päättymispäivä, Kuukausivuokra, Vesimaksu ja muut maksut, Maksutili (IBAN) ja eräpäivä, Vuokrankorotusehto, Vuokravakuus, Muut ehdot (kotivakuutus, tupakointi, lemmikit, avaimet)
+
+#### 1. VUOKRASOPIMUKSEN OSAPUOLET
+Vuokranantaja: ____________________ (____________________)
+Yhteystiedot: ____________________, ____________________
+Vuokralainen: ____________________ (____________________)
+Yhteystiedot: ____________________, ____________________
+
+#### 2. VUOKRAUSKOHDE JA KUNTO
+Osoite: ____________________
+Huoneiston tiedot: ____________________
+Huoneisto vuokrataan asuinkäyttöön. Vuokralainen on tarkastanut huoneiston ennen sopimuksen tekemistä ja hyväksyy sen siinä kunnossa kuin se on tarkastushetkellä.
+
+#### 3. VUOKRA-AIKA JA IRTISANOMINEN
+Sopimus on voimassa toistaiseksi. Vuokrasuhde alkaa ____________________.
+Irtisanomisaika on lain asuinhuoneiston vuokrauksesta (AHVL 52 §) mukaisesti vuokranantajan irtisanoessa 3 kuukautta (6 kuukautta, jos vuokrasuhde on kestänyt yhtäjaksoisesti vähintään vuoden) ja vuokralaisen irtisanoessa 1 kuukausi. Irtisanomisaika lasketaan sen kalenterikuukauden viimeisestä päivästä, jonka aikana irtisanominen on tehty.
+
+#### 4. VUOKRA, VUOKRANKOROTUS JA VAKUUS
+Kuukausivuokra: ____________________
+Vesimaksu ja erilliskorvaukset: ____________________
+Maksutiedot ja eräpäivä: ____________________
+Vuokrankorotus: Vuokraa tarkistetaan vuosittain 1.1. alkaen elinkustannusindeksin (1951:10 = 100) muutoksen mukaisesti. Perusindeksinä on sopimuksen allekirjoituskuukauden pisteluku ja tarkistusindeksinä tarkistusta edeltävän lokakuun pisteluku. Vuokra ei alene indeksin laskiessa.
+Vuokravakuus: ____________________
+Vakuus palautetaan vuokralaiselle kohtuullisessa ajassa vuokrasuhteen päätyttyä, kun huoneisto on tarkastettu eikä vuokralaisella ole maksamattomia vuokria tai korvausvelvollisuutta.
+
+#### 5. MUUT EHDOT
+Vuokralainen sitoutuu ottamaan ja pitämään voimassa kotivakuutuksen vastuuvakuutusosineen koko vuokrasuhteen ajan. Tupakointi huoneistossa ja parvekkeella on kielletty. Vuokralainen saa kaksi (2) avainta. Sähkösopimuksen tekee vuokralainen omissa nimissään.
+Vuokrasuhteessa noudatetaan lakia asuinhuoneiston vuokrauksesta (481/1995) sekä hyvää vuokratapaa.
 
 ### 7.2. Asunto-osakkeen kauppakirja (Asuminen)
 - **Suora URL:** https://helppoallekirjoitus.fi/sopimuspohjat/asunto-osakkeen-kauppakirja/
 - **Kuvaus:** Kauppakirja kerrostalo-, rivitalo- tai paritaloasunnon osakkeiden kauppaan ilman välittäjää. Perustuu asuntokauppalakiin (843/1994).
 - **Juridinen huomio:** Asunto-osakkeen kaupalle ei ole laissa muotovaatimusta, joten pankkitunnuksilla allekirjoitettu kauppakirja on pätevä. Kiinteistön (omakotitalo tai tontti) kauppaan tämä pohja ei sovellu, koska kiinteistökauppa vaatii kaupanvahvistajan.
+- **Allekirjoittajat:** Myyjä ja ostaja (kaikki omistajat) (1,49 € / allekirjoittaja sis. ALV, PDF-lataus 0 €)
+- **Allekirjoitusohje:** Jos asunnolla on useampi myyjä tai ostaja, lisää kaikki omistajat allekirjoittajiksi seuraavassa vaiheessa.
 - **Word-pohja (.docx):** https://dokumenttipohja.fi/Asunto%20osakkeen%20kauppakirja.docx
 - **Lomakkeen kentät:** Myyjän nimi (kaikki myyjät), Myyjän henkilötunnus, Myyjän osoite ja puhelin, Myyjän sähköposti, Ostajan nimi (kaikki ostajat ja omistusosuudet), Ostajan henkilötunnus, Ostajan osoite ja puhelin, Ostajan sähköposti, Asunto-osakeyhtiön nimi ja Y-tunnus, Osakkeiden numerot tai osakeryhmän tunnus, Huoneiston osoite, tunnus, huoneluku ja pinta-ala, Kauppahinta, Huoneistoon kohdistuva yhtiölainaosuus, Maksuehdot, Hallinnan luovutuspäivä, Tiedossa olevat remontit ja huomiot huoneiston kunnosta
+
+#### 1. OSAPUOLET
+Myyjä: ____________________ (____________________)
+Yhteystiedot: ____________________, ____________________
+Ostaja: ____________________ (____________________)
+Yhteystiedot: ____________________, ____________________
+
+#### 2. KAUPAN KOHDE
+Yhtiö: ____________________
+Osakkeet: ____________________
+Huoneisto: ____________________
+Osakkeet oikeuttavat hallitsemaan yllä mainittua huoneistoa yhtiöjärjestyksen mukaisesti.
+
+#### 3. KAUPPAHINTA JA MAKSUEHDOT
+Kauppahinta: ____________________
+Huoneistoon kohdistuva yhtiölainaosuus: 0,00 €
+Maksuehdot: ____________________
+
+#### 4. OMISTUS- JA HALLINTAOIKEUDEN SIIRTYMINEN
+Omistusoikeus osakkeisiin siirtyy ostajalle, kun kauppahinta on maksettu kokonaisuudessaan. Huoneiston hallinta luovutetaan ostajalle ____________________, jolloin myyjä luovuttaa kaikki huoneiston avaimet.
+Myyjä vastaa yhtiövastikkeista ja muista huoneistoon kohdistuvista maksuista, jotka erääntyvät ennen hallinnan luovutusta, ja ostaja sen jälkeen erääntyvistä. Myyjä vastaa niistä yhtiökokouksen ennen tätä kauppaa päättämistä korjauksista, joista ei ole kerrottu ostajalle.
+Ostaja maksaa kauppaan liittyvän varainsiirtoveron ja ilmoittaa omistuksen kirjaamisesta Maanmittauslaitoksen osakehuoneistorekisteriin tai, jos osakkeista on paperinen osakekirja, taloyhtiön isännöitsijälle. Myyjä luovuttaa paperisen osakekirjan ostajalle, kun kauppahinta on maksettu.
+
+#### 5. KUNTO JA VASTUUT
+Ostaja on tutustunut isännöitsijäntodistukseen, yhtiöjärjestykseen ja kunnossapitotarveselvitykseen sekä tarkastanut huoneiston ennen kaupantekoa.
+Myyjä vakuuttaa, että osakkeet ovat hänen omistamiaan eikä niihin kohdistu panttaus- tai muita rasituksia, ellei niistä ole erikseen tässä kauppakirjassa sovittu. Kaupassa noudatetaan asuntokauppalakia (843/1994).
 
 ### 7.3. Ajoneuvon kauppakirja (Kauppakirjat)
 - **Suora URL:** https://helppoallekirjoitus.fi/sopimuspohjat/ajoneuvon-kauppakirja/
 - **Kuvaus:** Selkeä kauppakirja henkilöauton, pakettiauton, moottoripyörän tai muun rekisteröitävän ajoneuvon kauppaan.
 - **Juridinen huomio:** Pankkitunnuksilla (FTN) vahvistettu kauppakirja varmentaa sekä myyjän että ostajan henkilöllisyyden ja luovutusajankohdan kiistattomasti.
+- **Allekirjoittajat:** Myyjä ja ostaja (1,49 € / allekirjoittaja sis. ALV, PDF-lataus 0 €)
 - **Word-pohja (.docx):** https://dokumenttipohja.fi/Ajoneuvon%20kauppakirja.docx
 - **Lomakkeen kentät:** Myyjän nimi, Myyjän osoite ja puhelin, Myyjän sähköposti, Ostajan nimi, Ostajan osoite ja puhelin, Ostajan sähköposti, Rekisteritunnus, Valmistenumero (VIN), Merkki, malli ja käyttöönottovuosi, Matkamittarin lukema, Kauppaan sisältyvät varusteet, Kauppahinta ja maksutapa, Luovutuspäivä ja kellonaika, Myyjän tiedossa olevat viat ja puutteet, Muut ehdot
+
+#### 1. OSAPUOLET
+Myyjä: ____________________
+Yhteystiedot: ____________________, ____________________
+Ostaja: ____________________
+Yhteystiedot: ____________________, ____________________
+
+#### 2. KAUPAN KOHDE
+Rekisteritunnus: ____________________
+Valmistenumero (VIN): ____________________
+Merkki, malli ja vuosimalli: ____________________
+Matkamittarin lukema: ____________________
+Kauppaan sisältyvät varusteet: Kahdet renkaat, kaksi avainta ja huoltoasiakirjat.
+
+#### 3. KAUPPAHINTA, LUOVUTUS JA OMISTUSOIKEUS
+Kauppahinta ja maksuehto: ____________________
+Luovutusajankohta: ____________________
+Ajoneuvon omistusoikeus siirtyy ostajalle, kun koko kauppahinta on maksettu. Vaaranvastuu siirtyy ostajalle luovutushetkellä. Myyjä vastaa ajoneuvon käytöstä aiheutuneista maksuista (esim. pysäköintivirhe- ja rikesakot) luovutushetkeen asti ja ostaja luovutushetkestä alkaen.
+Myyjä luovuttaa ostajalle rekisteröintitodistuksen tai varmennekoodin. Osapuolet tekevät omistajanvaihdoksen ilmoituksen Traficomiin viipymättä, viimeistään 7 päivän kuluessa luovutuksesta. Ostaja vastaa ajoneuvon liikennevakuutuksesta luovutushetkestä alkaen.
+
+#### 4. AJONEUVON KUNTO JA VASTUUT
+Myyjän tiedossa olevat viat ja puutteet: Ei myyjän tiedossa olevia vikoja.
+Myyjä vakuuttaa, että hänellä on täysi omistusoikeus ajoneuvoon eikä siihen kohdistu maksamattomia veroja, rahoitusta tai muita rasitteita.
+Ostaja on koeajanut ja tarkastanut ajoneuvon ennen kauppaa ja hyväksyy sen nykyisessä kunnossaan.
 
 ### 7.4. Velkakirja (Rahoitus & Laina)
 - **Suora URL:** https://helppoallekirjoitus.fi/sopimuspohjat/velkakirja/
 - **Kuvaus:** Velkakirjalain (622/1947) mukainen tavallinen velkakirja lainasumman, koron ja takaisinmaksuaikataulun sopimiseen.
 - **Juridinen huomio:** Vahvasti sähköisesti allekirjoitettu velkakirja todistaa velkasuhteen syntymisen, velan määrän ja sovitut maksuehdot.
+- **Allekirjoittajat:** Velallinen (velkoja voi allekirjoittaa myös) (1,49 € / allekirjoittaja sis. ALV, PDF-lataus 0 €)
+- **Allekirjoitusohje:** Velkakirjan sitovuuteen riittää velallisen allekirjoitus. Jos vain velallinen allekirjoittaa, valitse seuraavassa vaiheessa "Lähetä pelkästään vastaanottajille", jolloin hinta on yhteensä 1,49 €.
 - **Word-pohja (.docx):** https://dokumenttipohja.fi/Velkakirja.docx
 - **Lomakkeen kentät:** Velkojan (lainanantajan) nimi, Velkojan syntymäaika tai Y-tunnus, Velkojan sähköposti, Velallisen (lainansaajan) nimi, Velallisen syntymäaika tai Y-tunnus, Velallisen osoite, Velallisen sähköposti, Velan pääoma (numeroin ja kirjaimin), Vuotuinen korko, Takaisinmaksuohjelma, eräpäivät ja maksutili, Velan eräännyttäminen
+
+#### 1. VELKAKIRJAN OSAPUOLET
+Velkoja (lainanantaja): ____________________ (____________________)
+Sähköposti: ____________________
+Velallinen (lainansaaja): ____________________ (____________________)
+Osoite: ____________________, ____________________
+
+#### 2. VELKASITOUMUS JA PÄÄOMA
+Velallinen on saanut velkojalta lainaksi ja sitoutuu maksamaan velkojalle tämän velkakirjan ehtojen mukaisesti velan pääoman:
+____________________.
+Tämä velkakirja on velkakirjalain (622/1947) tarkoittama tavallinen velkakirja, joka on asetettu nimetylle velkojalle.
+
+#### 3. KORKO JA TAKAISINMAKSU
+Vuotuinen korko: 0 % (koroton)
+Takaisinmaksu ja erääntyminen:
+____________________
+Mikäli suoritusta ei makseta viimeistään sovittuna eräpäivänä, velallinen on velvollinen maksamaan viivästyneelle määrälle korkolain (633/1982) mukaista viivästyskorkoa eräpäivästä maksupäivään saakka. Velallisella on oikeus maksaa velka tai sen osa ennenaikaisesti ilman lisäkuluja.
+
+#### 4. ERÄÄNNYTTÄMINEN
+Jos maksuerä viivästyy yli 30 päivää, velkojalla on oikeus eräännyttää koko jäljellä oleva velka maksettavaksi heti.
 
 ### 7.5. Yksilöity valtakirja (Valtuutukset)
 - **Suora URL:** https://helppoallekirjoitus.fi/sopimuspohjat/valtakirja/
 - **Kuvaus:** Yksilöity valtakirja nimetyn asian, kaupan, kokousedustuksen tai asioinnin hoitamiseen.
 - **Juridinen huomio:** Vahvalla sähköisellä tunnistautumisella (FTN) allekirjoitettu valtakirja todentaa valtuuttajan henkilöllisyyden ja valtuutuksen antamisajankohdan. Huomaa, että pankki tai viranomainen voi edellyttää omaa lomakettaan. Edunvalvontavaltuutukseen tämä pohja ei sovellu.
+- **Allekirjoittajat:** Vain valtuuttaja (1,49 € / allekirjoittaja sis. ALV, PDF-lataus 0 €)
+- **Allekirjoitusohje:** Valtakirjan allekirjoittaa ainoastaan valtuuttaja, joten vastapuolen sähköpostia ei tarvita. Hinta on yhteensä 1,49 €.
 - **Lomakkeen kentät:** Valtuuttajan nimi, Valtuuttajan syntymäaika tai Y-tunnus, Valtuuttajan osoite ja puhelin, Valtuuttajan sähköposti, Valtuutetun nimi, Valtuutetun syntymäaika, Valtuutetun osoite ja puhelin, Valtuutuksen sisältö (mitä valtuutettu saa tehdä), Edelleenvaltuutus, Voimassaoloaika
+
+#### 1. VALTUUTTAJA
+Nimi: ____________________ (____________________)
+Yhteystiedot: ____________________, ____________________
+
+#### 2. VALTUUTETTU
+Nimi: ____________________ (____________________)
+
+#### 3. VALTUUTUKSEN YKSILÖINTI
+Valtuutan yllä mainitun henkilön toimimaan puolestani ja nimissäni seuraavassa asiassa:
+____________________
+Valtuutetulla ei ole oikeutta siirtää valtuutusta edelleen.
+
+#### 4. VOIMASSAOLO JA PERUUTTAMINEN
+Tämä valtakirja on voimassa: Toimeksiannon suorittamiseen saakka.
+Valtuuttaja voi peruuttaa valtakirjan milloin tahansa ilmoittamalla siitä valtuutetulle sekä tarvittaessa niille tahoille, joille valtakirja on esitetty.
 
 ### 7.6. Työsopimus (Yritykset & Työ)
 - **Suora URL:** https://helppoallekirjoitus.fi/sopimuspohjat/tyosopimus/
 - **Kuvaus:** Työsopimuslain (55/2001) mukainen työsopimus, joka sisältää lain edellyttämät työnteon keskeiset ehdot (TSL 2:4).
 - **Juridinen huomio:** Työsopimuksen voi tehdä sähköisesti. Pankkitunnuksilla allekirjoitettu sopimus täyttää myös työnantajan velvollisuuden antaa työntekijälle kirjallinen selvitys työnteon keskeisistä ehdoista.
+- **Allekirjoittajat:** Työnantaja ja työntekijä (1,49 € / allekirjoittaja sis. ALV, PDF-lataus 0 €)
 - **Word-pohja (.docx):** https://dokumenttipohja.fi/Ty%C3%B6sopimus.docx
 - **Lomakkeen kentät:** Työnantajan nimi ja Y-tunnus, Työnantajan osoite, Työnantajan edustajan sähköposti, Työntekijän nimi, Työntekijän syntymäaika, Työntekijän osoite, Työntekijän sähköposti, Työsuhteen alkamispäivä, Määräaikaisuus ja sen peruste, Koeaika, Tehtävänimike ja pääasialliset tehtävät, Työntekopaikka, Säännöllinen työaika, Palkka, palkanmaksukausi ja maksupäivä, Luontoisedut ja muut edut, Sovellettava työehtosopimus, Irtisanomisaika, Muut ehdot
+
+#### 1. SOPIJAPUOLET
+Työnantaja: ____________________
+Osoite: ____________________, ____________________
+Työntekijä: ____________________ (____________________)
+Osoite: ____________________, ____________________
+
+#### 2. TYÖSUHTEEN ALKAMINEN JA KESTO
+Työsuhde alkaa ____________________.
+Työsopimus on voimassa toistaiseksi.
+Koeaika: 4 kuukautta. Koeajan kuluessa kumpikin osapuoli voi purkaa työsopimuksen päättymään heti, ei kuitenkaan syrjivin tai koeajan tarkoitukseen nähden epäasiallisin perustein (TSL 1:4).
+
+#### 3. TYÖTEHTÄVÄT, TYÖNTEKOPAIKKA JA TYÖAIKA
+Tehtävät: ____________________
+Työntekopaikka: ____________________
+Säännöllinen työaika: ____________________
+
+#### 4. PALKKA JA EDUT
+Palkka ja palkanmaksu: ____________________
+Vuosiloma ja lomaraha määräytyvät vuosilomalain (162/2005) ja mahdollisen työehtosopimuksen mukaan.
+
+#### 5. MUUT EHDOT
+Sovellettava työehtosopimus: ____________________
+Irtisanomisaika: Työehtosopimuksen tai, jos työehtosopimusta ei sovelleta, työsopimuslain 6 luvun 3 §:n mukainen.
+Muilta osin työsuhteessa noudatetaan työsopimuslakia (55/2001) ja muuta voimassa olevaa työlainsäädäntöä.
 
 ### 7.7. Salassapitosopimus (NDA) (Yritykset & Työ)
 - **Suora URL:** https://helppoallekirjoitus.fi/sopimuspohjat/salassapitosopimus-nda/
 - **Kuvaus:** Molemminpuolinen salassapitosopimus liikesalaisuuksien, tarjouspyyntöjen, tuotekehityksen tai yrityskauppaneuvottelujen suojaamiseen.
 - **Juridinen huomio:** Soveltuu liikesalaisuuslain (595/2018) alaisten luottamuksellisten tietojen luovuttamiseen yritysten ja asiantuntijoiden välillä. Yrityksen puolesta allekirjoittavalla tulee olla nimenkirjoitus- tai muu edustusoikeus.
+- **Allekirjoittajat:** Molempien osapuolten edustajat (1,49 € / allekirjoittaja sis. ALV, PDF-lataus 0 €)
 - **Word-pohja (.docx):** https://dokumenttipohja.fi/Salassapitosopimus.docx
 - **Lomakkeen kentät:** Osapuoli 1 (yritys / henkilö ja Y-tunnus), Osapuolen 1 allekirjoittajan sähköposti, Osapuoli 2 (yritys / henkilö ja Y-tunnus), Osapuolen 2 allekirjoittajan sähköposti, Yhteistyön tai neuvottelujen tarkoitus, Salassapidon kesto ja sopimussakko
+
+#### 1. SOPIMUKSEN OSAPUOLET
+Osapuoli 1: ____________________ (____________________)
+Osapuoli 2: ____________________ (____________________)
+
+#### 2. SOPIMUKSEN TARKOITUS JA LUOTTAMUKSELLINEN TIETO
+Osapuolet luovuttavat toisilleen luottamuksellista tietoa seuraavaa tarkoitusta varten:
+____________________
+Luottamuksellisella tiedolla tarkoitetaan kaikkea teknistä, kaupallista, taloudellista tai asiakkaisiin liittyvää aineistoa ja tietoa, jonka osapuoli luovuttaa toiselle kirjallisesti, sähköisesti tai suullisesti. Luottamuksellista tietoa saa käyttää ainoastaan yllä mainittuun tarkoitukseen, eikä sitä saa ilmaista kolmansille osapuolille. Tieto saadaan luovuttaa vain niille omille työntekijöille ja neuvonantajille, jotka tarvitsevat sitä tarkoituksen toteuttamiseen ja joita sitoo vastaava salassapitovelvollisuus.
+
+#### 3. POIKKEUKSET
+Salassapitovelvollisuus ei koske tietoa, (a) joka on yleisesti saatavilla tai tulee yleisesti saataville muuten kuin tämän sopimuksen rikkomisen seurauksena, (b) joka oli vastaanottajan hallussa ennen sen saamista toiselta osapuolelta ilman salassapitovelvollisuutta, (c) jonka vastaanottaja on saanut kolmannelta osapuolelta ilman salassapitovelvollisuutta tai (d) jonka vastaanottaja on kehittänyt itsenäisesti käyttämättä luottamuksellista tietoa. Osapuolella on oikeus luovuttaa tietoa, jos lainsäädäntö, viranomaisen päätös tai tuomioistuin sitä edellyttää; tällöin osapuolen on ilmoitettava asiasta toiselle osapuolelle viipymättä, mikäli se on sallittua.
+
+#### 4. AINEISTON PALAUTTAMINEN
+Osapuolen on pyynnöstä tai yhteistyön päättyessä palautettava tai hävitettävä toiselta osapuolelta saamansa luottamuksellinen aineisto kopioineen, lukuun ottamatta lain edellyttämiä arkistokappaleita, joihin salassapitovelvollisuus kohdistuu edelleen.
+
+#### 5. VOIMASSAOLO, VASTUU JA SOVELLETTAVA LAKI
+Salassapitovelvollisuus on voimassa viisi (5) vuotta tämän sopimuksen allekirjoittamisesta. Sopimusrikkomuksesta seuraava sopimussakko on 10 000 euroa kultakin rikkomukselta.
+Sopimussakon maksaminen ei rajoita oikeutta vaatia korvausta sopimussakon määrän ylittävästä vahingosta.
+Tähän sopimukseen sovelletaan Suomen lakia (mukaan lukien liikesalaisuuslaki 595/2018). Mahdolliset erimielisyydet ratkaistaan ensisijaisesti neuvottelemalla ja viime kädessä toimivaltaisessa käräjäoikeudessa.
 
 ### 7.8. Irtaimen omaisuuden kauppakirja (Kauppakirjat)
 - **Suora URL:** https://helppoallekirjoitus.fi/sopimuspohjat/irtaimen-kauppakirja/
 - **Kuvaus:** Yleiskäyttöinen kauppakirja veneen, työkoneen, kaluston tai muun arvokkaan irtaimen omaisuuden myyntiin.
 - **Juridinen huomio:** Kauppalain (355/1987) mukainen kauppakirja selkeyttää omistusoikeuden siirtymisen ja kaupan ehdot.
+- **Allekirjoittajat:** Myyjä ja ostaja (1,49 € / allekirjoittaja sis. ALV, PDF-lataus 0 €)
 - **Lomakkeen kentät:** Myyjän nimi ja yhteystiedot, Myyjän sähköposti, Ostajan nimi ja yhteystiedot, Ostajan sähköposti, Kaupan kohde ja kauppaan sisältyvät varusteet, Sarja-, valmiste- tai rekisterinumerot, Kauppahinta ja maksuehto, Luovutuspäivä ja -paikka, Myyjän tiedossa olevat viat ja puutteet
+
+#### 1. OSAPUOLET
+Myyjä: ____________________ (____________________)
+Ostaja: ____________________ (____________________)
+
+#### 2. KAUPAN KOHDE
+____________________
+
+#### 3. KAUPPAHINTA, LUOVUTUS JA OMISTUSOIKEUS
+Kauppahinta ja maksuehto: ____________________
+Luovutus: ____________________
+Omistusoikeus siirtyy ostajalle, kun kauppahinta on kokonaisuudessaan maksettu. Vaaranvastuu siirtyy ostajalle luovutushetkellä.
+
+#### 4. KUNTO JA VASTUUT
+Myyjän tiedossa olevat viat ja puutteet: Ei myyjän tiedossa olevia vikoja.
+Ostaja on tarkastanut kaupan kohteen ennen kaupan päättämistä ja hyväksyy sen nykyisessä kunnossaan. Myyjä vakuuttaa omistavansa kaupan kohteen ja ettei siihen kohdistu kolmansien osapuolten pantti- tai muita oikeuksia. Kaupassa noudatetaan kauppalakia (355/1987).
 
 ## 8. Asiantuntija-artikkelit ja oppaat
 

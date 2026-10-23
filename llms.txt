@@ -41,9 +41,11 @@ Helppoallekirjoitus.fi on suunniteltu yksityishenkilöille, vuokranantajille, yh
 
 - [Kaikki sopimuspohjat](https://helppoallekirjoitus.fi/sopimuspohjat/): selaimessa täytettävät suomalaiset sopimusmallit, PDF-lataus 0 €
 - [Asuinhuoneiston vuokrasopimus](https://helppoallekirjoitus.fi/sopimuspohjat/asuinhuoneiston-vuokrasopimus/): Lakiin asuinhuoneiston vuokrauksesta (AHVL 481/1995) perustuva selkeä vuokrasopimus vuokranantajan ja vuokralaisen välille.
+- [Asunto-osakkeen kauppakirja](https://helppoallekirjoitus.fi/sopimuspohjat/asunto-osakkeen-kauppakirja/): Kauppakirja kerrostalo-, rivitalo- tai paritaloasunnon osakkeiden kauppaan ilman välittäjää. Perustuu asuntokauppalakiin (843/1994).
 - [Ajoneuvon kauppakirja](https://helppoallekirjoitus.fi/sopimuspohjat/ajoneuvon-kauppakirja/): Selkeä kauppakirja henkilöauton, pakettiauton, moottoripyörän tai muun rekisteröitävän ajoneuvon kauppaan.
 - [Velkakirja](https://helppoallekirjoitus.fi/sopimuspohjat/velkakirja/): Velkakirjalain (622/1947) mukainen tavallinen velkakirja lainasumman, koron ja takaisinmaksuaikataulun sopimiseen.
-- [Yksilöity valtakirja](https://helppoallekirjoitus.fi/sopimuspohjat/valtakirja/): Yksilöity valtakirja nimetyn asian, kaupan, kokousedustuksen tai viranomaisasioinnin hoitamiseen.
+- [Yksilöity valtakirja](https://helppoallekirjoitus.fi/sopimuspohjat/valtakirja/): Yksilöity valtakirja nimetyn asian, kaupan, kokousedustuksen tai asioinnin hoitamiseen.
+- [Työsopimus](https://helppoallekirjoitus.fi/sopimuspohjat/tyosopimus/): Työsopimuslain (55/2001) mukainen työsopimus, joka sisältää lain edellyttämät työnteon keskeiset ehdot (TSL 2:4).
 - [Salassapitosopimus (NDA)](https://helppoallekirjoitus.fi/sopimuspohjat/salassapitosopimus-nda/): Molemminpuolinen salassapitosopimus liikesalaisuuksien, tarjouspyyntöjen, tuotekehityksen tai yrityskauppaneuvottelujen suojaamiseen.
 - [Irtaimen omaisuuden kauppakirja](https://helppoallekirjoitus.fi/sopimuspohjat/irtaimen-kauppakirja/): Yleiskäyttöinen kauppakirja veneen, työkoneen, kaluston tai muun arvokkaan irtaimen omaisuuden myyntiin.
 - [Dokumenttipohja.fi](https://dokumenttipohja.fi/): sisarsivusto, yli 70 ilmaista Word (.docx) -asiakirjapohjaa

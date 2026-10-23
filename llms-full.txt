@@ -123,7 +123,7 @@ Valmis PDF lähetetään liitteenä kaikkien osapuolten sähköpostiin, ja se po
 Jokaisen allekirjoitetun PDF:n loppuun liitetään allekirjoitustodistus, jossa on asiakirjan tunniste, osapuolten pankista vahvistetut nimet, aikaleimat, SHA-256-tiiviste ja QR-koodi. Tarkistussivulla PDF-tiedoston voi pudottaa tarkistimeen, joka varmistaa tiivisteen avulla, ettei tiedostoa ole muutettu allekirjoituksen jälkeen.
 
 **Voinko laatia vuokrasopimuksen tai kauppakirjan suoraan palvelussa?**
-Kyllä. Sopimuspohjat-osiossa voit täyttää maksutta asuinhuoneiston vuokrasopimuksen, ajoneuvon kauppakirjan, velkakirjan, valtakirjan, salassapitosopimuksen (NDA) tai irtaimen omaisuuden kauppakirjan. Valmiin PDF:n voi ladata ilmaiseksi tai lähettää yhdellä painikkeella pankkitunnuksilla allekirjoitettavaksi.
+Kyllä. Sopimuspohjat-osiossa voit täyttää maksutta asuinhuoneiston vuokrasopimuksen, asunto-osakkeen kauppakirjan, ajoneuvon kauppakirjan, työsopimuksen, velkakirjan, valtakirjan, salassapitosopimuksen (NDA) tai irtaimen omaisuuden kauppakirjan. Valmiin PDF:n voi ladata ilmaiseksi tai lähettää yhdellä painikkeella pankkitunnuksilla allekirjoitettavaksi.
 
 **Mihin asiakirjoihin sähköinen allekirjoitus ei sovellu?**
 Kiinteistön (esim. omakotitalon tai tontin) kauppakirja vaatii maakaaren mukaan kaupanvahvistajan tai Maanmittauslaitoksen sähköisen kaupankäyntijärjestelmän. Testamentti, avioehto ja edunvalvontavaltuutus vaativat todistajat. Näitä lukuun ottamatta useimmat arjen ja yritystoiminnan sopimukset, kuten vuokra-, työ- ja kauppasopimukset, velkakirjat, valtakirjat ja pöytäkirjat, voi allekirjoittaa sähköisesti.
@@ -135,39 +135,54 @@ Kiinteistön (esim. omakotitalon tai tontin) kauppakirja vaatii maakaaren mukaan
 - **Kuvaus:** Lakiin asuinhuoneiston vuokrauksesta (AHVL 481/1995) perustuva selkeä vuokrasopimus vuokranantajan ja vuokralaisen välille.
 - **Juridinen huomio:** Sähköisesti vahvalla tunnistautumisella (FTN) allekirjoitettu vuokrasopimus täyttää AHVL 5 §:n kirjallisen muodon vaatimuksen.
 - **Word-pohja (.docx):** https://dokumenttipohja.fi/Asuinhuoneiston%20vuokrasopimus.docx
-- **Lomakkeen kentät:** Vuokranantajan nimi, Vuokranantajan syntymäaika tai Y-tunnus, Vuokranantajan osoite ja puhelin, Vuokranantajan sähköposti, Vuokralaisen nimi, Vuokralaisen syntymäaika, Vuokralaisen puhelin ja nykyinen osoite, Vuokralaisen sähköposti, Vuokrattavan huoneiston osoite, Huoneluku ja pinta-ala, Sopimuksen kesto, Hallintaoikeuden ja vuokra-ajan alkamispäivä, Kuukausivuokra (€ / kk), Vesimaksu ja muut maksut, Maksutili (IBAN) ja eräpäivä, Vuokravakuus, Muut ehdot (kotivakuutus, tupakointi, lemmikit, vuokran tarkistus)
+- **Lomakkeen kentät:** Vuokranantajan nimi, Vuokranantajan syntymäaika tai Y-tunnus, Vuokranantajan osoite ja puhelin, Vuokranantajan sähköposti, Vuokralaisen nimi, Vuokralaisen syntymäaika, Vuokralaisen puhelin ja nykyinen osoite, Vuokralaisen sähköposti, Vuokrattavan huoneiston osoite, Huoneluku ja pinta-ala, Huoneistossa asuvat henkilöt, Vuokrasuhteen alkamispäivä, Määräaikaisen sopimuksen päättymispäivä, Kuukausivuokra, Vesimaksu ja muut maksut, Maksutili (IBAN) ja eräpäivä, Vuokrankorotusehto, Vuokravakuus, Muut ehdot (kotivakuutus, tupakointi, lemmikit, avaimet)
 
-### 7.2. Ajoneuvon kauppakirja (Kauppakirjat)
+### 7.2. Asunto-osakkeen kauppakirja (Asuminen)
+- **Suora URL:** https://helppoallekirjoitus.fi/sopimuspohjat/asunto-osakkeen-kauppakirja/
+- **Kuvaus:** Kauppakirja kerrostalo-, rivitalo- tai paritaloasunnon osakkeiden kauppaan ilman välittäjää. Perustuu asuntokauppalakiin (843/1994).
+- **Juridinen huomio:** Asunto-osakkeen kaupalle ei ole laissa muotovaatimusta, joten pankkitunnuksilla allekirjoitettu kauppakirja on pätevä. Kiinteistön (omakotitalo tai tontti) kauppaan tämä pohja ei sovellu, koska kiinteistökauppa vaatii kaupanvahvistajan.
+- **Word-pohja (.docx):** https://dokumenttipohja.fi/Asunto%20osakkeen%20kauppakirja.docx
+- **Lomakkeen kentät:** Myyjän nimi (kaikki myyjät), Myyjän henkilötunnus, Myyjän osoite ja puhelin, Myyjän sähköposti, Ostajan nimi (kaikki ostajat ja omistusosuudet), Ostajan henkilötunnus, Ostajan osoite ja puhelin, Ostajan sähköposti, Asunto-osakeyhtiön nimi ja Y-tunnus, Osakkeiden numerot tai osakeryhmän tunnus, Huoneiston osoite, tunnus, huoneluku ja pinta-ala, Kauppahinta, Huoneistoon kohdistuva yhtiölainaosuus, Maksuehdot, Hallinnan luovutuspäivä, Tiedossa olevat remontit ja huomiot huoneiston kunnosta
+
+### 7.3. Ajoneuvon kauppakirja (Kauppakirjat)
 - **Suora URL:** https://helppoallekirjoitus.fi/sopimuspohjat/ajoneuvon-kauppakirja/
 - **Kuvaus:** Selkeä kauppakirja henkilöauton, pakettiauton, moottoripyörän tai muun rekisteröitävän ajoneuvon kauppaan.
-- **Juridinen huomio:** Pankkitunnuksilla (FTN) vahvistettu kauppakirja varmentaa sekä myyjän että ostajan henkilöllisyyden kiistattomasti.
+- **Juridinen huomio:** Pankkitunnuksilla (FTN) vahvistettu kauppakirja varmentaa sekä myyjän että ostajan henkilöllisyyden ja luovutusajankohdan kiistattomasti.
 - **Word-pohja (.docx):** https://dokumenttipohja.fi/Ajoneuvon%20kauppakirja.docx
-- **Lomakkeen kentät:** Myyjän nimi, Myyjän osoite ja puhelin, Myyjän sähköposti, Ostajan nimi, Ostajan osoite ja puhelin, Ostajan sähköposti, Rekisteritunnus, Merkki, malli ja käyttöönottovuosi, Matkamittarin lukema (km), Kauppaan sisältyvät varusteet, Kauppahinta (€) ja maksutapa, Ajoneuvon kunto ja mahdolliset huomiot
+- **Lomakkeen kentät:** Myyjän nimi, Myyjän osoite ja puhelin, Myyjän sähköposti, Ostajan nimi, Ostajan osoite ja puhelin, Ostajan sähköposti, Rekisteritunnus, Valmistenumero (VIN), Merkki, malli ja käyttöönottovuosi, Matkamittarin lukema, Kauppaan sisältyvät varusteet, Kauppahinta ja maksutapa, Luovutuspäivä ja kellonaika, Myyjän tiedossa olevat viat ja puutteet, Muut ehdot
 
-### 7.3. Velkakirja (Rahoitus & Laina)
+### 7.4. Velkakirja (Rahoitus & Laina)
 - **Suora URL:** https://helppoallekirjoitus.fi/sopimuspohjat/velkakirja/
 - **Kuvaus:** Velkakirjalain (622/1947) mukainen tavallinen velkakirja lainasumman, koron ja takaisinmaksuaikataulun sopimiseen.
 - **Juridinen huomio:** Vahvasti sähköisesti allekirjoitettu velkakirja todistaa velkasuhteen syntymisen, velan määrän ja sovitut maksuehdot.
 - **Word-pohja (.docx):** https://dokumenttipohja.fi/Velkakirja.docx
-- **Lomakkeen kentät:** Velkojan (lainanantajan) nimi, Velkojan sähköposti, Velallisen (lainansaajan) nimi, Velallisen syntymäaika tai Y-tunnus, Velallisen osoite, Velallisen sähköposti, Velan pääoma (€ numeroin ja kirjaimin), Vuotuinen korko (%), Takaisinmaksuohjelma ja eräpäivä
+- **Lomakkeen kentät:** Velkojan (lainanantajan) nimi, Velkojan syntymäaika tai Y-tunnus, Velkojan sähköposti, Velallisen (lainansaajan) nimi, Velallisen syntymäaika tai Y-tunnus, Velallisen osoite, Velallisen sähköposti, Velan pääoma (numeroin ja kirjaimin), Vuotuinen korko, Takaisinmaksuohjelma, eräpäivät ja maksutili, Velan eräännyttäminen
 
-### 7.4. Yksilöity valtakirja (Valtuutukset)
+### 7.5. Yksilöity valtakirja (Valtuutukset)
 - **Suora URL:** https://helppoallekirjoitus.fi/sopimuspohjat/valtakirja/
-- **Kuvaus:** Yksilöity valtakirja nimetyn asian, kaupan, kokousedustuksen tai viranomaisasioinnin hoitamiseen.
-- **Juridinen huomio:** Vahvalla sähköisellä tunnistautumisella (FTN) allekirjoitettu valtakirja todentaa valtuuttajan henkilöllisyyden ja valtuutuksen antamisajankohdan.
-- **Lomakkeen kentät:** Valtuuttajan nimi, Valtuuttajan syntymäaika tai Y-tunnus, Valtuuttajan osoite ja puhelin, Valtuuttajan sähköposti, Valtuutetun nimi, Valtuutetun syntymäaika, Valtuutuksen sisältö (mitä valtuutettu saa tehdä), Voimassaoloaika
+- **Kuvaus:** Yksilöity valtakirja nimetyn asian, kaupan, kokousedustuksen tai asioinnin hoitamiseen.
+- **Juridinen huomio:** Vahvalla sähköisellä tunnistautumisella (FTN) allekirjoitettu valtakirja todentaa valtuuttajan henkilöllisyyden ja valtuutuksen antamisajankohdan. Huomaa, että pankki tai viranomainen voi edellyttää omaa lomakettaan. Edunvalvontavaltuutukseen tämä pohja ei sovellu.
+- **Lomakkeen kentät:** Valtuuttajan nimi, Valtuuttajan syntymäaika tai Y-tunnus, Valtuuttajan osoite ja puhelin, Valtuuttajan sähköposti, Valtuutetun nimi, Valtuutetun syntymäaika, Valtuutetun osoite ja puhelin, Valtuutuksen sisältö (mitä valtuutettu saa tehdä), Edelleenvaltuutus, Voimassaoloaika
 
-### 7.5. Salassapitosopimus (NDA) (Yritykset & Työ)
+### 7.6. Työsopimus (Yritykset & Työ)
+- **Suora URL:** https://helppoallekirjoitus.fi/sopimuspohjat/tyosopimus/
+- **Kuvaus:** Työsopimuslain (55/2001) mukainen työsopimus, joka sisältää lain edellyttämät työnteon keskeiset ehdot (TSL 2:4).
+- **Juridinen huomio:** Työsopimuksen voi tehdä sähköisesti. Pankkitunnuksilla allekirjoitettu sopimus täyttää myös työnantajan velvollisuuden antaa työntekijälle kirjallinen selvitys työnteon keskeisistä ehdoista.
+- **Word-pohja (.docx):** https://dokumenttipohja.fi/Ty%C3%B6sopimus.docx
+- **Lomakkeen kentät:** Työnantajan nimi ja Y-tunnus, Työnantajan osoite, Työnantajan edustajan sähköposti, Työntekijän nimi, Työntekijän syntymäaika, Työntekijän osoite, Työntekijän sähköposti, Työsuhteen alkamispäivä, Määräaikaisuus ja sen peruste, Koeaika, Tehtävänimike ja pääasialliset tehtävät, Työntekopaikka, Säännöllinen työaika, Palkka, palkanmaksukausi ja maksupäivä, Luontoisedut ja muut edut, Sovellettava työehtosopimus, Irtisanomisaika, Muut ehdot
+
+### 7.7. Salassapitosopimus (NDA) (Yritykset & Työ)
 - **Suora URL:** https://helppoallekirjoitus.fi/sopimuspohjat/salassapitosopimus-nda/
 - **Kuvaus:** Molemminpuolinen salassapitosopimus liikesalaisuuksien, tarjouspyyntöjen, tuotekehityksen tai yrityskauppaneuvottelujen suojaamiseen.
-- **Juridinen huomio:** Soveltuu liikesalaisuuslain (595/2018) alaisten luottamuksellisten tietojen luovuttamiseen yritysten ja asiantuntijoiden välillä.
-- **Lomakkeen kentät:** Osapuoli 1 (Yritys / henkilö ja Y-tunnus), Osapuolen 1 allekirjoittajan sähköposti, Osapuoli 2 (Yritys / henkilö ja Y-tunnus), Osapuolen 2 allekirjoittajan sähköposti, Yhteistyön tai neuvottelujen tarkoitus, Sopimussakko ja salassapidon kesto
+- **Juridinen huomio:** Soveltuu liikesalaisuuslain (595/2018) alaisten luottamuksellisten tietojen luovuttamiseen yritysten ja asiantuntijoiden välillä. Yrityksen puolesta allekirjoittavalla tulee olla nimenkirjoitus- tai muu edustusoikeus.
+- **Word-pohja (.docx):** https://dokumenttipohja.fi/Salassapitosopimus.docx
+- **Lomakkeen kentät:** Osapuoli 1 (yritys / henkilö ja Y-tunnus), Osapuolen 1 allekirjoittajan sähköposti, Osapuoli 2 (yritys / henkilö ja Y-tunnus), Osapuolen 2 allekirjoittajan sähköposti, Yhteistyön tai neuvottelujen tarkoitus, Salassapidon kesto ja sopimussakko
 
-### 7.6. Irtaimen omaisuuden kauppakirja (Kauppakirjat)
+### 7.8. Irtaimen omaisuuden kauppakirja (Kauppakirjat)
 - **Suora URL:** https://helppoallekirjoitus.fi/sopimuspohjat/irtaimen-kauppakirja/
 - **Kuvaus:** Yleiskäyttöinen kauppakirja veneen, työkoneen, kaluston tai muun arvokkaan irtaimen omaisuuden myyntiin.
 - **Juridinen huomio:** Kauppalain (355/1987) mukainen kauppakirja selkeyttää omistusoikeuden siirtymisen ja kaupan ehdot.
-- **Lomakkeen kentät:** Myyjän nimi ja yhteystiedot, Myyjän sähköposti, Ostajan nimi ja yhteystiedot, Ostajan sähköposti, Kaupan kohde ja yksilöintitiedot (sarjanumero, malli, varusteet), Kauppahinta (€) ja luovutusehto
+- **Lomakkeen kentät:** Myyjän nimi ja yhteystiedot, Myyjän sähköposti, Ostajan nimi ja yhteystiedot, Ostajan sähköposti, Kaupan kohde ja kauppaan sisältyvät varusteet, Sarja-, valmiste- tai rekisterinumerot, Kauppahinta ja maksuehto, Luovutuspäivä ja -paikka, Myyjän tiedossa olevat viat ja puutteet
 
 ## 8. Asiantuntija-artikkelit ja oppaat
 
